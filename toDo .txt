@@ -1,0 +1,47 @@
+to do: 
+-navigatie (one page)
+-php verbinden met webcomp.
+-layout 
+-
+
+Pages:
+	-home
+		begin pagina, live games per plein.
+	-history
+		alle games (laatste 10 dagen)
+	-log in/profiel
+		eerst inloggen
+		aanpassen account
+	-my games
+		nieuwe game aanmaken
+		vorige games zien
+
+
+home:
+	als in afbeelding
+
+history: 
+	component die: (chronologische volgorde)
+		compacte weergave score: spelernamen, score sets, begin/eind tijd 
+
+
+my games: 
+	(extra) statistieken
+	component van history overnemen maar enkel van eigen games
+	CREATE GAME knop met tegenstander kiezen 
+
+game: 
+	veld met knoppen
+
+
+
+
+taakverdeling: 
+	hamza: history tabs
+	niels: database + logIn
+	lukas: velden(scoreborden)
+	
+	
+
+
+
