@@ -4,7 +4,7 @@
 
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
-    <h1>hello i am the home page</h1>
+    <h1>hello i am a scoreBord</h1>
 `
 
 class app extends HTMLElement {

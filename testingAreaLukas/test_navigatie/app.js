@@ -46,7 +46,7 @@ class app extends HTMLElement
             console.log("i already cached! " + page)
             
             this.shadowRoot.querySelector(`#${page}`).style.display = "block";
-
+            this.shadowRoot.querySelector(`#${page}`).setAttribute("hasupdate", "true"); //checken of er een nieuwe match gestart is of niet het updaten van de punten wordt in het scorebord component gedaan volgens mij
 
         }
         else{
@@ -54,13 +54,13 @@ class app extends HTMLElement
             console.log(`the ${page} has been chached`)
             
             let newPage = document.createElement(`${page}-comp`);
-            newPage.setAttribute("id", page)
+            newPage.setAttribute("id", page);
+            newPage.setAttribute("hasupdate", "false");
 
-            this.mainPage.append(newPage)
+            this.mainPage.append(newPage);
 
         }
         console.log(this.cachedPages);
-
         
     }
     
