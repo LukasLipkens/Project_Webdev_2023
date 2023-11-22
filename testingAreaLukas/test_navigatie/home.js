@@ -28,7 +28,7 @@ class app extends HTMLElement
         this.shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
         this.shadow.append(template.content.cloneNode(true))
         this.container = this.shadow.querySelector("#homeContainer");
-        this.matchesArray = [111,2,3];
+        this.matchesArray = ["field"];
     }
     
     static get observedAttributes(){
