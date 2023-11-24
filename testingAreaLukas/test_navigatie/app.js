@@ -36,7 +36,7 @@ class app extends HTMLElement
 
     showPages(page)
     {
-
+        
         for(let oldPage of this.cachedPages){
                 this.shadowRoot.querySelector(`#${oldPage}`).style.display = "none";
                 
