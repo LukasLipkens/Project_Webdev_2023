@@ -41,7 +41,6 @@ class app extends HTMLElement
                 this.shadowRoot.querySelector(`#${oldPage}`).style.display = "none";
                 
         }
-
         if(this.cachedPages.indexOf(page) !== -1){
             console.log("i already cached! " + page)
             
