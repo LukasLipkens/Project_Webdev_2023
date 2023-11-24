@@ -57,7 +57,7 @@ class app extends HTMLElement
             //console.log("added board #" + match)
             let scoreBord = document.createElement(`score-comp`);
             scoreBord.setAttribute("id", `scoreboard_${this.matchesArray[match]}`);
-
+            scoreBord.setAttribute("type", "admin");
             this.container.append(scoreBord);
             console.log("Added: " + scoreBord.getAttribute("id"));
         }
