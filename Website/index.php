@@ -11,7 +11,7 @@
 <body>
   <?php session_start();
   print_r($_SESSION);
-  echo($_SESSION);
+  echo($_SESSION[0]);
   ?>
   <app-comp></app-comp>
 </body>
