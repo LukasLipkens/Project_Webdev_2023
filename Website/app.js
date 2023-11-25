@@ -32,6 +32,7 @@ class app extends HTMLElement
 
     connectedCallback(){
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
+        this.showPages("home")
     }
 
     showPages(page)
@@ -41,6 +42,7 @@ class app extends HTMLElement
                 this.shadowRoot.querySelector(`#${oldPage}`).style.display = "none";
                 
         }
+
         if(this.cachedPages.indexOf(page) !== -1){
             console.log("i already cached! " + page)
             
