@@ -1,80 +1,59 @@
 //#region IMPORTS
-
+import "./MatchLine.js"
 //#endregion IMPORTS
 
-const template = document.createElement("template")
-template.innerHTML = /*html*/`
+const template = document.createElement("template");
+template.innerHTML = /*html*/ `
+
     <style>
-        .history-container {
-            width: 100%;
-            border: 3px solid black;
+        .big-container {
+            width: 1200px;
+            margin: 20px auto;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 10px 10px 0 10px;
+            font-size: 25px;
         }
-
-        .history-item {
-            border: 1px solid #ccc;
-            margin: 5px;
-            padding: 10px;
+        .anotherone {
+            border: 1px solid black;
+            position: absolute;
+            top: 0;
+            left: 48%;
             cursor: pointer;
+            background-color: white;
+            border-radius: 10px;
+            width: 50px;
+            user-select: none;
         }
-
-        .history-item.expanded {
-            height: 300px; 
-        }
-
-        .history-item-content {
-            display: none;
-        }
-
-        .history-item.expanded .history-item-content {
-            display: block;
+        .title {
+            font-size: 60px;
+            margin: 0 auto;
+            padding-bottom: 15px;
+            text-align: center;
         }
     </style>
-
-    <div class="history-container">
-        <div class="history-item" id="item1">
-            <h3>Event 1</h3>
-            <div class="history-item-content">
-                <p>Additional information about Event 1...</p>
-            </div>
-        </div>
-
-        <div class="history-item" id="item2">
-            <h3>Event 2</h3>
-            <div class="history-item-content">
-                <p>Additional information about Event 2...</p>
-            </div>
-        </div>
-
-        <div class="history-item" id="item3">
-            <h3>Event 2</h3>
-            <div class="history-item-content">
-                <p>Additional information about Event 3...</p>
-            </div>
-        </div>
-
-        <div class="history-item" id="item4">
-            <h3>Event 2</h3>
-            <div class="history-item-content">
-                <p>Additional information about Event 4...</p>
-            </div>
-        </div>
+    <div class="big-container">
+        <p class="title">All Played Games</p>
+        <p class="anotherone">Add</p>
     </div>
-`
+`;
 
 class HistoryComponent extends HTMLElement {
     constructor() {
-        super()
-        this.shadow = this.attachShadow({ mode: "open" })
-        this.shadow.append(template.content.cloneNode(true))
+        super();
+        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow.append(template.content.cloneNode(true));
+    }
 
-        // click event for expanding items
-        const historyItems = this.shadow.querySelectorAll('.history-item');
-        historyItems.forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('expanded');
-            });
-        });
+    connectedCallback() {
+        const bigContainer = this.shadow.querySelector(".big-container");
+        const another = this.shadow.querySelector(".anotherone");
+
+        another.addEventListener("click", () => {
+            const newMatch = document.createElement("match-comp");
+            bigContainer.append(newMatch);
+        })
     }
 }
 
-customElements.define('history-comp', HistoryComponent)
+customElements.define("history-comp", HistoryComponent);
