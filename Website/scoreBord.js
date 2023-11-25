@@ -77,8 +77,8 @@ template.innerHTML = /*html*/`
                 <div class="matchesPlayer1">match<br><span>0</span></div>
                 <div class="matchesPlayer2">match<br><span>0</span></div>
 
-                <div class="servePlayer1">serve:X</div>
-                <div class="servePlayer2">serve:Thomas</div>
+                <div class="servePlayer1">serve:Simon</div>
+                <div class="servePlayer2">serve:simo</div>
 
             </div>
         </div>
