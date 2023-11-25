@@ -48,10 +48,10 @@ template.innerHTML = /*html*/`
         <div class="innerArea">
             <ul>
                 <li>
-                    <button><h1>+</h1></button>
+                    <button id="plus"><h1>+</h1></button>
                 </li>
                 <li>
-                    <button><h1 class="min">-</h1></button>
+                    <button id="min"><h1 class="min">-</h1></button>
                 </li>
             </ul>
         </div>
@@ -65,6 +65,26 @@ class app extends HTMLElement
         const shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
         shadow.append(template.content.cloneNode(true))
         
+        this.button = this.shadowRoot.querySelectorAll("button");
+        }
+
+        connectedCallback()
+        {
+            this.button.forEach(btn => {
+                btn.addEventListener('mousedown', (e) =>{
+                    console.log("btn Clicked");
+                    let info = [btn.getAttribute("id"), this.getAttribute("id")];
+                    this.UpdateScoreEvent(info);
+                })
+            });
+        }
+
+        UpdateScoreEvent(info){
+            this.dispatchEvent(new CustomEvent("UpdateScoreEvent", {
+                bubbles: true,
+                composed: true,
+                detail: info
+            }))
         }
 }
 

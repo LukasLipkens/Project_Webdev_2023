@@ -68,14 +68,14 @@ template.innerHTML = /*html*/`
                 <div class="player1">Player1</div>
                 <div class="player2">Player2</div>
 
-                <div class="scorePlayer1">score<br>15</div>
-                <div class="scorePlayer2">score<br>30</div>
+                <div class="scorePlayer1">score<br><span>0</span></div>
+                <div class="scorePlayer2">score<br><span>0</span></div>
 
-                <div class="setsPlayer1">sets<br>1</div>  
-                <div class="setsPlayer2">sets<br>0</div>  
+                <div class="setsPlayer1">sets<br><span>0</span></div>  
+                <div class="setsPlayer2">sets<br><span>0</span></div>  
 
-                <div class="matchesPlayer1">match<br>0</div>
-                <div class="matchesPlayer2">match<br>0</div>
+                <div class="matchesPlayer1">match<br><span>0</span></div>
+                <div class="matchesPlayer2">match<br><span>0</span></div>
 
                 <div class="servePlayer1">serve:</div>
                 <div class="servePlayer2">serve:</div>
@@ -92,6 +92,25 @@ class app extends HTMLElement {
         shadow.append(template.content.cloneNode(true))
         this.type;
         this.board = this.shadowRoot.querySelector(".centerDiv");
+
+        this.scoreP1 = this.shadowRoot.querySelector(".scorePlayer1 span");
+        this.scoreP2 = this.shadowRoot.querySelector(".scorePlayer2 span");
+
+        this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
+        this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
+
+        this.scores = {
+            player1: {
+                score: 0,
+                sets: 0,
+                match: 0
+            },
+            player2:{
+                score: 0,
+                sets: 0,
+                match: 0
+            }
+        }
     }
 
     connectedCallback(){
@@ -99,13 +118,26 @@ class app extends HTMLElement {
         if(this.type == "admin"){
             this.UpdateToAdmin();
         }
+        this.addEventListener("UpdateScoreEvent", this.UpdateScoreEvent);
+
+    }
+
+    UpdateScoreEvent(e){
+        console.log("btnPress Received " + e.detail);
+        this.UpdateScore(e.detail);
+    }
+    UpdateScore(info){
+        let action = info[0];
+        let player = info[1];
+
+        console.log(`updating: ${player} \n action: ${action}`);
     }
 
     UpdateToAdmin(){
         console.log("admin rights have been added");
         for(let i = 1; i<=2;i++){
             let scoreBtn = document.createElement(`scorebtn-comp`);
-            scoreBtn.setAttribute("id", `scoreBtnPlayer_${i}`)
+            scoreBtn.setAttribute("id", `Player_${i}`)
             if(i == 1){
                 this.board.prepend(scoreBtn);
             }

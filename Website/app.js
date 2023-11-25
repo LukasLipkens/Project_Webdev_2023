@@ -32,6 +32,7 @@ class app extends HTMLElement
 
     connectedCallback(){
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
+        this.showPages("home")
     }
 
     showPages(page)
