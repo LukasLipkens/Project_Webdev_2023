@@ -1,5 +1,5 @@
 <?php
-define('DB_HOST', 'http://tennisscore.duckdns.org');
+define('DB_HOST', 'tennisscore.duckdns.org');
 define('DB_USER', 'super');
 define('DB_PASS', 'Project_Webdev');
 define('DB_NAME', 'project_tennis');
