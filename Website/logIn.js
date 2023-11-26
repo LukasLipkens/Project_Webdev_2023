@@ -83,7 +83,7 @@ class app extends HTMLElement
               return;
             }
             const xhttp = new XMLHttpRequest();
-            xhttp.onload(()=> {
+            xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
                 res.innerHTML= xhttp.responseText;
                 if(!empty(xhttp.responseText)){
@@ -92,7 +92,6 @@ class app extends HTMLElement
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
-            this.IsLoggedIn = login;
           }
           ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {
