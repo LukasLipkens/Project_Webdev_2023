@@ -18,7 +18,7 @@ session_start();
 
 $modus = $_GET["modus"];
 
-if ($modus == 0) {
+if ($modus == 0 && isset($_SESSION["user"])) {
     print_r(true);
 } else {
     $name = $_GET["name"];
