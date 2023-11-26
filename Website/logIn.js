@@ -77,7 +77,7 @@ class app extends HTMLElement
     }
         CheckLogin(str) {
             let res = this.respons;
-            let login = this.IsLoggedIn;
+            let login;
             if (str == "") {
               this.respons.innerHTML = "";
               return;
@@ -93,6 +93,7 @@ class app extends HTMLElement
             }
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
+            this.IsLoggedIn = login;
           }
           ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {
