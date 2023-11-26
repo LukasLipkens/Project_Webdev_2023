@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 session_start();
 
 if (isset($_SESSION["user"])) {
-    echo true;
+    print_r(true);
 } else {
     $name = $_GET["name"];
     $password = $_GET["password"];
