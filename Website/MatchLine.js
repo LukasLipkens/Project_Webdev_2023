@@ -19,6 +19,7 @@ template.innerHTML = /*html*/ `
             font-size: 30px;
             height: 63px;
             border-radius: 10px 0 0 10px;
+            margin-left: 15px;
         }
         .item-container {
             border: 2px solid #d1d1d1;
@@ -103,18 +104,19 @@ template.innerHTML = /*html*/ `
             border-radius: 10px;
             width: 50px;
             user-select: none;
+            font-size: 25px;
         }
         .item-content-box {
             display: flex;
             width: auto;
         }
         .startTime, .endTime {
-            border: 1px dashed #d1d1d1;
             width: 30%;
             height: auto;
             text-align: center;
             margin: 0;
             padding: 10px 0 0 0;
+            font-size: 20px;
         }
         .fill {
             width: 40%;
@@ -180,12 +182,37 @@ class MatchComponent extends HTMLElement {
         super();
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
+
     }
 
     connectedCallback() {
+        const playerName1 = this.getAttribute("playerName1") || "Player 1";
+        const playerName2 = this.getAttribute("playerName2") || "Player 2";
+        const score1 = this.getAttribute("score1") || "0";
+        const score2 = this.getAttribute("score2") || "0";
+
+        const winnerLeft = this.shadow.querySelector(".winnerLeft");
+        const winnerRight = this.shadow.querySelector(".winnerRight");
+        const winningSide = this.getAttribute("whoWon");
+
+        if (winningSide == "left") {
+            winnerLeft.style.visibility = "visible";
+            winnerRight.style.visibility = "hidden";
+        }
+        else if (winningSide == "right") {
+            winnerLeft.style.visibility = "hidden";
+            winnerRight.style.visibility = "visible";
+        }
+        else if (winningSide == "both") {
+            winnerLeft.style.visibility = "visible";
+            winnerRight.style.visibility = "visible";
+        }
+
+        this.shadow.querySelector('.left p').innerText = playerName1;
+        this.shadow.querySelector('.right p').innerText = playerName2;
+        this.shadow.querySelector('.score').innerText = `${score1} - ${score2}`;
 
         this.setupEventListeners();
-
     }
 
     setupEventListeners() {
@@ -194,9 +221,7 @@ class MatchComponent extends HTMLElement {
         const itemContainer = this.shadow.querySelector(".item-container");
         const container = this.shadow.querySelector(".container");
 
-        const winnerLeft = this.shadow.querySelector(".winnerLeft");
-        const winnerRight = this.shadow.querySelector(".winnerRight");
-        const scores = this.shadow.querySelectorAll(".score");
+        const more = this.shadow.querySelector(".more");
 
         arrowImage.forEach((arrow) => {
             arrow.addEventListener("click", () => {
@@ -213,26 +238,15 @@ class MatchComponent extends HTMLElement {
             });
         });
 
-        let leftWon = true;
-        scores.forEach((score) => {
-            score.addEventListener("click", () => {
-                leftWon = !leftWon;
-                if (leftWon) {
-                    winnerLeft.style.visibility = "visible";
-                    winnerRight.style.visibility = "hidden";
-                }
-                else {
-                    winnerLeft.style.visibility = "hidden";
-                    winnerRight.style.visibility = "visible";
-                }
-            })
-        })
-
-        const more = this.shadow.querySelector(".more");
         more.addEventListener("click", () => {
             const scoreElement = document.createElement("single-score-comp");
             const itemContent = this.shadow.querySelector(".item-content");
             const itemContentBox = this.shadow.querySelector(".item-content-box");
+
+            scoreElement.setAttribute("playerName1", this.getAttribute("playerName1") || "Player 1");
+            scoreElement.setAttribute("playerName2", this.getAttribute("playerName2") || "Player 2");
+            scoreElement.setAttribute("score1", this.getAttribute("score1") || "0");
+            scoreElement.setAttribute("score2", this.getAttribute("score2") || "0");
 
             itemContent.insertBefore(scoreElement, itemContentBox.nextSibling);
         })

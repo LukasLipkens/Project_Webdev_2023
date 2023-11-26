@@ -7,12 +7,12 @@ template.innerHTML = /*html*/ `
 
     <style>
         .big-container {
-            width: 1200px;
-            margin: 20px auto;
             border: 2px solid black;
             border-radius: 10px;
-            padding: 10px 10px 0 10px;
-            font-size: 25px;
+            width: 1200px;
+            margin: auto;
+            margin-top: 20px;
+            min-height: 500px;
         }
         .anotherone {
             border: 1px solid black;
@@ -24,6 +24,7 @@ template.innerHTML = /*html*/ `
             border-radius: 10px;
             width: 50px;
             user-select: none;
+            font-size: 25px;
         }
         .title {
             font-size: 60px;
@@ -51,6 +52,30 @@ class HistoryComponent extends HTMLElement {
 
         another.addEventListener("click", () => {
             const newMatch = document.createElement("match-comp");
+
+            const names = ["Ruan", "Lukas", "Simon", "Thomas", "Niels", "Hamza", "Siegmund", "Benny", "Jule", "Mathijs", "Ragnar", "Zoran", "Philip", "Warre"];
+            const randomName1 = names[Math.floor(Math.random() * names.length)];
+            const randomName2 = names[Math.floor(Math.random() * names.length)];
+            const randomScore1 = Math.floor(Math.random() * 7);
+            const randomScore2 = Math.floor(Math.random() * 7);
+
+            let winningSide = "";
+            if (randomScore1 > randomScore2) {
+                winningSide = "left";
+            }
+            else if (randomScore2 > randomScore1) {
+                winningSide = "right";
+            }
+            else {
+                winningSide = "both";
+            }
+
+            newMatch.setAttribute("playerName1", randomName1);
+            newMatch.setAttribute("playerName2", randomName2);
+            newMatch.setAttribute("score1", randomScore1);
+            newMatch.setAttribute("score2", randomScore2);
+            newMatch.setAttribute("whoWon", winningSide);
+
             bigContainer.append(newMatch);
         })
     }
