@@ -1,5 +1,6 @@
 //#region IMPORTS
 import "./scoreButtons.js"
+import "./endgameButton.js"
 //#endregion IMPORTS
 
 const template = document.createElement("template")
@@ -30,12 +31,13 @@ template.innerHTML = /*html*/`
                 'servePlayer1 servePlayer1 servePlayer1 servePlayer2 servePlayer2 servePlayer2';
             gap: 4px;
             background-color: rgb(255, 255, 255);
-            padding: 10px;
-            border: 10px solid black;
+            padding: 4px;
+            border: 5px solid black;
+            border-radius: 5px;
             width: 70%;
             margin: auto;
-            margin-top: 25px;
-            margin-bottom: 25px;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
 
         .grid-container > div {
@@ -47,6 +49,11 @@ template.innerHTML = /*html*/`
         }
         .scoreBoard{
             width: 100%;
+
+        }
+        .content{
+            border-radius: 20px;
+            margin: 10px;
         }
         scorebtn-comp{
             display: flex;
@@ -60,27 +67,67 @@ template.innerHTML = /*html*/`
             width: 100%;
             display: flex;
         }
+        .serveBall{
+            width: 25px;
+            position: absolute;
+            transform: translate(120%, -45%);
+            right: 0;
+            top: 50%;
+            
+        }
+        .servePlayer1 p, .servePlayer2 p{
+            position: relative;
+            width: fit-content;
+            margin: auto;
+        }
+        p, h3{
+            margin: 0;
+        }
+        .bottomDiv{
+            margin: 10px;
+        }
+        .score{
+            height: 100%;
+            position: relative;
+
+        }
+        .score p{
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .value{
+            font-size: 1.5em;
+            color: yellow;
+
+        }
     </style>
     <div class="scoreBoard">
-        <div class="centerDiv">
+        <div class="content">
+            <div class="centerDiv">
 
-            <div class="grid-container">
-                <div class="player1">Player1</div>
-                <div class="player2">Player2</div>
+                <div class="grid-container">
+                    <div class="player1"><h3>Player1</h3></div>
+                    <div class="player2"><h3>Player2</h3></div>
 
-                <div class="scorePlayer1">score<br><span>0</span></div>
-                <div class="scorePlayer2">score<br><span>0</span></div>
+                    <div class="scorePlayer1"><div class="score"><p>score<br><span class="value">0</span></p></div></div>
+                    <div class="scorePlayer2"><div class="score"><p>score<br><span class="value">0</span></p></div></div>
 
-                <div class="setsPlayer1">sets<br><span>0</span></div>  
-                <div class="setsPlayer2">sets<br><span>0</span></div>  
+                    <div class="setsPlayer1"><p>sets<br><span class="value">0</span></p></div>  
+                    <div class="setsPlayer2"><p>sets<br><span class="value">0</span></p></div>  
 
-                <div class="matchesPlayer1">match<br><span>0</span></div>
-                <div class="matchesPlayer2">match<br><span>0</span></div>
+                    <div class="matchesPlayer1"><p>match<br><span class="value">0</span></p></div>
+                    <div class="matchesPlayer2"><p>match<br><span class="value">0</span></p></div>
 
-                <div class="servePlayer1">serve:Simon</div>
-                <div class="servePlayer2">serve:simo</div>
+                    <div class="servePlayer1"><p>serve:<img id="ballP1" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
+                    <div class="servePlayer2"><p>serve:<img id="ballP2" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
+
+                </div>
 
             </div>
+            <div class="bottomDiv"></div>
         </div>
     </div>
     `
@@ -92,25 +139,13 @@ class app extends HTMLElement {
         shadow.append(template.content.cloneNode(true))
         this.type;
         this.board = this.shadowRoot.querySelector(".centerDiv");
+        this.endgame = this.shadowRoot.querySelector(".bottomDiv");
 
         this.scoreP1 = this.shadowRoot.querySelector(".scorePlayer1 span");
         this.scoreP2 = this.shadowRoot.querySelector(".scorePlayer2 span");
 
         this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
-        this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
-
-        this.scores = {
-            player1: {
-                score: 0,
-                sets: 0,
-                match: 0
-            },
-            player2:{
-                score: 0,
-                sets: 0,
-                match: 0
-            }
-        }
+        this.setsP2 = this.shadowRoot.querySelector(".setsPlayer1 span");
     }
 
     connectedCallback(){
@@ -120,12 +155,14 @@ class app extends HTMLElement {
         }
         this.addEventListener("UpdateScoreEvent", this.UpdateScoreEvent);
 
-    }
+
+    }   
 
     UpdateScoreEvent(e){
         console.log("btnPress Received " + e.detail);
         this.UpdateScore(e.detail);
     }
+
     UpdateScore(info){
         let action = info[0];
         let player = info[1];
@@ -135,6 +172,7 @@ class app extends HTMLElement {
 
     UpdateToAdmin(){
         console.log("admin rights have been added");
+        let endgamebtn = document.createElement(`endgamebtn-comp`);
         for(let i = 1; i<=2;i++){
             let scoreBtn = document.createElement(`scorebtn-comp`);
             scoreBtn.setAttribute("id", `Player_${i}`)
@@ -145,6 +183,7 @@ class app extends HTMLElement {
                 this.board.append(scoreBtn);
             }
         }
+        this.endgame.append(endgamebtn);
         
 
     }
