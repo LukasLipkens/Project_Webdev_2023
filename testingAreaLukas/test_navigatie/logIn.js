@@ -90,7 +90,7 @@ class app extends HTMLElement
                   login = true;
                 }
             }
-            xhttp.open("GET", "login.php?"+str);
+            xhttp.open("GET", "/testingAreaLukas/test_navigatie/login.php?"+str);
             xhttp.send();
           }
           ChangePageEvent(id){
