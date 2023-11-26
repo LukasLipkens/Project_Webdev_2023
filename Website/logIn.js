@@ -48,6 +48,8 @@ class app extends HTMLElement
         
         }
     connectedCallback(){
+      this.IsLoggedIn = false;
+
         this.loginbtn = this.shadow.querySelector("#btnLogin");
         this.name = this.shadow.querySelector("#name");
         this.password = this.shadow.querySelector("#password");
@@ -65,8 +67,9 @@ class app extends HTMLElement
             else{
                 this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
                 // this.ChangePageEvent("myGames");
-                this.ChangePageEvent("home");
-                alert(this.respons.innerHTML);
+                if(this.IsLoggedIn){
+                  this.ChangePageEvent("myGames");
+                }
             }
 
         })
@@ -81,6 +84,9 @@ class app extends HTMLElement
             xhttp.onload = function() {
                 alert(this.responseText);
                 res.innerHTML= this.responseText;
+                if(!empty(this.responseText)){
+                  login = true;
+                }
             }
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
