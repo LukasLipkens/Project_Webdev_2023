@@ -66,6 +66,7 @@ class app extends HTMLElement
                 this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
                 // this.ChangePageEvent("myGames");
                 this.ChangePageEvent("home");
+                alert(this.respons);
             }
 
         })
