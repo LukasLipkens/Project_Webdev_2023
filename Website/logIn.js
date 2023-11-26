@@ -67,7 +67,7 @@ class app extends HTMLElement
             else{
                 this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
                 // this.ChangePageEvent("myGames");
-                console.log(this.IsLoggedIn);
+                this.IsLoggedIn = this.CheckLogin("");
                 if(this.IsLoggedIn){
                   this.ChangePageEvent("myGames");
                 }
@@ -76,22 +76,10 @@ class app extends HTMLElement
         })
     }
         CheckLogin(str) {
-            let res = this.respons;
-            let login;
-            if (str == "") {
-              this.respons.innerHTML = "";
-              this.IsLoggedIn = false;
-              return;
-            }
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
-                res.innerHTML= xhttp.responseText;
-                if(!empty(xhttp.responseText)){
-                  this.IsLoggedIn = true;
-                  return;
-                }
-                this.IsLoggedIn = false;
+                return xhttp.responseText;
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
