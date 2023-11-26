@@ -83,13 +83,13 @@ class app extends HTMLElement
               return;
             }
             const xhttp = new XMLHttpRequest();
-            xhttp.onload = ()=> {
+            xhttp.onload(()=> {
                 console.log(xhttp.responseText);
                 res.innerHTML= xhttp.responseText;
                 if(!empty(xhttp.responseText)){
                   this.IsLoggedIn = true;
                 }
-            }
+            });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
             this.IsLoggedIn = login;
