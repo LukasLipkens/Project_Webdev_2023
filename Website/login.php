@@ -19,7 +19,7 @@ session_start();
 $modus = $_GET["modus"];
 
 if ($modus == 0) {
-    print_r(false);
+    print_r(true);
 } else {
     $name = $_GET["name"];
     $password = $_GET["password"];

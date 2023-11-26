@@ -88,7 +88,11 @@ class app extends HTMLElement
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
-                this.ChangePageEvent("myGames");
+                //We moeten nu dit nog aanpassen dat 
+                if(this.CheckLogin("") == 1){
+                  this.ChangePageEvent("myGames");
+                }
+
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
