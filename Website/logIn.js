@@ -88,10 +88,12 @@ class app extends HTMLElement
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
+          
                 return xhttp.responseText;
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
+            console.log(xhttp);
           }
           ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {
