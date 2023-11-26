@@ -4,6 +4,7 @@ import "./navigation.js"
 import "./home.js"
 import "./history.js"
 import "./logIn.js"
+import "./games.js"
 //#endregion IMPORTS
 
 const template = document.createElement("template")
