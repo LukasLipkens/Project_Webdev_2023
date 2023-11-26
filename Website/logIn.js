@@ -81,7 +81,7 @@ class app extends HTMLElement
                 alert(this.responseText);
                 res.innerHTML= this.responseText;
             }
-            xhttp.open("GET", "/Website/login.php?"+str);
+            xhttp.open("GET", "login.php?"+str);
             xhttp.send();
           }
           ChangePageEvent(id){
