@@ -86,6 +86,7 @@ class app extends HTMLElement
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
                 res.innerHTML= xhttp.responseText;
+                console.log(this);
                 if(!empty(xhttp.responseText)){
                   this.IsLoggedIn = true;
                 }
