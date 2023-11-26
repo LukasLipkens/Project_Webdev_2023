@@ -67,9 +67,10 @@ class app extends HTMLElement
             else{
                 this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
                 // this.ChangePageEvent("myGames");
-                if(!empty(this.IsLoggedIn)){
+                if(this.IsLoggedIn){
                   this.ChangePageEvent("home");
                 }
+
             }
 
         })
@@ -86,7 +87,7 @@ class app extends HTMLElement
                 alert(this.responseText);
                 res.innerHTML= this.responseText;
                 if(!empty(this.responseText)){
-                  login = this.responseText;
+                  login = true;
                 }
             }
             xhttp.open("GET", "login.php?"+str);
