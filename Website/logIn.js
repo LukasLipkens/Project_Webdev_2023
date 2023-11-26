@@ -67,6 +67,7 @@ class app extends HTMLElement
             else{
                 this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
                 // this.ChangePageEvent("myGames");
+                console.log(this.IsLoggedIn);
                 if(this.IsLoggedIn){
                   this.ChangePageEvent("myGames");
                 }
