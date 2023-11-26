@@ -12,7 +12,7 @@ template.innerHTML = /*html*/ `
             width: 1200px;
             margin: auto;
             margin-top: 20px;
-            min-height: 500px;
+            padding-top: 10px;
         }
         .anotherone {
             border: 1px solid black;

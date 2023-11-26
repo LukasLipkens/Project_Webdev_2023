@@ -81,8 +81,14 @@ template.innerHTML = /*html*/ `
             background: radial-gradient(circle, gold , white 80%);
             border-radius: 30px;
         }
+        .drawLeft, .drawRight {
+            width: 40px;
+            height: 40px;
+            display: none;
+            font-weight: bold;
+            padding-top: 20px;
+        }
         .score {
-            cursor: pointer;
             user-select: none;
             font-size: 30px;
         }
@@ -135,9 +141,11 @@ template.innerHTML = /*html*/ `
                     <p>Player 1</p>
                 </div>
                 <div class="center">
+                    <p class="drawLeft">DRAW</p>
                     <img class="winnerLeft" src="./images/winner.png" alt="winner-tag">
                     <p class="score">0 - 0</p>
                     <img class="winnerRight" src="./images/winner.png" alt="winner-tag">
+                    <p class="drawRight">DRAW</p>
                 </div>
                 <div class="right">
                     <img src="./images/player2.png" alt="playerTwo">
@@ -193,6 +201,8 @@ class MatchComponent extends HTMLElement {
 
         const winnerLeft = this.shadow.querySelector(".winnerLeft");
         const winnerRight = this.shadow.querySelector(".winnerRight");
+        const drawLeft = this.shadow.querySelector(".drawLeft");
+        const drawRight = this.shadow.querySelector(".drawRight");
         const winningSide = this.getAttribute("whoWon");
 
         if (winningSide == "left") {
@@ -204,8 +214,10 @@ class MatchComponent extends HTMLElement {
             winnerRight.style.visibility = "visible";
         }
         else if (winningSide == "both") {
-            winnerLeft.style.visibility = "visible";
-            winnerRight.style.visibility = "visible";
+            winnerLeft.style.visibility = "hidden";
+            winnerRight.style.visibility = "hidden";
+            drawLeft.style.display = "block";
+            drawRight.style.display = "block";
         }
 
         this.shadow.querySelector('.left p').innerText = playerName1;
@@ -216,15 +228,13 @@ class MatchComponent extends HTMLElement {
     }
 
     setupEventListeners() {
-        const arrowImage = this.shadow.querySelectorAll(".arrow-image");
         const itemContent = this.shadow.querySelector(".item-content");
         const itemContainer = this.shadow.querySelector(".item-container");
-        const container = this.shadow.querySelector(".container");
 
-        const more = this.shadow.querySelector(".more");
-
+        const arrowImage = this.shadow.querySelectorAll(".arrow-image");
         arrowImage.forEach((arrow) => {
             arrow.addEventListener("click", () => {
+
                 if (itemContent.style.display == "block") {
                     itemContent.style.display = "none";
                     itemContainer.style.height = "60px";
@@ -234,10 +244,12 @@ class MatchComponent extends HTMLElement {
                     itemContainer.style.height = "350px";
                     itemContent.style.borderTop = "1px dashed #d1d1d1";
                 }
+
                 arrow.classList.toggle("rotate");
             });
         });
 
+        const more = this.shadow.querySelector(".more");
         more.addEventListener("click", () => {
             const scoreElement = document.createElement("single-score-comp");
             const itemContent = this.shadow.querySelector(".item-content");
