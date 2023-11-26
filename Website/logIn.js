@@ -76,6 +76,7 @@ class app extends HTMLElement
     }
         CheckLogin(str) {
             let res = this.respons;
+            let login = this.IsLoggedIn;
             if (str == "") {
               this.respons.innerHTML = "";
               return;
