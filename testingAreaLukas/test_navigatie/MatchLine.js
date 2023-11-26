@@ -22,7 +22,7 @@ template.innerHTML = /*html*/ `
             margin-left: 15px;
         }
         .item-container {
-            border: 2px solid #d1d1d1;
+            border: 2px solid rgb(1, 184, 90);
             border-left: none;
             border-radius: 0 10px 0 0;
             width: 90%;
@@ -98,7 +98,6 @@ template.innerHTML = /*html*/ `
             height: 290px;
             overflow-y: scroll;
             padding: 0 10px 0 30px;
-            border-left: 1px solid #d1d1d1;
         }
         .more {
             border: 1px solid black;
