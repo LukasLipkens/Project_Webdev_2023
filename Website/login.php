@@ -16,7 +16,9 @@ if ($conn->connect_error) {
 }
 session_start();
 
-if (isset($_SESSION["user"])) {
+$modus = $_GET["modus"];
+
+if ($modus == 0) {
     print_r(true);
 } else {
     $name = $_GET["name"];

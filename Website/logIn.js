@@ -77,6 +77,14 @@ class app extends HTMLElement
         })
     }
         CheckLogin(str) {
+          let modus;
+          if(str ==""){
+            modus = 0;
+          }
+          else{
+            modus = 1;
+          }
+          str += "&modus=" + modus;
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
