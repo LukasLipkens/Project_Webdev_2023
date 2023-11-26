@@ -80,16 +80,18 @@ class app extends HTMLElement
             let login;
             if (str == "") {
               this.respons.innerHTML = "";
+              this.IsLoggedIn = false;
               return;
             }
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
                 res.innerHTML= xhttp.responseText;
-                console.log(this);
                 if(!empty(xhttp.responseText)){
                   this.IsLoggedIn = true;
+                  return;
                 }
+                this.IsLoggedIn = false;
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
