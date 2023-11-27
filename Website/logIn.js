@@ -329,7 +329,10 @@ class app extends HTMLElement
                 //We moeten nu dit nog aanpassen dat er als er een andere user wilt inloggen
                 let arr = xhttp.response;
                 console.log(arr);
+                if(!"Error" in arr){
                   this.ChangePageEvent("myGames");
+                }
+
 
             });
             xhttp.open("GET", "login.php?"+str);
