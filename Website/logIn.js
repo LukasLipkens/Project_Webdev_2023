@@ -280,7 +280,7 @@ class app extends HTMLElement
         this.signIn = this.shadow.querySelector("#signIn");
 
         this.signIn.addEventListener("click", ()=>{
-          console.log(this.email);
+          console.log(this.email.value);
         });
         
         // this.loginbtn.addEventListener("click", ()=>{
