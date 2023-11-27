@@ -21,12 +21,12 @@ $modus = $_GET["modus"];
 if ($modus == 0 && isset($_SESSION["user"])) {
     print_r(true);
 } else {
-    $name = $_GET["name"];
+    $email = $_GET["email"];
     $password = $_GET["password"];
     $nameErr = $passErr = "";
 
 
-    $t_sql = 'SELECT * FROM tblspelers WHERE gebruikersnaam= "' . $name . '" AND password ="' . $password . '";';
+    $t_sql = 'SELECT * FROM tblspelers WHERE email= "' . $email . '" AND password ="' . $password . '";';
     $t_result = mysqli_query($conn, $t_sql);
     if ($t_result) {
         $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
@@ -35,8 +35,8 @@ if ($modus == 0 && isset($_SESSION["user"])) {
         } else {
             $_SESSION['user'] = $t_arr[0];
             // var_dump($t_arr);
-            // var_dump($_SESSION);
-            echo "succes";
+            var_dump($_SESSION["user"]);
+            // echo "succes";
         }
     } else {
         echo "Error:" . mysqli_error($conn);
