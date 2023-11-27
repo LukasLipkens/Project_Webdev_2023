@@ -31,7 +31,7 @@ template.innerHTML = /*html*/`
 
 <style>
   * {
-    margin: 0 auto;
+    margin: 6rem auto;
     padding: 0;
     box-sizing: border-box;
   }
