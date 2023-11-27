@@ -31,11 +31,12 @@ template.innerHTML = /*html*/`
 
 <style>
   * {
-    margin: 6rem auto;
+    margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
   }
   body {
+    margin-top: 5rem;
     background-color: #c9d6ff;
     display: flex;
     align-items: center;
