@@ -73,7 +73,7 @@ template.innerHTML = /*html*/`
             transform: translate(120%, -45%);
             right: 0;
             top: 50%;
-            
+            display: none;
         }
         .servePlayer1 p, .servePlayer2 p{
             position: relative;
@@ -146,6 +146,12 @@ class app extends HTMLElement {
 
         this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
         this.setsP2 = this.shadowRoot.querySelector(".setsPlayer1 span");
+
+        this.serveP1 = this.shadowRoot.querySelector("#ballP1");
+        this.serveP2 = this.shadowRoot.querySelector("#ballP2");
+
+        this.scoreArray = [0,15,30,40,"TB"];
+        this.serving = "";
     }
 
     connectedCallback(){
@@ -154,12 +160,10 @@ class app extends HTMLElement {
             this.UpdateToAdmin();
         }
         this.addEventListener("UpdateScoreEvent", this.UpdateScoreEvent);
-
-
     }   
 
     UpdateScoreEvent(e){
-        console.log("btnPress Received " + e.detail);
+        //console.log("btnPress Received " + e.detail);
         this.UpdateScore(e.detail);
     }
 
@@ -167,7 +171,30 @@ class app extends HTMLElement {
         let action = info[0];
         let player = info[1];
 
-        console.log(`updating: ${player} \n action: ${action}`);
+        //console.log(`updating: ${player} \n action: ${action}`);
+        if(player == "Player_1"){
+            if(action == "plus"){
+                let current = +this.scoreP1.innerHTML
+                this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)+1];
+            }
+            else if(action == "min"){
+                let current = +this.scoreP1.innerHTML
+                this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+            }
+        }
+        if(player == "Player_2"){
+            if(action == "plus"){
+                let current = +this.scoreP2.innerHTML
+                this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)+1];
+
+            }
+            else if(action == "min"){
+                let current = +this.scoreP2.innerHTML
+                this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+
+            }
+
+        }
     }
 
     UpdateToAdmin(){
@@ -186,6 +213,17 @@ class app extends HTMLElement {
         this.endgame.append(endgamebtn);
         
 
+        //voeg de serve ball toe aan een random player
+        if(Math.floor(Math.random() * 2) == 0){
+            this.shadowRoot.querySelector("#ballP1").style.display = "block";
+            this.serving = "Player_1";
+        }
+        else{
+            this.shadowRoot.querySelector("#ballP2").style.display = "block";
+            this.serving = "Player_2";
+        }
+        
+        
     }
 
 

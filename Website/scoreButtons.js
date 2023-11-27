@@ -72,7 +72,7 @@ class app extends HTMLElement
         {
             this.button.forEach(btn => {
                 btn.addEventListener('mousedown', (e) =>{
-                    console.log("btn Clicked");
+                    //console.log("btn Clicked");
                     let info = [btn.getAttribute("id"), this.getAttribute("id")];
                     this.UpdateScoreEvent(info);
                 })

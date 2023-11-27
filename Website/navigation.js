@@ -29,7 +29,53 @@ template.innerHTML = /*html*/`
         position: relative;
     }
 
-    nav li button, button {
+
+
+    button {
+        font-size: 18px;
+        color: black;
+        font-weight: 800;
+        cursor: pointer;
+        position: relative;
+        border: none;
+        background: none;
+        text-transform: uppercase;
+        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition-duration: 400ms;
+        transition-property: color;
+        margin-right: 15px;
+    }
+
+    button:focus,
+    button:hover{
+        color: green;
+    }
+
+    button:focus:after,
+    button:hover:after {
+        width: 100%;
+        left: 0%;
+    }
+
+    button:after {
+        content: "";
+        pointer-events: none;
+        bottom: -2px;
+        left: 50%;
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        background-color: green;
+        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition-duration: 400ms;
+        transition-property: width, left;
+    }
+
+    .active{
+        color: green;
+    }
+
+    /*nav li button, button {
         display: block;
         color: none;
         text-align: center;
@@ -45,7 +91,7 @@ template.innerHTML = /*html*/`
     nav li button:hover,nav .right-item button:hover{
         background-color: green;
         color: white;
-    }
+    }*/
     nav .right-item {
         margin-left: auto;
         margin: 0;
@@ -53,16 +99,16 @@ template.innerHTML = /*html*/`
         display: flex;
         align-items: center;
     }
-    .active {
-        background-color: #04AA6D;
-    }
     </style>
 <nav>
     <ul>
-    <li><button id="home">home</button></li>
-    <li><button id="history">history</button></li>
+    <li><h2>Tennis</h2></li>
+    <li><img src="./images/logo.svg" alt="tennisBall" style="width: 60px;"></li>
+    <li><h2>Scores<h2></li>
     </ul>
     <div class="right-item">
+        <button id="home" class="active">home</button>
+        <button id="history">history</button>
         <button id="myGames">My games</button>
         <button id="logIn">Log in</button>
     </div>
@@ -87,6 +133,11 @@ class app extends HTMLElement
             this.button.forEach(btn => {
                 btn.addEventListener('mousedown', (e) =>{
                     console.log("btn Clicked");
+                    
+                    this.button.forEach(state =>{
+                        state.setAttribute("class", "");
+                    })
+                    btn.setAttribute("class", "active");
                     this.ChangePageEvent(btn.getAttribute("id"));
                 })
             });
