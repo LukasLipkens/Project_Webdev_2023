@@ -276,30 +276,30 @@ class app extends HTMLElement
     connectedCallback(){
       this.IsLoggedIn = false;
 
-        this.loginbtn = this.shadow.querySelector("#btnLogin");
+        //this.loginbtn = this.shadow.querySelector("#btnLogin");
         this.name = this.shadow.querySelector("#name");
         this.password = this.shadow.querySelector("#password");
-        this.loginbtn.addEventListener("click", ()=>{
-            //Hier moet gewoon dan de naam en het passwoord worden doorgegeven via een string, we kunnen deze splitsen achteraf met split
-            //Er moet ook nog een element worden aangemaakt voor het eindresultaat uit te voeren.
-            //We moeten nog toevoegen dat we niet zomaar lege velden kunnen doorvoeren
-            if(empty(this.name.value)){
-                this.respons.innerHTML = "geef een naam in";
-            }
-            else if(empty(this.password.value)){
-                this.respons.innerHTML = "geef een passwoord in";
-            }
-            else{
-                this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
-                // this.ChangePageEvent("myGames");
-                this.IsLoggedIn = this.CheckLogin("");
-                console.log(this.IsLoggedIn);
-                if(this.IsLoggedIn == 1){
-                  this.ChangePageEvent("myGames");
-                }
-            }
+        // this.loginbtn.addEventListener("click", ()=>{
+        //     //Hier moet gewoon dan de naam en het passwoord worden doorgegeven via een string, we kunnen deze splitsen achteraf met split
+        //     //Er moet ook nog een element worden aangemaakt voor het eindresultaat uit te voeren.
+        //     //We moeten nog toevoegen dat we niet zomaar lege velden kunnen doorvoeren
+        //     if(empty(this.name.value)){
+        //         this.respons.innerHTML = "geef een naam in";
+        //     }
+        //     else if(empty(this.password.value)){
+        //         this.respons.innerHTML = "geef een passwoord in";
+        //     }
+        //     else{
+        //         this.CheckLogin("name="+this.name.value +"&password="+ this.password.value);
+        //         // this.ChangePageEvent("myGames");
+        //         this.IsLoggedIn = this.CheckLogin("");
+        //         console.log(this.IsLoggedIn);
+        //         if(this.IsLoggedIn == 1){
+        //           this.ChangePageEvent("myGames");
+        //         }
+        //     }
 
-        });
+        // });
 
         //animatie voor de login en sign up:
         this.container= this.shadow.getElementById("container");
