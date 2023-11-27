@@ -34,14 +34,13 @@ template.innerHTML = /*html*/`
     margin :0;
     padding: 0;
     box-sizing :border-box;
-    font-family 'Montserrat', sans-serif;
   }
   body{
     background-color: #c9d6ff;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction :colomn;
+    flex-direction :column;
     height: 100vh;
   }
   .container{
