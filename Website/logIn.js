@@ -34,15 +34,17 @@ template.innerHTML = /*html*/`
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
+    height: 100vh;
+    display: flex;
   }
   body {
-    margin-top: 5rem;
     background-color: #c9d6ff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     height: 100vh;
+    align-self: center;
   }
   .container {
     background-color: #fff;
