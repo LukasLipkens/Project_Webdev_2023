@@ -34,8 +34,6 @@ template.innerHTML = /*html*/`
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
-    height: 100vh;
-    display: flex;
   }
   body {
     background-color: #c9d6ff;
@@ -44,7 +42,6 @@ template.innerHTML = /*html*/`
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-    align-self: center;
   }
   .container {
     background-color: #fff;
@@ -238,10 +235,10 @@ template.innerHTML = /*html*/`
       <form>
         <h1>Sign In</h1>
         <span>use your email and password to login</span>
-        <input type="email" placeholder="Put here youre email" />
-        <input type="password" placeholder="Put here youre password" />
+        <input id="signEmail" type="email" placeholder="Put here your email" />
+        <input id="signPass" type="password" placeholder="Put here your password" />
         <a href="#">Forgot Your Password?</a>
-        <button>Sign In</button>
+        <button id = "signIn">Sign In</button>
       </form>
     </div>
     <div class="toggle-container">
@@ -277,8 +274,15 @@ class app extends HTMLElement
       this.IsLoggedIn = false;
 
         //this.loginbtn = this.shadow.querySelector("#btnLogin");
-        this.name = this.shadow.querySelector("#name");
-        this.password = this.shadow.querySelector("#password");
+        this.email = this.shadow.querySelector("#signEmail");
+        this.password = this.shadow.querySelector("#signPass");
+
+        this.signIn = this.shadow.querySelector("#signIn");
+
+        this.signIn.addEventListener("click", ()=>{
+          console.log(this.email);
+        });
+        
         // this.loginbtn.addEventListener("click", ()=>{
         //     //Hier moet gewoon dan de naam en het passwoord worden doorgegeven via een string, we kunnen deze splitsen achteraf met split
         //     //Er moet ook nog een element worden aangemaakt voor het eindresultaat uit te voeren.
