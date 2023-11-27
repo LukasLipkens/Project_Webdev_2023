@@ -147,10 +147,7 @@ class app extends HTMLElement {
         this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
         this.setsP2 = this.shadowRoot.querySelector(".setsPlayer1 span");
 
-        this.serveP1 = this.shadowRoot.querySelector("#ballP1");
-        this.serveP2 = this.shadowRoot.querySelector("#ballP2");
-
-        this.scoreArray = [0,15,30,40,"TB"];
+        this.scoreArray = ["0","15","30","40","TB"];
         this.serving = "";
     }
 
@@ -173,27 +170,75 @@ class app extends HTMLElement {
 
         //console.log(`updating: ${player} \n action: ${action}`);
         if(player == "Player_1"){
+            
             if(action == "plus"){
-                let current = +this.scoreP1.innerHTML
-                this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)+1];
+                let currentScore = this.scoreP1.innerHTML;
+                let currentSets = +this.setsP1.innerHTML;
+                if(currentScore == "40"){
+                    this.setsP1.innerHTML = currentSets + 1;
+                    this.scoreP1.innerHTML = this.scoreArray[0];
+
+                    this.setServing(1);
+                }
+                else{
+                    this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(currentScore)+1];
+                }
             }
             else if(action == "min"){
-                let current = +this.scoreP1.innerHTML
-                this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+                if(this.scoreP1.innerHTML != 0){
+                    let current = this.scoreP1.innerHTML
+                    console.log(this.scoreArray[this.scoreArray.indexOf(current)])
+                    this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+                }
             }
         }
         if(player == "Player_2"){
             if(action == "plus"){
-                let current = +this.scoreP2.innerHTML
+                let current = this.scoreP2.innerHTML
                 this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)+1];
 
             }
             else if(action == "min"){
-                let current = +this.scoreP2.innerHTML
-                this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+                if(this.scoreP2.innerHTML != 0){
+                    let current = this.scoreP2.innerHTML
+                    console.log(this.scoreArray[this.scoreArray.indexOf(current)])
+                    this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
+                }
 
             }
 
+        }
+    }
+
+    setServing(status){
+
+        let serveP1 = this.shadowRoot.querySelector("#ballP1");
+        let serveP2 = this.shadowRoot.querySelector("#ballP2");
+
+        if(status == 0){
+        //voeg de serve ball toe aan een random player
+            if(Math.floor(Math.random() * 2) == 0){
+                serveP1.style.display = "block";
+                this.serving = "Player_1";
+            }
+            else{
+                serveP2.style.display = "block";
+                this.serving = "Player_2";
+            }
+        }
+        else{
+            if(this.serving == "Player_1"){
+                serveP2.style.display = "block";
+                serveP1.style.display = "none";
+
+                this.serving = "Player_2"
+            }
+            else{
+                serveP1.style.display = "block";
+                serveP2.style.display = "none";
+
+                this.serving = "Player_1"
+            }
         }
     }
 
@@ -213,15 +258,7 @@ class app extends HTMLElement {
         this.endgame.append(endgamebtn);
         
 
-        //voeg de serve ball toe aan een random player
-        if(Math.floor(Math.random() * 2) == 0){
-            this.shadowRoot.querySelector("#ballP1").style.display = "block";
-            this.serving = "Player_1";
-        }
-        else{
-            this.shadowRoot.querySelector("#ballP2").style.display = "block";
-            this.serving = "Player_2";
-        }
+        this.setServing(0);
         
         
     }
