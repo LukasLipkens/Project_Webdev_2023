@@ -23,7 +23,7 @@ $password = $_GET["password"];
 $nameErr = $passErr = "";
 
 
-$t_sql = 'SELECT * FROM tblspelers WHERE email= "' . $email . '" AND password ="' . $password . '";';
+$t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '" AND password="' . $password . '";';
 $t_result = mysqli_query($conn, $t_sql);
 if ($t_result) {
     $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);

@@ -337,7 +337,6 @@ class app extends HTMLElement
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
-            console.log(xhttp);
           }
           ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {
