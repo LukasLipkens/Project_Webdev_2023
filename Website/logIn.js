@@ -291,12 +291,6 @@ class app extends HTMLElement
           }
           else{
               this.CheckLogin("email="+this.email.value +"&password="+ this.password.value);
-              // this.ChangePageEvent("myGames");
-              this.IsLoggedIn = this.CheckLogin("");
-              console.log(this.IsLoggedIn);
-              if(this.IsLoggedIn == 1){
-                this.ChangePageEvent("myGames");
-              }
           }
         });
 
