@@ -19,6 +19,7 @@ template.innerHTML = /*html*/`
     }
     li{
         padding: 5px;
+        display: flex
     }
     button{
         padding: 0 12px;
@@ -27,14 +28,21 @@ template.innerHTML = /*html*/`
         border-radius: 2em;
         position: relative;
     }
-    button h1{
+    #min{
+        padding: 0 5px;
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        margin: auto;
+    }
+    button h1, button h3{
         position: absolute;
         top: 15%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
     .min{
-        top: 10%;
+        top: -20%;
     }
     .innerArea{
         height: fit-content;
@@ -51,7 +59,7 @@ template.innerHTML = /*html*/`
                     <button id="plus"><h1>+</h1></button>
                 </li>
                 <li>
-                    <button id="min"><h1 class="min">-</h1></button>
+                    <button id="min"><h3 class="min">-</h3></button>
                 </li>
             </ul>
         </div>

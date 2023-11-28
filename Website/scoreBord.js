@@ -9,26 +9,26 @@ template.innerHTML = /*html*/`
         .player1 { grid-area: player1; }
         .player2 { grid-area: player2; }
 
-        .scorePlayer1 { grid-area: scorePlayer1; }
-        .scorePlayer2 { grid-area: scorePlayer2; }
+        .pointsT1 { grid-area: pointsT1; }
+        .pointsT2 { grid-area: pointsT2; }
 
-        .setsPlayer1 { grid-area: setsPlayer1; }
-        .setsPlayer2 { grid-area: setsPlayer2; }
+        .gameT1 { grid-area: gameT1; }
+        .gameT2 { grid-area: gameT2; }
 
-        .matchesPlayer1 { grid-area: matchesPlayer1; }
-        .matchesPlayer2 { grid-area: matchesPlayer2; }
+        .setsT1 { grid-area: setsT1; }
+        .setsT2 { grid-area: setsT2; }
 
-        .servePlayer1 { grid-area: servePlayer1; }
-        .servePlayer2 { grid-area: servePlayer2; }
+        .serveT1 { grid-area: serveT1; }
+        .serveT2 { grid-area: serveT2; }
 
 
         .grid-container {
             display: grid;
             grid-template-areas:
-                'player1 player1 player1 player2 player2 player2'
-                'scorePlayer1 setsPlayer1 setsPlayer1 setsPlayer2 setsPlayer2 scorePlayer2'
-                'scorePlayer1 matchesPlayer1 matchesPlayer1 matchesPlayer2 matchesPlayer2 scorePlayer2'
-                'servePlayer1 servePlayer1 servePlayer1 servePlayer2 servePlayer2 servePlayer2';
+                'player1 player1 player1 player1 player2 player2 player2 player2'
+                'pointsT1 pointsT1 gameT1 gameT1 gameT2 gameT2 pointsT2 pointsT2'
+                'pointsT1 pointsT1 setsT1 setsT1 setsT2 setsT2 pointsT2 pointsT2'
+                'serveT1 serveT1 serveT1 serveT1 serveT2 serveT2 serveT2 serveT2';
             gap: 4px;
             background-color: rgb(255, 255, 255);
             padding: 4px;
@@ -75,7 +75,7 @@ template.innerHTML = /*html*/`
             top: 50%;
             display: none;
         }
-        .servePlayer1 p, .servePlayer2 p{
+        .serveT1 p, .serveT2 p{
             position: relative;
             width: fit-content;
             margin: auto;
@@ -112,17 +112,17 @@ template.innerHTML = /*html*/`
                     <div class="player1"><h3>Player1</h3></div>
                     <div class="player2"><h3>Player2</h3></div>
 
-                    <div class="scorePlayer1"><div class="score"><p>score<br><span class="value">0</span></p></div></div>
-                    <div class="scorePlayer2"><div class="score"><p>score<br><span class="value">0</span></p></div></div>
+                    <div class="pointsT1"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
+                    <div class="pointsT2"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
 
-                    <div class="setsPlayer1"><p>sets<br><span class="value">0</span></p></div>  
-                    <div class="setsPlayer2"><p>sets<br><span class="value">0</span></p></div>  
+                    <div class="gameT1"><p>game<br><span class="value">0</span></p></div>  
+                    <div class="gameT2"><p>game<br><span class="value">0</span></p></div>  
 
-                    <div class="matchesPlayer1"><p>match<br><span class="value">0</span></p></div>
-                    <div class="matchesPlayer2"><p>match<br><span class="value">0</span></p></div>
+                    <div class="setsT1"><p>sets<br><span class="value">0</span></p></div>
+                    <div class="setsT2"><p>sets<br><span class="value">0</span></p></div>
 
-                    <div class="servePlayer1"><p>serve:<img id="ballP1" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
-                    <div class="servePlayer2"><p>serve:<img id="ballP2" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
+                    <div class="serveT1"><p>serve:<img id="ballT1" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
+                    <div class="serveT2"><p>serve:<img id="ballT2" class="serveBall" src="./images/logo.svg" alt="tennisBall"></p></div>
 
                 </div>
 
@@ -141,13 +141,16 @@ class app extends HTMLElement {
         this.board = this.shadowRoot.querySelector(".centerDiv");
         this.endgame = this.shadowRoot.querySelector(".bottomDiv");
 
-        this.scoreP1 = this.shadowRoot.querySelector(".scorePlayer1 span");
-        this.scoreP2 = this.shadowRoot.querySelector(".scorePlayer2 span");
+        this.pointsT1 = this.shadowRoot.querySelector(".pointsT1 span");
+        this.pointsT2 = this.shadowRoot.querySelector(".pointsT2 span");
 
-        this.setsP1 = this.shadowRoot.querySelector(".setsPlayer1 span");
-        this.setsP2 = this.shadowRoot.querySelector(".setsPlayer1 span");
+        this.gameT1 = this.shadowRoot.querySelector(".gameT1 span");
+        this.gameT2 = this.shadowRoot.querySelector(".gameT2 span");
 
-        this.scoreArray = ["0","15","30","40","TB"];
+        this.setsT1 = this.shadowRoot.querySelector(".setsT1 span");
+        this.setsT2 = this.shadowRoot.querySelector(".setsT2 span");
+
+        this.pointsArray = ["0","15","30","40","ADV"];
         this.serving = "";
     }
 
@@ -168,76 +171,167 @@ class app extends HTMLElement {
         let action = info[0];
         let player = info[1];
 
-        //console.log(`updating: ${player} \n action: ${action}`);
-        if(player == "Player_1"){
-            
-            if(action == "plus"){
-                let currentScore = this.scoreP1.innerHTML;
-                let currentSets = +this.setsP1.innerHTML;
-                if(currentScore == "40"){
-                    this.setsP1.innerHTML = currentSets + 1;
-                    this.scoreP1.innerHTML = this.scoreArray[0];
+        /*begin spel*/
+        this.game(action, player);
+        /*einde spel*/
 
-                    this.setServing(1);
-                }
-                else{
-                    this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(currentScore)+1];
-                }
-            }
-            else if(action == "min"){
-                if(this.scoreP1.innerHTML != 0){
-                    let current = this.scoreP1.innerHTML
-                    console.log(this.scoreArray[this.scoreArray.indexOf(current)])
-                    this.scoreP1.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
-                }
-            }
-        }
-        if(player == "Player_2"){
-            if(action == "plus"){
-                let current = this.scoreP2.innerHTML
-                this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)+1];
+        /*begin match*/
+        /*einde match*/
 
-            }
-            else if(action == "min"){
-                if(this.scoreP2.innerHTML != 0){
-                    let current = this.scoreP2.innerHTML
-                    console.log(this.scoreArray[this.scoreArray.indexOf(current)])
-                    this.scoreP2.innerHTML = this.scoreArray[this.scoreArray.indexOf(current)-1];
-                }
+        /*begin sets*/
+        /*einde sets*/
 
-            }
-
-        }
     }
 
-    setServing(status){
+    game(action, team){
+        let T1 = this.pointsT1.innerHTML;
+        let T2 = this.pointsT2.innerHTML;
 
-        let serveP1 = this.shadowRoot.querySelector("#ballP1");
-        let serveP2 = this.shadowRoot.querySelector("#ballP2");
+        if(action == "min"){
+            switch(team){
+                case "T_1":
+                    if(T1 != 0)
+                    this.pointsT1.innerHTML = this.pointsArray[this.pointsArray.indexOf(T1) - 1];
+                    break;
+                case "T_2":
+                    if(T2 != 0)
+                    this.pointsT2.innerHTML = this.pointsArray[this.pointsArray.indexOf(T2) - 1];
+                    break;
+
+            }
+        }
+        else{
+            let updateTo = "-1";
+            if(T1 == "40" || T2 == "40"){
+                if(T1 == "40" && team == "T_1" && T2 != 40 && T2 != "ADV"){
+                    //als team 1: 40 heeft EN scoort EN team 2 heeft geen 40 EN geen ADV: team 1 wint de game 
+                    //console.log("case 1");
+                    this.match(team);
+                    return;
+                }
+                if(T2 == "40" && team == "T_2" && T1 != 40 && T1 != "ADV"){
+                    //als team 2: 40 heeft EN scoort EN team 1 heeft geen 40 EN geen ADV: team 2 wint de game 
+                    //console.log("case 2");
+                    this.match(team);
+                    return;
+                }
+                if(T1 == "40" && T2 == "40"){
+                    //als team 1 40 heeft EN team 2 40 heeft: team met punt krijgt ADV
+                    //console.log("case 3");
+                }
+                
+            }
+
+            if(T1 == "ADV" || T2 == "ADV"){
+                if(team == "T_1" && T1 == "ADV"){
+                    //team 1 scoort heeft voordeel: team 1 wint de game
+                    //console.log("case 4");
+                    this.match(team);
+                    return;
+                }
+                if(team == "T_2" && T2 == "ADV"){
+                    //team 2 scoort heeft voordeel: team 2 wint de game
+                    //console.log("case 5");
+                    this.match(team);
+                    return;
+                }
+                if(team == "T_2" && T1 == "ADV" || team == "T_1" && T2 == "ADV"){
+                    // een team heeft voordeel, het ander team scoort: terug naar 40-gelijk
+                    //console.log("case 6");
+                    updateTo = "40-gelijk"
+
+                    //zet bijde teams terug op 40
+                    this.pointsT1.innerHTML = this.pointsArray[this.pointsArray.indexOf("40")];
+                    this.pointsT2.innerHTML = this.pointsArray[this.pointsArray.indexOf("40")];
+                }
+            }
+
+            if(updateTo == "-1"){
+                //console.log(updateTo)
+                switch(team){
+                    case "T_1":
+                        this.pointsT1.innerHTML = this.pointsArray[this.pointsArray.indexOf(T1) + 1];
+                        break;
+                    case "T_2":
+                        this.pointsT2.innerHTML = this.pointsArray[this.pointsArray.indexOf(T2) + 1];
+                        break;
+                }
+            }
+        }
+    }
+    match(team){
+        /*reset points*/
+        this.pointsT1.innerHTML = this.pointsArray[this.pointsArray.indexOf("0")];
+        this.pointsT2.innerHTML = this.pointsArray[this.pointsArray.indexOf("0")];
+
+        /*change serve side*/
+        this.updateServe(1);
+        
+        let T1 = +this.gameT1.innerHTML;
+        let T2 = +this.gameT2.innerHTML;
+        
+        switch(team){
+            case "T_1":
+                this.gameT1.innerHTML = T1 + 1;
+                T1 += 1;
+                break;
+            case "T_2":
+                this.gameT2.innerHTML = T2 + 1;
+                T2 += 1;
+                break;
+        }
+
+        if(team == "T_1" && T1 > 5 && T1 >= T2 + 2){
+            this.sets(team);
+            return;
+        }
+        if(team == "T_2" && T2 > 5 && T2 >= T2 + 2){
+            this.sets(team);
+            return;
+        }
+
+
+    }
+    sets(team){
+        this.gameT1.innerHTML = "0";
+        this.gameT2.innerHTML = "0";
+
+        
+    }
+
+
+
+
+
+
+    updateServe(status){
+
+        let serveT1 = this.shadowRoot.querySelector("#ballT1");
+        let serveT2 = this.shadowRoot.querySelector("#ballT2");
 
         if(status == 0){
         //voeg de serve ball toe aan een random player
             if(Math.floor(Math.random() * 2) == 0){
-                serveP1.style.display = "block";
-                this.serving = "Player_1";
+                serveT1.style.display = "block";
+                this.serving = "T_1";
             }
             else{
-                serveP2.style.display = "block";
-                this.serving = "Player_2";
+                serveT2.style.display = "block";
+                this.serving = "T_2";
             }
         }
         else{
             if(this.serving == "Player_1"){
-                serveP2.style.display = "block";
-                serveP1.style.display = "none";
+                serveT2.style.display = "block";
+                serveT1.style.display = "none";
 
-                this.serving = "Player_2"
+                this.serving = "T_2"
             }
             else{
-                serveP1.style.display = "block";
-                serveP2.style.display = "none";
+                serveT1.style.display = "block";
+                serveT2.style.display = "none";
 
-                this.serving = "Player_1"
+                this.serving = "T_1"
             }
         }
     }
@@ -247,7 +341,7 @@ class app extends HTMLElement {
         let endgamebtn = document.createElement(`endgamebtn-comp`);
         for(let i = 1; i<=2;i++){
             let scoreBtn = document.createElement(`scorebtn-comp`);
-            scoreBtn.setAttribute("id", `Player_${i}`)
+            scoreBtn.setAttribute("id", `T_${i}`)
             if(i == 1){
                 this.board.prepend(scoreBtn);
             }
@@ -258,7 +352,7 @@ class app extends HTMLElement {
         this.endgame.append(endgamebtn);
         
 
-        this.setServing(0);
+        this.updateServe(0);
         
         
     }
