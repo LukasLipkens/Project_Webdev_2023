@@ -112,7 +112,7 @@ template.innerHTML = /*html*/`
                     <div class="player1"><h3>Player1</h3></div>
                     <div class="player2"><h3>Player2</h3></div>
 
-                    <div class="pointsT1"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
+                    <div class="pointsT1"><div class="score"><p>pointss<br><span class="value">0</span></p></div></div>
                     <div class="pointsT2"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
 
                     <div class="gameT1"><p>game<br><span class="value">0</span></p></div>  
