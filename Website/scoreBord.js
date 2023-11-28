@@ -302,8 +302,6 @@ class app extends HTMLElement {
 
 
 
-
-
     updateServe(status){
 
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
