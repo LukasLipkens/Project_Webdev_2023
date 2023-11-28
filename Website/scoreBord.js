@@ -303,7 +303,6 @@ class app extends HTMLElement {
 
 
     updateServe(status){
-
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
         let serveT2 = this.shadowRoot.querySelector("#ballT2");
 
@@ -319,7 +318,7 @@ class app extends HTMLElement {
             }
         }
         else{
-            if(this.serving == "Player_1"){
+            if(this.serving == "T_1"){
                 serveT2.style.display = "block";
                 serveT1.style.display = "none";
 
