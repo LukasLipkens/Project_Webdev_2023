@@ -285,7 +285,7 @@ class app extends HTMLElement {
             this.sets(team);
             return;
         }
-        if(team == "T_2" && T2 > 5 && T2 >= T2 + 2){
+        if(team == "T_2" && T2 > 5 && T2 >= T1 + 2){
             this.sets(team);
             return;
         }
