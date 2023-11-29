@@ -25,6 +25,13 @@ class app extends HTMLElement
         this.mainPage = this.shadowRoot.querySelector("#mainPage");
     }
 
+
+
+    connectedCallback(){
+        this.navigation = this.shadowRoot.querySelector("navi-comp");
+        this.addEventListener("ChangePageEvent", this.ChangePageEvent);
+        this.showPages("home")
+    }
     ChangePageEvent(e){
         console.log("btnPress Received " + e.detail);
         this.CheckLogin();
@@ -46,13 +53,6 @@ class app extends HTMLElement
         xhttp.open("GET", "checkLogin.php?");
         xhttp.send();
     }
-
-    connectedCallback(){
-        this.navigation = this.shadow.querySelector("navi-comp");
-        this.addEventListener("ChangePageEvent", this.ChangePageEvent);
-        this.showPages("home")
-    }
-
     showPages(page)
     {
         
