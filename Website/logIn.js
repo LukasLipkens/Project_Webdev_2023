@@ -280,16 +280,18 @@ class app extends HTMLElement
         this.signIn = this.shadow.querySelector("#signIn");
 
         this.signIn.addEventListener("click", ()=>{
-                      //Hier moet gewoon dan de naam en het passwoord worden doorgegeven via een string, we kunnen deze splitsen achteraf met split
-            //Er moet ook nog een element worden aangemaakt voor het eindresultaat uit te voeren.
-            //We moeten nog toevoegen dat we niet zomaar lege velden kunnen doorvoeren
-            if(empty(this.email.value)){
+          if(empty(this.email.value)){
+            console.log("1");
+
               this.email.value = "";
           }
           else if(empty(this.password.value)){
+            console.log("2");
+
               this.password.value = "";
           }
           else{
+            console.log("3");
               this.CheckLogin("email="+this.email.value +"&password="+ this.password.value);
           }
         });
