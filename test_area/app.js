@@ -4,6 +4,7 @@ import "./navigation.js"
 import "./home.js"
 import "./history.js"
 import "./logIn.js"
+import "./games.js"
 //#endregion IMPORTS
 
 const template = document.createElement("template")
@@ -32,6 +33,7 @@ class app extends HTMLElement
 
     connectedCallback(){
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
+        this.showPages("home")
     }
 
     showPages(page)
@@ -41,6 +43,7 @@ class app extends HTMLElement
                 this.shadowRoot.querySelector(`#${oldPage}`).style.display = "none";
                 
         }
+
         if(this.cachedPages.indexOf(page) !== -1){
             console.log("i already cached! " + page)
             
