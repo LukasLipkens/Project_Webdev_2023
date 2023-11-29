@@ -24,5 +24,6 @@ jobs:
         port: 22
         script: |
           cd /var/www/Project_Webdev_2023/
+          git stash
           git pull origin main
           git status
