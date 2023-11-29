@@ -29,6 +29,8 @@ class app extends HTMLElement
         console.log("btnPress Received " + e.detail);
         this.CheckLogin();
         console.log("test");
+
+        
         this.showPages(e.detail);
     }
 
