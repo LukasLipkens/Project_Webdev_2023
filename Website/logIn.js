@@ -225,14 +225,14 @@ template.innerHTML = /*html*/`
       <form>
         <h1>Create Account</h1>
         <span>use your email for registration</span>
-        <input type="text" placeholder="Put here your name" />
-        <input type="email" placeholder="Put here youre email" />
-        <input type="password" placeholder="Put here youre password" />
-        <button type ="button">Sign Up</button> <!-- type button is hier heel belangrijk: het zorgt ervoor dat de button geen random acties doet -->
+        <input id="upName" type="text" placeholder="Put here your name" />
+        <input id="upEmail" type="email" placeholder="Put here youre email" />
+        <input id="upPassword" type="password" placeholder="Put here youre password" />
+        <button type = "button" id = "signUp">Sign Up</button>
       </form>
     </div>
     <div class="form-container sign-in">
-      <form action="">
+      <form>
         <h1>Sign In</h1>
         <span>use your email and password to login</span>
         <input id="signEmail" type="email" placeholder="Put here your email" />
@@ -277,7 +277,12 @@ class app extends HTMLElement
         this.email = this.shadow.querySelector("#signEmail");
         this.password = this.shadow.querySelector("#signPass");
 
+        this.upEmail = this.shadow.querySelector("#upEmail");
+        this.upName = this.shadow.querySelector("#upName");
+        this.upPass = this.shadow.querySelector("#upPassword")
+
         this.signIn = this.shadow.querySelector("#signIn");
+        this.signUp = this.shadow.querySelector("#signUp");
 
         this.signIn.addEventListener("click", ()=>{
           if(empty(this.email.value)){
@@ -296,6 +301,10 @@ class app extends HTMLElement
           }
         });
 
+        this.signUp.addEventListener("click", ()=>{
+              this.AddUser("email="+this.upEmail.value + "&password="+ this.upPass.value + "&name="+this.upName.value);
+        });
+
         //animatie voor de login en sign up:
         this.container= this.shadow.getElementById("container");
         this.registerBtn = this.shadow.getElementById("register");
@@ -311,14 +320,6 @@ class app extends HTMLElement
 
       }
       CheckLogin(str) {
-          let modus;
-          if(str ==""){
-            modus = 0;
-          }
-          else{
-            modus = 1;
-          }
-          str += "&modus=" + modus;
             const xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", ()=> {
                 console.log(xhttp.responseText);
@@ -333,7 +334,20 @@ class app extends HTMLElement
             });
             xhttp.open("GET", "login.php?"+str);
             xhttp.send();
-          }
+      }
+
+      AddUser(str){
+          const xhttp = new XMLHttpRequest();
+          xhttp.addEventListener(("load"), ()=>{
+            let response = xhttp.response;
+            console.log(response);
+            if(response == "succes"){
+              this.CheckLogin(str);
+            }
+          });
+          xhttp.open("GET", "addUser.php?"+str);
+          xhttp.send();
+      }
           ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {
                 bubbles: true,
@@ -375,5 +389,3 @@ const empty = (data) => {
     // Return false for any other data types, as they're not considered empty
     return false;
   };
-
-
