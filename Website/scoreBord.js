@@ -293,12 +293,37 @@ class app extends HTMLElement {
 
     }
     sets(team){
+        /*reset de match punten*/
         this.gameT1.innerHTML = "0";
         this.gameT2.innerHTML = "0";
 
+        let T1 = +this.setsT1.innerHTML;
+        let T2 = +this.setsT2.innerHTML;
+        
+        switch(team){
+            case "T_1":
+                this.setsT1.innerHTML = T1 + 1;
+                T1 += 1;
+                break;
+            case "T_2":
+                this.setsT2.innerHTML = T2 + 1;
+                T2 += 1;
+                break;
+        }
+        console.log(T1 + "|" + T2)
+        if(T1 == 2 || T2 == 2){
+            this.winner(team);
+        }
         
     }
 
+    winner(team){
+        alert("there is a winner");
+
+        this.setsT1.innerHTML = "0";
+        this.setsT2.innerHTML = "0";
+        //hier moet de game gestopt worden en terug gaan naar mygames
+    }
 
 
 
