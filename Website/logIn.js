@@ -228,7 +228,7 @@ template.innerHTML = /*html*/`
         <input type="text" placeholder="Put here your name" />
         <input type="email" placeholder="Put here youre email" />
         <input type="password" placeholder="Put here youre password" />
-        <button>Sign Up</button>
+        <button type = "button">Sign Up</button>
       </form>
     </div>
     <div class="form-container sign-in">
@@ -238,7 +238,7 @@ template.innerHTML = /*html*/`
         <input id="signEmail" type="email" placeholder="Put here your email" />
         <input id="signPass" type="password" placeholder="Put here your password" />
         <a href="#">Forgot Your Password?</a>
-        <button id = "signIn">Sign In</button>
+        <button id = "signIn" type = "button">Sign In</button>
       </form>
     </div>
     <div class="toggle-container">
