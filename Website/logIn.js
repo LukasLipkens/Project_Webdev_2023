@@ -228,7 +228,7 @@ template.innerHTML = /*html*/`
         <input type="text" placeholder="Put here your name" />
         <input type="email" placeholder="Put here youre email" />
         <input type="password" placeholder="Put here youre password" />
-        <button type ="button">Sign Up</button>
+        <button type ="button">Sign Up</button> <!-- type button is hier heel belangrijk: het zorgt ervoor dat de button geen random acties doet -->
       </form>
     </div>
     <div class="form-container sign-in">

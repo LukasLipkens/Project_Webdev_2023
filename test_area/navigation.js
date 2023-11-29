@@ -142,6 +142,11 @@ class app extends HTMLElement
                 })
             });
         }
+        static observedAttributes = ["loggedIn"];
+
+        AttributeChangedCallback(){
+            console.log("gerarriveerd");
+        }
 
         ChangePageEvent(id){
             this.dispatchEvent(new CustomEvent("ChangePageEvent", {

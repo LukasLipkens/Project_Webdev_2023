@@ -9,7 +9,7 @@ import "./games.js"
 
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
-    <navi-comp></navi-comp>
+    <navi-comp loggedIn = "false"></navi-comp>
     <div id="mainPage"></div>
 `
 
@@ -27,11 +27,26 @@ class app extends HTMLElement
 
     ChangePageEvent(e){
         console.log("btnPress Received " + e.detail);
-
+        this.CheckLogin();
+        console.log("test");
         this.showPages(e.detail);
     }
 
+    CheckLogin(){
+        const xhttp = new XMLHttpRequest();
+        xhttp.addEventListener("load", ()=>{
+          let response = xhttp.response;
+          console.log(response);
+          if(!(response = "guest")){
+            this.navigation.setAttribute("loggedIn", "true");
+          }
+        });
+        xhttp.open("GET", "checkLogin.php?");
+        xhttp.send();
+    }
+
     connectedCallback(){
+        this.navigation = this.shadow.querySelector("navi-comp");
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
         this.showPages("home")
     }
