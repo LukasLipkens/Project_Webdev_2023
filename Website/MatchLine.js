@@ -234,24 +234,27 @@ class MatchComponent extends HTMLElement {
         arrowImage.forEach((arrow) => {
             arrow.addEventListener("click", () => {
 
-                if (itemContent.style.display == "block") {
-                    itemContent.style.display = "none";
-                    itemContainer.style.height = "60px";
-                }
-                else {
-                    itemContent.style.display = "block";
-                    itemContainer.style.height = "350px";
-                    itemContent.style.borderTop = "1px dashed #d1d1d1";
-                }
+            //     if (itemContent.style.display == "block") {
+            //         itemContent.style.display = "none";
+            //         itemContainer.style.height = "60px";
+            //     }
+            //     else {
+            //         itemContent.style.display = "block";
+            //         itemContainer.style.height = "350px";
+            //         itemContent.style.borderTop = "1px dashed #d1d1d1";
+            //     }
 
-                arrow.classList.toggle("rotate");
+            //     arrow.classList.toggle("rotate");
+            // });
+
+            
             });
         });
 
         const more = this.shadow.querySelector(".more");
         more.addEventListener("click", () => {
             const scoreElement = document.createElement("single-score-comp");
-            const itemContent = this.shadow.querySelector(".item-content");
+            // const itemContent = this.shadow.querySelector(".item-content");
             const itemContentBox = this.shadow.querySelector(".item-content-box");
 
             scoreElement.setAttribute("playerName1", this.getAttribute("playerName1") || "Player 1");

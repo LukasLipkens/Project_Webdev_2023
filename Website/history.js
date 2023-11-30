@@ -40,6 +40,7 @@ template.innerHTML = /*html*/ `
 `;
 
 class HistoryComponent extends HTMLElement {
+
     constructor() {
         super();
         this.shadow = this.attachShadow({ mode: "open" });
