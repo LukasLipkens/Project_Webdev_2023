@@ -13,7 +13,7 @@ template.innerHTML = /*html*/`
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    width: 1200px;
+    width: 100%;
     margin: auto;
     }
     nav ul {
@@ -49,6 +49,9 @@ template.innerHTML = /*html*/`
     button:focus,
     button:hover{
         color: green;
+    }
+    .hidden{
+        display: none; /*laat de button niet zien als deze verstopt moet worden*/
     }
 
     button:focus:after,
@@ -98,7 +101,39 @@ template.innerHTML = /*html*/`
         padding: 0;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
     }
+
+    ul#account{
+        display: flex;
+        position:relative;
+        flex-direction : column;
+        width: 10%;
+        margin: auto 2rem;
+    }
+    ul#account img{
+        width: 6rem;
+        position: relative;
+    }
+    ul#account.hidden{
+        display: none;
+    }
+    ul#account.hidden img{
+        display: none;
+    }
+
+    ul#account>ul{
+        position: absolute;
+        top: 6.5rem;
+        background-color: lightgrey;
+        padding: 10px;
+        z-index: 1;
+    }
+    ul#account>ul.hidden{
+        display: none;
+    }
+
+
     </style>
 <nav>
     <ul>
@@ -111,6 +146,12 @@ template.innerHTML = /*html*/`
         <button id="history">history</button>
         <button id="myGames">My games</button>
         <button id="logIn">Log in</button>
+        <ul id="account">
+        <li id="profilePic"><img src="./images/player1.png"></li>
+        <ul id="profileInfo" class="hidden">
+            <li id="logout">Logout</li>
+        </ul>
+        </ul>
     </div>
 </nav>
 
@@ -122,7 +163,7 @@ class app extends HTMLElement
         super();
 
         this.shadow = this.attachShadow({mode: "open"}); // zorgt ervoor dart het component een afgeschermde stijl kan hebben
-        this.shadow.append(template.content.cloneNode(true));
+        this.shadow.appendChild(template.content.cloneNode(true));
         
         this.button = this.shadowRoot.querySelectorAll("button");
 
@@ -132,8 +173,8 @@ class app extends HTMLElement
         {
             this.button.forEach(btn => {
                 btn.addEventListener('mousedown', (e) =>{
-                    console.log("btn Clicked");
-                    
+                    //console.log("btn Clicked");
+                    //console.log(this.getAttribute("loggedIn"));
                     this.button.forEach(state =>{
                         state.setAttribute("class", "");
                     })
@@ -141,6 +182,38 @@ class app extends HTMLElement
                     this.ChangePageEvent(btn.getAttribute("id"));
                 })
             });
+            this.myGames = this.shadow.querySelector("#myGames");
+            this.loginBtn = this.shadow.querySelector("#logIn");
+            this.account = this.shadow.querySelector("#account");
+            if(this.getAttribute("loggedin") != "true"){
+                this.myGames.classList.add("hidden");
+                this.loginBtn.classList.remove("hidden");
+                this.account.classList.add("hidden");
+            }
+            else{
+                this.loginBtn.classList.add("hidden");
+                this.myGames.classList.remove("hidden");
+                this.account.classList.remove("hidden");
+            }
+
+            this.account.addEventListener("click", ()=>{
+                this.shadow.querySelector("#profileInfo").classList.toggle("hidden");
+            })
+        }
+        static observedAttributes = ["loggedin"]; //altijd kleine letters gebruiken voor attributen
+
+        attributeChangedCallback(name, oldValue, newValue){
+            //console.log("gerarriveerd");
+            if(newValue != "true"){
+                this.myGames.classList.add("hidden");
+                this.loginBtn.classList.remove("hidden");
+                this.account.classList.add("hidden");
+            }
+            else{
+                this.loginBtn.classList.add("hidden");
+                this.myGames.classList.remove("hidden");
+                this.account.classList.remove("hidden");
+            }
         }
 
         ChangePageEvent(id){

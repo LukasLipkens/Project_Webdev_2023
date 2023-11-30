@@ -17,8 +17,9 @@ class app extends HTMLElement
 {
     constructor(){
         super()
-        const shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
-        shadow.append(template.content.cloneNode(true))
+        //const shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
+        this.attachShadow({mode:"open"});
+        this.shadowRoot.appendChild(template.content.cloneNode(true))
 
         this.cachedPages = [];
         this.currentPage = "";
@@ -35,7 +36,7 @@ class app extends HTMLElement
     ChangePageEvent(e){
         console.log("btnPress Received " + e.detail);
         this.CheckLogin();
-        console.log("test");
+        //console.log("test");
 
         
         this.showPages(e.detail);
@@ -46,7 +47,7 @@ class app extends HTMLElement
         xhttp.addEventListener("load", ()=>{
           let response = xhttp.response;
           console.log(response);
-          if(!(response = "guest")){
+          if(!(response == "guest")){
             this.navigation.setAttribute("loggedIn", "true");
           }
         });
