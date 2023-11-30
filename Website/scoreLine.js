@@ -69,16 +69,16 @@ template.innerHTML = /*html*/ `
 class SingleScoreComponent extends HTMLElement {
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow = this.attachShadow({ mode: 'open' });
         this.shadow.append(template.content.cloneNode(true));
 
     }
 
     connectedCallback() {
-        const playerName1 = this.getAttribute("playerName1") || "Player 1";
-        const playerName2 = this.getAttribute("playerName2") || "Player 2";
-        const score1 = "0";
-        const score2 = "0";
+        const playerName1 = this.getAttribute('playerName1') || 'Player 1';
+        const playerName2 = this.getAttribute('playerName2') || 'Player 2';
+        const score1 = '0';
+        const score2 = '0';
 
         this.shadow.querySelector('.left-box p').innerText = playerName1;
         this.shadow.querySelector('.right-box p').innerText = playerName2;
@@ -86,4 +86,4 @@ class SingleScoreComponent extends HTMLElement {
     }
 }
 
-customElements.define("single-score-comp", SingleScoreComponent);
+customElements.define('single-score-comp', SingleScoreComponent);

@@ -32,22 +32,42 @@ template.innerHTML = /*html*/ `
             padding-bottom: 15px;
             text-align: center;
         }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            margin: 10px 0;
+            justify-content: center;
+            border: 1px solid red;
+        }
+        .pagination li {
+            margin: 0 5px;
+            cursor: pointer;
+        }
     </style>
     <div class="big-container">
         <p class="title">All Played Games</p>
         <p class="anotherone">Add</p>
+        <div id="content">...</div>
+        <ul id="pagination" class="pagination">...</ul>
+        <div class="componentsContainer"></div>
     </div>
 `;
 
 class HistoryComponent extends HTMLElement {
     latestMatchId = 0;
+    itemsPerPage = 8;
+    currentPage = 1;
 
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow = this.attachShadow({ mode: 'open' });
         this.shadow.append(template.content.cloneNode(true));
 
-        this.bigContainer = this.shadow.querySelector(".big-container");
+        this.bigContainer = this.shadow.querySelector('.big-container');
+        this.contentContainer = this.shadow.getElementById('content');
+        this.paginationContainer = this.shadow.getElementById('pagination');
+        this.componentsContainer = this.shadow.querySelector('.componentsContainer');
 
         this.append = true;
         this.previousComponent = null;
@@ -55,17 +75,17 @@ class HistoryComponent extends HTMLElement {
 
     connectedCallback() {
         console.log('latestMatch:', this.latestMatchId);
-        const another = this.shadow.querySelector(".anotherone");
+        const another = this.shadow.querySelector('.anotherone');
 
-        another.addEventListener("click", () => {
+        another.addEventListener('click', () => {
             this.createNewMatchComponent();
         })
     }
 
     createNewMatchComponent() {
-        this.newMatch = document.createElement("match-comp");
+        this.newMatch = document.createElement('match-comp');
 
-        this.newMatch.setAttribute("id", this.getNewMatchId());
+        this.newMatch.setAttribute('id', this.getNewMatchId());
         console.log('newMatchId', this.latestMatchId);
 
         this.newMatch.addEventListener('toggleContent', (e) => {
@@ -73,6 +93,8 @@ class HistoryComponent extends HTMLElement {
         })
 
         this.editScoreAndPlayers();
+
+        this.updatePage();
     }
 
     editScoreAndPlayers() {
@@ -82,22 +104,22 @@ class HistoryComponent extends HTMLElement {
         const randomScore1 = Math.floor(Math.random() * 7);
         const randomScore2 = Math.floor(Math.random() * 7);
 
-        let winningSide = "";
+        let winningSide = '';
         if (randomScore1 > randomScore2) {
-            winningSide = "left";
+            winningSide = 'left';
         }
         else if (randomScore2 > randomScore1) {
-            winningSide = "right";
+            winningSide = 'right';
         }
         else {
-            winningSide = "both";
+            winningSide = 'both';
         }
 
-        this.newMatch.setAttribute("playerName1", randomName1);
-        this.newMatch.setAttribute("playerName2", randomName2);
-        this.newMatch.setAttribute("score1", randomScore1);
-        this.newMatch.setAttribute("score2", randomScore2);
-        this.newMatch.setAttribute("whoWon", winningSide);
+        this.newMatch.setAttribute('playerName1', randomName1);
+        this.newMatch.setAttribute('playerName2', randomName2);
+        this.newMatch.setAttribute('score1', randomScore1);
+        this.newMatch.setAttribute('score2', randomScore2);
+        this.newMatch.setAttribute('whoWon', winningSide);
 
         this.addComponent(this.newMatch);
     }
@@ -110,7 +132,8 @@ class HistoryComponent extends HTMLElement {
     onMatchCompToggle(e) {
         const matchId = e.detail.matchId;
         console.log('event: ', matchId);
-        const matchComponents = this.shadow.querySelectorAll("match-comp");
+
+        const matchComponents = this.shadow.querySelectorAll('match-comp'); // moet apart gedeclareerd 
         matchComponents.forEach(comp => {
             if (comp.getAttribute('id') === matchId) {
                 comp.toggle(true);
@@ -124,15 +147,54 @@ class HistoryComponent extends HTMLElement {
 
     addComponent(nextComponent) {
         if (this.append) {
-            this.bigContainer.append(nextComponent);
+            this.componentsContainer.append(nextComponent);
             this.append = false;
             this.previousComponent = nextComponent;
         }
         else {
-            this.bigContainer.insertBefore(nextComponent, this.previousComponent);
+            this.componentsContainer.insertBefore(nextComponent, this.previousComponent);
             this.previousComponent = nextComponent;
+        }
+    }
+
+    updatePage() {
+        this.contentContainer.innerHTML = ''; // reset
+
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        const matchComponents = Array.from(this.componentsContainer.querySelectorAll('match-comp'));
+        const totalItems = matchComponents.length;
+
+        this.updatePagination();
+    }
+
+    updatePagination() {
+        this.paginationContainer.innerHTML = '';
+
+        const matchComponents = this.shadow.querySelectorAll('match-comp');
+        const totalItems = matchComponents.length;
+        console.log('total Items', totalItems);
+
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        console.log('total pages: ', totalPages);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const listItem = document.createElement('li');
+            listItem.textContent = i;
+            listItem.addEventListener('click', () => {
+                this.currentPage = i;
+                this.updatePage();
+                this.updatePagination();
+                console.log('current page: ', this.currentPage);
+            });
+
+            if (i == this.currentPage) {
+                listItem.style.fontWeight = 'bold';
+            }
+
+            this.paginationContainer.append(listItem);
         }
     }
 }
 
-customElements.define("history-comp", HistoryComponent);
+customElements.define('history-comp', HistoryComponent);
