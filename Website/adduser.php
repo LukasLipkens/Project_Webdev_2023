@@ -21,7 +21,7 @@ $password = $_GET["password"];
 //     var_dump("user already exists:" . CheckExistingUser($email, $conn));
 // }
 
-var_dump(CheckExistingUser($email, $conn));
+//var_dump(CheckExistingUser($email, $conn));
 
 function CheckExistingUser($email,  $conn)
 {
