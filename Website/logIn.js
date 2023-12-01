@@ -343,6 +343,7 @@ class app extends HTMLElement
             console.log(response);
             if(response == "succes"){
               this.CheckLogin(str);
+              console.log(response);
             }
           });
           xhttp.open("GET", "adduser.php?"+str);
