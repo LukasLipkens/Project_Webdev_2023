@@ -24,7 +24,7 @@ $password = "elo";
 // } else {
 //     echo "Error:" . mysqli_error($conn);
 // }
-if (CheckExistingUser($email, $conn)) {
+if (CheckExistingUser($email)) {
     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
 
     $t_add = mysqli_query($conn, $t_sql);
