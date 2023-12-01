@@ -1,5 +1,20 @@
 <?php
-include "./config/database.php";
+//include "./config/database.php";
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'super');
+define('DB_PASS', 'Project_Webdev');
+define('DB_NAME', 'project_tennis');
+
+// Create connection
+
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// Check connection
+
+if ($conn->connect_error) {
+    die("Connection failed $conn->connect_error");
+}
 
 $name = $_GET["name"];
 $email = $_GET["email"];
@@ -26,8 +41,8 @@ $password = $_GET["password"];
 function CheckExistingUser($email)
 {
     $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
-
-    $t_result = mysqli_query(global $conn, $t_sql);
+    global $conn;
+    $t_result = mysqli_query($conn, $t_sql);
 
     if ($t_result) {
         $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
