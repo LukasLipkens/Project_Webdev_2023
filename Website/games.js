@@ -16,7 +16,7 @@ template.innerHTML = /*html*/`
         }
     </style>
     <center><div id="myGamesContainer">
-        test
+        
     </div></center>
     
 `
