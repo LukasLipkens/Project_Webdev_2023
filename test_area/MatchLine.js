@@ -15,14 +15,14 @@ template.innerHTML = /*html*/ `
             justify-content: center;
             width: 10%;
             background-image: linear-gradient(to right, #d1d1d1 75%, white);
-            padding-right: 20px;
-            font-size: 30px;
+            padding-right: 10px;
+            font-size: 25px;
             height: 63px;
             border-radius: 10px 0 0 10px;
             margin-left: 15px;
         }
         .item-container {
-            border: 2px solid rgb(1, 184, 90);
+            border: 2px solid #d1d1d1;
             border-left: none;
             border-radius: 0 10px 0 0;
             width: 90%;
@@ -51,10 +51,8 @@ template.innerHTML = /*html*/ `
             transform: rotate(0);
             transform-origin: center;
         }
-        .arrow-image.rotate {
-            transform: rotate(180deg);
-        }
-/*****************************************************************************/
+
+
         .left, .right {
             display: flex;
             align-items: center;
@@ -92,12 +90,28 @@ template.innerHTML = /*html*/ `
             user-select: none;
             font-size: 30px;
         }
-/******************************************************************************/
+
+
         .item-content {
             display: none;
             height: 290px;
             overflow-y: scroll;
             padding: 0 10px 0 30px;
+            border-left: 1px solid #d1d1d1;
+        }
+        .expanded {
+            & .item-content {
+                display: block;
+                border-top: 1px dashed #d1d1d1;
+            }
+
+            & .item-container {
+                height: 350px;
+            }
+
+            & .arrow-image {
+                transform: rotate(180deg);
+            }
         }
         .more {
             border: 1px solid black;
@@ -181,87 +195,130 @@ template.innerHTML = /*html*/ `
         </div>
     </div>
     <p class="more">more</p>
-    
 `;
 
 class MatchComponent extends HTMLElement {
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow = this.attachShadow({ mode: 'open' });
         this.shadow.append(template.content.cloneNode(true));
 
     }
 
     connectedCallback() {
-        const playerName1 = this.getAttribute("playerName1") || "Player 1";
-        const playerName2 = this.getAttribute("playerName2") || "Player 2";
-        const score1 = this.getAttribute("score1") || "0";
-        const score2 = this.getAttribute("score2") || "0";
+        this.getDate();
 
-        const winnerLeft = this.shadow.querySelector(".winnerLeft");
-        const winnerRight = this.shadow.querySelector(".winnerRight");
-        const drawLeft = this.shadow.querySelector(".drawLeft");
-        const drawRight = this.shadow.querySelector(".drawRight");
-        const winningSide = this.getAttribute("whoWon");
+        this.editScoreAndPlayers();
 
-        if (winningSide == "left") {
-            winnerLeft.style.visibility = "visible";
-            winnerRight.style.visibility = "hidden";
+        this.matchId = this.getAttribute('id');
+        console.log('id: ', this.matchId);
+
+        this.setupEventListeners();
+    }
+
+    getDate() {
+        const currentDate = new Date();
+
+        const day = currentDate.getDate();
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear() % 100;
+        console.log('current date: ', `${day}/${month}/${year}`);
+
+        const dateText = this.shadow.querySelector('.text');
+        dateText.innerHTML = `${day}/${month}/${year}`;
+    }
+
+    editScoreAndPlayers() {
+        const playerName1 = this.getAttribute('playerName1') || 'Player 1';
+        const playerName2 = this.getAttribute('playerName2') || 'Player 2';
+        const score1 = this.getAttribute('score1') || '0';
+        const score2 = this.getAttribute('score2') || '0';
+
+        const winnerLeft = this.shadow.querySelector('.winnerLeft');
+        const winnerRight = this.shadow.querySelector('.winnerRight');
+        const drawLeft = this.shadow.querySelector('.drawLeft');
+        const drawRight = this.shadow.querySelector('.drawRight');
+        const winningSide = this.getAttribute('whoWon');
+
+        if (winningSide == 'left') {
+            winnerLeft.style.visibility = 'visible';
+            winnerRight.style.visibility = 'hidden';
         }
-        else if (winningSide == "right") {
-            winnerLeft.style.visibility = "hidden";
-            winnerRight.style.visibility = "visible";
+        else if (winningSide == 'right') {
+            winnerLeft.style.visibility = 'hidden';
+            winnerRight.style.visibility = 'visible';
         }
-        else if (winningSide == "both") {
-            winnerLeft.style.visibility = "hidden";
-            winnerRight.style.visibility = "hidden";
-            drawLeft.style.display = "block";
-            drawRight.style.display = "block";
+        else if (winningSide == 'both') {
+            winnerLeft.style.visibility = 'hidden';
+            winnerRight.style.visibility = 'hidden';
+            drawLeft.style.display = 'block';
+            drawRight.style.display = 'block';
         }
 
         this.shadow.querySelector('.left p').innerText = playerName1;
         this.shadow.querySelector('.right p').innerText = playerName2;
         this.shadow.querySelector('.score').innerText = `${score1} - ${score2}`;
-
-        this.setupEventListeners();
     }
 
     setupEventListeners() {
-        const itemContent = this.shadow.querySelector(".item-content");
-        const itemContainer = this.shadow.querySelector(".item-container");
+        const arrowImage = this.shadow.querySelectorAll('.arrow-image');
 
-        const arrowImage = this.shadow.querySelectorAll(".arrow-image");
         arrowImage.forEach((arrow) => {
-            arrow.addEventListener("click", () => {
-
-                if (itemContent.style.display == "block") {
-                    itemContent.style.display = "none";
-                    itemContainer.style.height = "60px";
-                }
-                else {
-                    itemContent.style.display = "block";
-                    itemContainer.style.height = "350px";
-                    itemContent.style.borderTop = "1px dashed #d1d1d1";
-                }
-
-                arrow.classList.toggle("rotate");
+            arrow.addEventListener('click', () => {
+                this.dispatchEvent(new CustomEvent('toggleContent', { detail: { matchId: this.matchId }, bubbles: true }));
             });
         });
 
-        const more = this.shadow.querySelector(".more");
-        more.addEventListener("click", () => {
-            const scoreElement = document.createElement("single-score-comp");
-            const itemContent = this.shadow.querySelector(".item-content");
-            const itemContentBox = this.shadow.querySelector(".item-content-box");
+        const more = this.shadow.querySelector('.more');
+        more.addEventListener('click', () => {
+            const scoreElement = document.createElement('single-score-comp');
+            const itemContent = this.shadow.querySelector('.item-content');
+            const itemContentBox = this.shadow.querySelector('.item-content-box');
 
-            scoreElement.setAttribute("playerName1", this.getAttribute("playerName1") || "Player 1");
-            scoreElement.setAttribute("playerName2", this.getAttribute("playerName2") || "Player 2");
-            scoreElement.setAttribute("score1", this.getAttribute("score1") || "0");
-            scoreElement.setAttribute("score2", this.getAttribute("score2") || "0");
+            scoreElement.setAttribute('playerName1', this.getAttribute('playerName1') || 'Player 1');
+            scoreElement.setAttribute('playerName2', this.getAttribute('playerName2') || 'Player 2');
+            scoreElement.setAttribute('score1', this.getAttribute('score1') || '0');
+            scoreElement.setAttribute('score2', this.getAttribute('score2') || '0');
 
             itemContent.insertBefore(scoreElement, itemContentBox.nextSibling);
         })
     }
+
+    toggle(expanded) {
+        console.log('toggle');
+        const container = this.shadow.querySelector('.container');
+
+        // if (container.classList.contains('expanded')) {
+        //     container.classList.remove('expanded');
+        // }
+        // else {
+        //     container.classList.add('expanded');
+        // }
+
+        if (expanded) {
+            if (container.classList.contains('expanded')) {
+                container.classList.remove('expanded');
+            }
+            else {
+                container.classList.add('expanded');
+            }
+        }
+        else {
+            container.classList.remove('expanded');
+        }
+    }
+
+    // setExpanded(expanded) {
+    //     console.log('setExpanded', expanded);
+    //     const container = this.shadow.querySelector('.container');
+
+    //     if (expanded) {
+    //         container.classList.add('expanded');
+    //     }
+    //     else {
+    //         container.classList.remove('expanded');
+    //     }
+    // }
 }
 
-customElements.define("match-comp", MatchComponent);
+customElements.define('match-comp', MatchComponent);
