@@ -1,5 +1,5 @@
 <?php
-// include "./config/database.php";
+include "./config/database.php";
 
 // $name = $_GET["name"];
 // $email = $_GET["email"];
