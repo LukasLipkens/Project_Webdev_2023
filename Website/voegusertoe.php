@@ -10,7 +10,7 @@ $email = $_GET["email"];
 $password = $_GET["password"];
 
 
-if (!$checkExistingUser) {
+if ($checkExistingUser) {
     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
 
     $t_add = mysqli_query($conn, $t_sql);
@@ -35,7 +35,7 @@ $checkExistingUser = function ($email) {
         if (empty($t_arr)) {
             return 1;
         } else {
-            return 0;
+            return $t_arr;
         }
     } else {
         return mysqli_error($conn);
