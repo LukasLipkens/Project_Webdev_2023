@@ -16,9 +16,9 @@ define('DB_NAME', 'project_tennis');
 //     die("Connection failed $conn->connect_error");
 // }
 
-$name = $_GET["name"];
-$email = $_GET["email"];
-$password = $_GET["password"];
+// $name = $_GET["name"];
+// $email = $_GET["email"];
+// $password = $_GET["password"];
 
 echo "test";
 
