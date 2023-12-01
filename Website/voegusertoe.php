@@ -6,7 +6,7 @@ $email = $_GET["email"];
 $password = $_GET["password"];
 
 
-
+echo "test";
 // if (CheckExistingUser($email, $conn)) {
 //     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
 
