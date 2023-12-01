@@ -345,7 +345,7 @@ class app extends HTMLElement
               this.CheckLogin(str);
             }
           });
-          xhttp.open("GET", "addUser.php?"+str);
+          xhttp.open("GET", "adduser.php?"+str);
           xhttp.send();
       }
           ChangePageEvent(id){
