@@ -175,16 +175,17 @@ class app extends HTMLElement
                 btn.addEventListener('mousedown', (e) =>{
                     //console.log("btn Clicked");
                     //console.log(this.getAttribute("loggedIn"));
-                    this.button.forEach(state =>{
-                        state.setAttribute("class", "");
+                    this.button.forEach(btn =>{
+                        btn.classList.remove("active");
                     })
-                    btn.setAttribute("class", "active");
+                    btn.classList.toggle("active");
                     this.ChangePageEvent(btn.getAttribute("id"));
                 })
             });
             this.myGames = this.shadow.querySelector("#myGames");
             this.loginBtn = this.shadow.querySelector("#logIn");
             this.account = this.shadow.querySelector("#account");
+            this.logout = this.shadow.querySelector("#logout");
             if(this.getAttribute("loggedin") != "true"){
                 this.myGames.classList.add("hidden");
                 this.loginBtn.classList.remove("hidden");
@@ -198,18 +199,30 @@ class app extends HTMLElement
 
             this.account.addEventListener("click", ()=>{
                 this.shadow.querySelector("#profileInfo").classList.toggle("hidden");
-            })
+            });
+
+            this.logout.addEventListener("click", ()=>{
+                const xhttp = new XMLHttpRequest();
+                xhttp.addEventListener("load", ()=>{
+                    this.setAttribute("loggedIn", "false");
+                });
+                xhttp.open("GET", "logout.php?");
+                xhttp.send();
+            });
         }
         static observedAttributes = ["loggedin"]; //altijd kleine letters gebruiken voor attributen
 
         attributeChangedCallback(name, oldValue, newValue){
-            //console.log("gerarriveerd");
+            console.log("gerarriveerd");
+            console.log(newValue);
             if(newValue != "true"){
+                //console.log("not logged in");
                 this.myGames.classList.add("hidden");
                 this.loginBtn.classList.remove("hidden");
                 this.account.classList.add("hidden");
             }
             else{
+                //console.log("logged in");
                 this.loginBtn.classList.add("hidden");
                 this.myGames.classList.remove("hidden");
                 this.account.classList.remove("hidden");
