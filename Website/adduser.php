@@ -7,19 +7,21 @@ $password = $_GET["password"];
 
 
 
-if (CheckExistingUser($email, $conn)) {
-    $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
+// if (CheckExistingUser($email, $conn)) {
+//     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
 
-    $t_add = mysqli_query($conn, $t_sql);
+//     $t_add = mysqli_query($conn, $t_sql);
 
-    if ($t_add) {
-        echo 'succes';
-    } else {
-        echo 'Error:' . mysqli_error($conn);
-    }
-} else {
-    var_dump("user already exists:" . CheckExistingUser($email, $conn));
-}
+//     if ($t_add) {
+//         echo 'succes';
+//     } else {
+//         echo 'Error:' . mysqli_error($conn);
+//     }
+// } else {
+//     var_dump("user already exists:" . CheckExistingUser($email, $conn));
+// }
+
+var_dump(CheckExistingUser($email, $conn));
 
 function CheckExistingUser($email,  $conn)
 {
