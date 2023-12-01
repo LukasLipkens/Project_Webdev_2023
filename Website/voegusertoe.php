@@ -27,13 +27,15 @@ if ($checkExistingUser($email) == 1) {
 $checkExistingUser = function () {
     global $conn;
     global $email;
+    echo $conn;
+    echo $email;
     $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
 
     $t_result = mysqli_query($conn, $t_sql);
 
     if ($t_result) {
         $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
-        if (empty($t_arr[0])) {
+        if (empty($t_arr)) {
             return 1;
         } else {
             return $t_arr;
