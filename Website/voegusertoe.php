@@ -24,7 +24,7 @@ $password = "elo";
 // } else {
 //     echo "Error:" . mysqli_error($conn);
 // }
-if (CheckExistingUser($email)) {
+if ($checkExistingUser) {
     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
 
     $t_add = mysqli_query($conn, $t_sql);
@@ -35,11 +35,10 @@ if (CheckExistingUser($email)) {
         echo 'Error:' . mysqli_error($conn);
     }
 } else {
-    var_dump("user already exists:" . CheckExistingUser($email, $conn));
+    var_dump("user already exists:" . $checkExistingUser);
 }
 
-function CheckExistingUser($email)
-{
+$checkExistingUser = function ($email) {
     global $conn;
     $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
 
@@ -55,4 +54,4 @@ function CheckExistingUser($email)
     } else {
         return mysqli_error($conn);
     }
-}
+};
