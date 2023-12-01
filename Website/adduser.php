@@ -23,11 +23,11 @@ $password = $_GET["password"];
 
 //var_dump(CheckExistingUser($email, $conn));
 
-function CheckExistingUser($email,  $conn)
+function CheckExistingUser($email)
 {
     $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
 
-    $t_result = mysqli_query($conn, $t_sql);
+    $t_result = mysqli_query(global $conn, $t_sql);
 
     if ($t_result) {
         $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
