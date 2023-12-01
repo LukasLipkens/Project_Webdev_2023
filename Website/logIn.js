@@ -346,7 +346,7 @@ class app extends HTMLElement
               console.log(response);
             }
           });
-          xhttp.open("GET", "adduser.php?"+str);
+          xhttp.open("GET", "voegusertoe.php?"+str);
           xhttp.send();
       }
           ChangePageEvent(id){
