@@ -38,20 +38,20 @@ $password = $_GET["password"];
 
 //var_dump(CheckExistingUser($email, $conn));
 
-function CheckExistingUser($email)
-{
-    $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
-    global $conn;
-    $t_result = mysqli_query($conn, $t_sql);
+// function CheckExistingUser($email)
+// {
+//     $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
+//     global $conn;
+//     $t_result = mysqli_query($conn, $t_sql);
 
-    if ($t_result) {
-        $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
-        if (empty($t_arr)) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        return mysqli_error($conn);
-    }
-}
+//     if ($t_result) {
+//         $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
+//         if (empty($t_arr)) {
+//             return 1;
+//         } else {
+//             return 0;
+//         }
+//     } else {
+//         return mysqli_error($conn);
+//     }
+// }
