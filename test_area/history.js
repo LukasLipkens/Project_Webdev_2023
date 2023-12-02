@@ -37,23 +37,24 @@ template.innerHTML = /*html*/ `
         .pagination {
             display: flex;
             list-style: none;
-            margin: 10px 0;
-            justify-content: center;
-            border: 1px solid red;
+            margin: 10px 50px 15px 0;
+            justify-content: flex-end;
         }
         .pagination li {
             margin: 0 5px;
             cursor: pointer;
+        }
+        .componentsContainer {
+            border: 5px solid yellow;
         }
     </style>
 
     <div class="big-container">
         <p class="title">All Played Games</p>
         <p class="anotherone">Add</p>
-            <div id="content"></div>
             <ul id="pagination" class="pagination"></ul>
-        <div id="next-1">
-            <div class="componentsContainer"></div>
+        <div id="page-1">
+            <div class="componentsContainer"></div> 
         </div>
     </div>
 `;
@@ -69,9 +70,8 @@ class HistoryComponent extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this.bigContainer = this.shadowRoot.querySelector('.big-container');
-        this.contentContainer = this.shadowRoot.querySelector('#content');
         this.paginationContainer = this.shadowRoot.querySelector('#pagination');
-        this.componentsContainer = this.shadowRoot.querySelector('.componentsContainer');
+        this.componentsContainer = this.shadowRoot.querySelector('.componentsContainer'); // disappears after first match-comp's being updated on page ??????
 
         this.append = true;
         this.previousComponent = null;
@@ -88,6 +88,8 @@ class HistoryComponent extends HTMLElement {
         });
 
         this.editScoreAndPlayers();
+
+        this.addComponent(this.newMatch);
 
         this.updatePage();
     }
@@ -134,8 +136,6 @@ class HistoryComponent extends HTMLElement {
         this.newMatch.setAttribute('score1', score1);
         this.newMatch.setAttribute('score2', score2);
         this.newMatch.setAttribute('whoWon', winningSide);
-
-        this.addComponent(this.newMatch);
     }
 
     addComponent(nextComponent) {
@@ -151,16 +151,15 @@ class HistoryComponent extends HTMLElement {
     }
 
     updatePage() {
-        console.log('Entering updatePage()');
-
-        this.contentContainer.innerHTML = '';
-
         const matchComponents = Array.from(this.componentsContainer.querySelectorAll('match-comp'));
         const totalItems = matchComponents.length;
         this.totalPages = Math.ceil(totalItems / this.itemsPerPage);
 
-        this.currentPage = Math.max(1, Math.min(this.currentPage, this.totalPages));
-
+        if (this.currentPage < 1) {
+            this.currentPage = 1;
+        } else if (this.currentPage > this.totalPages) {
+            this.currentPage = this.totalPages;
+        }
         console.log('current page right now: ', this.currentPage);
 
         const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -170,33 +169,36 @@ class HistoryComponent extends HTMLElement {
         console.log('starting index: ', startIndex);
         console.log('ending index: ', endIndex);
 
-        let currentPageContainer = this.shadowRoot.getElementById(`next-${this.currentPage}`);
-
         for (let i = 1; i <= this.totalPages; i++) {
-            const container = this.shadowRoot.getElementById(`next-${i}`);
+            const container = this.shadowRoot.getElementById(`page-${i}`);
             if (container) {
                 container.style.display = 'none';
             }
         }
 
+        let currentPageContainer = this.shadowRoot.getElementById(`page-${this.currentPage}`);
+        // let pageContent;
         if (!currentPageContainer) {
             currentPageContainer = document.createElement('div');
-            currentPageContainer.setAttribute('id', `next-${this.currentPage}`);
-            currentPageContainer.classList.add('componentsContainer');
+            currentPageContainer.setAttribute('id', `page-${this.currentPage}`);
+
+            // pageContent = document.createElement('div');
+            // pageContent.classList.add('.componentsContainer');
+
+            // currentPageContainer.appendChild(pageContent);
             this.bigContainer.appendChild(currentPageContainer);
         }
 
         currentPageContainer.innerHTML = '';
 
         for (let i = startIndex; i < endIndex && i < totalItems; i++) {
-            currentPageContainer.append(matchComponents[i].cloneNode(true));
+            const matchComponent = matchComponents[i].cloneNode(true);
+            currentPageContainer.appendChild(matchComponent);
         }
 
         currentPageContainer.style.display = 'block';
 
         this.updatePagination();
-
-        console.log('Exiting updatePage()');
     }
 
     updatePagination() {
