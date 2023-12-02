@@ -201,7 +201,7 @@ class MatchComponent extends HTMLElement {
     constructor() {
         super();
         this.shadow = this.attachShadow({ mode: 'open' });
-        this.shadow.append(template.content.cloneNode(true));
+        this.shadowRoot.append(template.content.cloneNode(true));
 
     }
 
@@ -211,20 +211,18 @@ class MatchComponent extends HTMLElement {
         this.editScoreAndPlayers();
 
         this.matchId = this.getAttribute('id');
-        console.log('id: ', this.matchId);
 
         this.setupEventListeners();
     }
 
     getDate() {
-        const currentDate = new Date();
+        let currentDate = new Date();
 
-        const day = currentDate.getDate();
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear() % 100;
-        console.log('current date: ', `${day}/${month}/${year}`);
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        let year = currentDate.getFullYear() % 100;
 
-        const dateText = this.shadow.querySelector('.text');
+        let dateText = this.shadowRoot.querySelector('.text');
         dateText.innerHTML = `${day}/${month}/${year}`;
     }
 
@@ -234,10 +232,10 @@ class MatchComponent extends HTMLElement {
         const score1 = this.getAttribute('score1') || '0';
         const score2 = this.getAttribute('score2') || '0';
 
-        const winnerLeft = this.shadow.querySelector('.winnerLeft');
-        const winnerRight = this.shadow.querySelector('.winnerRight');
-        const drawLeft = this.shadow.querySelector('.drawLeft');
-        const drawRight = this.shadow.querySelector('.drawRight');
+        const winnerLeft = this.shadowRoot.querySelector('.winnerLeft');
+        const winnerRight = this.shadowRoot.querySelector('.winnerRight');
+        const drawLeft = this.shadowRoot.querySelector('.drawLeft');
+        const drawRight = this.shadowRoot.querySelector('.drawRight');
         const winningSide = this.getAttribute('whoWon');
 
         if (winningSide == 'left') {
@@ -255,25 +253,26 @@ class MatchComponent extends HTMLElement {
             drawRight.style.display = 'block';
         }
 
-        this.shadow.querySelector('.left p').innerText = playerName1;
-        this.shadow.querySelector('.right p').innerText = playerName2;
-        this.shadow.querySelector('.score').innerText = `${score1} - ${score2}`;
+        this.shadowRoot.querySelector('.left p').innerText = playerName1;
+        this.shadowRoot.querySelector('.right p').innerText = playerName2;
+        this.shadowRoot.querySelector('.score').innerText = `${score1} - ${score2}`;
     }
 
     setupEventListeners() {
-        const arrowImage = this.shadow.querySelectorAll('.arrow-image');
+        const arrowImage = this.shadowRoot.querySelectorAll('.arrow-image');
 
         arrowImage.forEach((arrow) => {
             arrow.addEventListener('click', () => {
+                console.log('arrow clicked for: ', this.matchId);
                 this.dispatchEvent(new CustomEvent('toggleContent', { detail: { matchId: this.matchId }, bubbles: true }));
             });
         });
 
-        const more = this.shadow.querySelector('.more');
+        const more = this.shadowRoot.querySelector('.more');
         more.addEventListener('click', () => {
             const scoreElement = document.createElement('single-score-comp');
-            const itemContent = this.shadow.querySelector('.item-content');
-            const itemContentBox = this.shadow.querySelector('.item-content-box');
+            const itemContent = this.shadowRoot.querySelector('.item-content');
+            const itemContentBox = this.shadowRoot.querySelector('.item-content-box');
 
             scoreElement.setAttribute('playerName1', this.getAttribute('playerName1') || 'Player 1');
             scoreElement.setAttribute('playerName2', this.getAttribute('playerName2') || 'Player 2');
@@ -286,14 +285,7 @@ class MatchComponent extends HTMLElement {
 
     toggle(expanded) {
         console.log('toggle');
-        const container = this.shadow.querySelector('.container');
-
-        // if (container.classList.contains('expanded')) {
-        //     container.classList.remove('expanded');
-        // }
-        // else {
-        //     container.classList.add('expanded');
-        // }
+        const container = this.shadowRoot.querySelector('.container');
 
         if (expanded) {
             if (container.classList.contains('expanded')) {
@@ -307,18 +299,6 @@ class MatchComponent extends HTMLElement {
             container.classList.remove('expanded');
         }
     }
-
-    // setExpanded(expanded) {
-    //     console.log('setExpanded', expanded);
-    //     const container = this.shadow.querySelector('.container');
-
-    //     if (expanded) {
-    //         container.classList.add('expanded');
-    //     }
-    //     else {
-    //         container.classList.remove('expanded');
-    //     }
-    // }
 }
 
 customElements.define('match-comp', MatchComponent);
