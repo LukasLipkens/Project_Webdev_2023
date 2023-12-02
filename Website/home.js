@@ -32,15 +32,27 @@ class app extends HTMLElement
     }
 
     connectedCallback(){//hier het aantal matches tonen
+        this.addMatch();
+    }
+
+    addMatch(){
         for(let match = 0; match < this.matchesArray.length; match++){
             //console.log("added board #" + match)
             let scoreBord = document.createElement(`score-comp`);
             scoreBord.setAttribute("id", `scoreboard_${this.matchesArray[match]}`);
             scoreBord.setAttribute("type", "user");
+
+
+            //er zou een array moeten komen van de server waarin de match id's zitten en per matchID moeten de gegevens van een match staan zoals: players, score, serve denk ik
+            scoreBord.setAttribute("team1", "player1");
+            scoreBord.setAttribute("team2", "player2");
+
             this.container.append(scoreBord);
             console.log("Added: " + scoreBord.getAttribute("id"));
         }
     }
+
+
 }
 
 customElements.define('home-comp', app)

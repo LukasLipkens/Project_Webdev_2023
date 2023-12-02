@@ -6,8 +6,8 @@ import "./endgameButton.js"
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>
-        .player1 { grid-area: player1; }
-        .player2 { grid-area: player2; }
+        .team1 { grid-area: team1; position: relative;}
+        .team2 { grid-area: team2; position: relative;}
 
         .pointsT1 { grid-area: pointsT1; }
         .pointsT2 { grid-area: pointsT2; }
@@ -25,7 +25,7 @@ template.innerHTML = /*html*/`
         .grid-container {
             display: grid;
             grid-template-areas:
-                'player1 player1 player1 player1 player2 player2 player2 player2'
+                'team1 team1 team1 team1 team2 team2 team2 team2'
                 'pointsT1 pointsT1 gameT1 gameT1 gameT2 gameT2 pointsT2 pointsT2'
                 'pointsT1 pointsT1 setsT1 setsT1 setsT2 setsT2 pointsT2 pointsT2'
                 'serveT1 serveT1 serveT1 serveT1 serveT2 serveT2 serveT2 serveT2';
@@ -80,8 +80,9 @@ template.innerHTML = /*html*/`
             width: fit-content;
             margin: auto;
         }
-        p, h3{
+        p, h4{
             margin: 0;
+
         }
         .bottomDiv{
             margin: 10px;
@@ -103,14 +104,30 @@ template.innerHTML = /*html*/`
             color: yellow;
 
         }
+        .players{
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            width: 100%;
+        }
+        .bottomDiv{
+            width: max-content;
+            margin: auto;
+        }
     </style>
     <div class="scoreBoard">
         <div class="content">
             <div class="centerDiv">
 
                 <div class="grid-container">
-                    <div class="player1"><h3>Player1</h3></div>
-                    <div class="player2"><h3>Player2</h3></div>
+                    <div class="team1">
+                        <div class="players"></div>
+                        <br>
+                    </div>
+                    <div class="team2">
+                        <div class="players"></div>
+                    </div>
 
                     <div class="pointsT1"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
                     <div class="pointsT2"><div class="score"><p>points<br><span class="value">0</span></p></div></div>
@@ -137,7 +154,6 @@ class app extends HTMLElement {
         super()
         const shadow = this.attachShadow({ mode: "open" }) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
         shadow.append(template.content.cloneNode(true))
-        this.type;
         this.board = this.shadowRoot.querySelector(".centerDiv");
         this.endgame = this.shadowRoot.querySelector(".bottomDiv");
 
@@ -160,7 +176,33 @@ class app extends HTMLElement {
             this.UpdateToAdmin();
         }
         this.addEventListener("UpdateScoreEvent", this.UpdateScoreEvent);
+
+        //speler namen toevoegen aan het scorenbord
+        this.setPlayers();
+        
     }   
+
+    setPlayers(){
+
+        let team1 = this.getAttribute("team1").split(",")
+        let team2 = this.getAttribute("team2").split(",")
+
+        if(team1.length <= 2){
+            team1.forEach(player => {
+                let element = document.createElement("h4");
+                element.innerHTML = player;
+                this.shadowRoot.querySelector(".team1 .players").append(element);
+            }); 
+        }
+        if(team2.length <= 2){
+            team2.forEach(player => {
+                let element = document.createElement("h4");
+                element.innerHTML = player;
+                this.shadowRoot.querySelector(".team2 .players").append(element);
+            });
+        }
+    }
+
 
     UpdateScoreEvent(e){
         //console.log("btnPress Received " + e.detail);
