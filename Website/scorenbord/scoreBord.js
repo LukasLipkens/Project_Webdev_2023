@@ -166,8 +166,18 @@ class app extends HTMLElement {
         this.setsT1 = this.shadowRoot.querySelector(".setsT1 span");
         this.setsT2 = this.shadowRoot.querySelector(".setsT2 span");
 
+
+        
         this.pointsArray = ["0","15","30","40","ADV"];
         this.serving = "";
+    }
+
+    static observedAttributes = ["serve"];
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if(name == "serve"){
+            this.updateServe(1, newValue);
+        }
     }
 
     connectedCallback(){
@@ -369,35 +379,48 @@ class app extends HTMLElement {
 
 
 
-    updateServe(status){
+    updateServe(status, team){
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
         let serveT2 = this.shadowRoot.querySelector("#ballT2");
-
-        if(status == 0){
-        //voeg de serve ball toe aan een random player
-            if(Math.floor(Math.random() * 2) == 0){
-                serveT1.style.display = "block";
-                this.serving = "T_1";
+        if(this.type == "admin"){
+    
+            if(status == 0){//status 0 betekent start van het spel
+            //voeg de serve ball toe aan een random player
+                if(Math.floor(Math.random() * 2) == 0){
+                    serveT1.style.display = "block";
+                    this.serving = "T_1";
+                }
+                else{
+                    serveT2.style.display = "block";
+                    this.serving = "T_2";
+                }
             }
             else{
-                serveT2.style.display = "block";
-                this.serving = "T_2";
+                if(this.serving == "T_1"){
+                    serveT2.style.display = "block";
+                    serveT1.style.display = "none";
+    
+                    this.serving = "T_2"
+                }
+                else{
+                    serveT1.style.display = "block";
+                    serveT2.style.display = "none";
+    
+                    this.serving = "T_1"
+                }
             }
         }
         else{
-            if(this.serving == "T_1"){
-                serveT2.style.display = "block";
-                serveT1.style.display = "none";
-
-                this.serving = "T_2"
-            }
-            else{
+            if(team == "team1"){
                 serveT1.style.display = "block";
                 serveT2.style.display = "none";
-
-                this.serving = "T_1"
+            }
+            else{
+                serveT2.style.display = "block";
+                serveT1.style.display = "none";
             }
         }
+
     }
 
     UpdateToAdmin(){

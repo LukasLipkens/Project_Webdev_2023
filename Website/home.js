@@ -1,5 +1,5 @@
 //#region IMPORTS
-import "./scoreBord.js"
+import "./scorenbord/scoreBord.js"
 //#endregion IMPORTS
 
 const template = document.createElement("template")
@@ -15,9 +15,9 @@ template.innerHTML = /*html*/`
 
         }
     </style>
-    <center><div id="homeContainer">
+    <div id="homeContainer">
 
-    </div></center>
+    </div>
     
 `
 
@@ -46,6 +46,8 @@ class app extends HTMLElement
             //er zou een array moeten komen van de server waarin de match id's zitten en per matchID moeten de gegevens van een match staan zoals: players, score, serve denk ik
             scoreBord.setAttribute("team1", "player1");
             scoreBord.setAttribute("team2", "player2");
+
+            scoreBord.setAttribute("serve", "team2");
 
             this.container.append(scoreBord);
             console.log("Added: " + scoreBord.getAttribute("id"));

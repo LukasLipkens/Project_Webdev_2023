@@ -1,5 +1,5 @@
 //#region IMPORTS
-import "./scoreBord.js"
+import "./scorenbord/scoreBord.js"
 import "./navigation.js"
 import "./home.js"
 import "./history.js"

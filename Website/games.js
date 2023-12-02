@@ -1,5 +1,5 @@
 //#region IMPORTS
-import "./scoreBord.js";
+import "./scorenbord/scoreBord.js";
 //#endregion IMPORTS
 
 const template = document.createElement("template")
