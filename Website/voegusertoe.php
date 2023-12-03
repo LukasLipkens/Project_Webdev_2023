@@ -4,7 +4,9 @@
 $name = $_GET["name"];
 $email = $_GET["email"];
 $password = $_GET["password"];
-
+$dsn = "mysql:host=localhost;dbname=project_tennis";
+$dbusername = "super";
+$dbpassword = "Project_Webdev";
 
 
 try {
