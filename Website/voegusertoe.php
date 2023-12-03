@@ -1,5 +1,5 @@
 <?php
-include "./config/database.php";
+//include "./config/database.php";
 
 $name = $_GET["name"];
 $email = $_GET["email"];
@@ -7,34 +7,34 @@ $password = $_GET["password"];
 
 
 
-if (CheckExistingUser($email, $conn)) {
-    $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
+try {
+    $pdo = new PDO($dsn, $dbusername, $dbpassword);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $t_add = mysqli_query($conn, $t_sql);
+    $query = "INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES (?,?,?);";
+    //$query = "INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES (:username,:password,:email);"; //dit is het gebruik van named parameters
+    //$query = "SELECT * FROM tblgames;";
+    $stmt = $pdo->prepare($query);
 
-    if ($t_add) {
-        echo 'succes';
-    } else {
-        echo 'Error:' . mysqli_error($conn);
-    }
-} else {
-    var_dump("user already exists:" . CheckExistingUser($email, $conn));
-}
+    /*
+    $stmt->bindParam(":username", $username);
+    $stmt->bindParam(":password", $pwd);
+    $stmt->bindParam(":email", $email);
 
-function CheckExistingUser($email,  $conn)
-{
-    $t_sql = 'SELECT * FROM tblspelers WHERE email="' . $email . '";';
+    $stmt->execute();
+    */
 
-    $t_result = mysqli_query($conn, $t_sql);
+    $stmt->execute([$name, $password, $email]);
+    //$stmt->execute();
+    //$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //print_r($results[0]);
 
-    if ($t_result) {
-        $t_arr = mysqli_fetch_all($t_result, MYSQLI_ASSOC);
-        if (empty($t_arr)) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        return mysqli_error($conn);
-    }
+
+
+    $pdo = null;
+    $stmt = null;
+
+    die(); //als je iets hebt met een connectie, anders exit();
+} catch (PDOException $e) {
+    die("Query failed: " . $e->getMessage());
 }
