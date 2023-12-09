@@ -1,0 +1,325 @@
+//#region IMPORTS
+
+//#endregion IMPORTS
+
+const template = document.createElement("template")
+template.innerHTML = /*html*/`
+    <style>
+    #createGameForm{
+        width: 300px;
+        border: 2px solid black;
+        background-color: rgb(255, 255, 255);
+        border-radius: 15px;
+        text-align: center;
+    }
+    h1{
+        background-color: green;
+        margin: 0;
+        padding: 5px;
+        color: yellow;
+        border-radius: 12px 12px 0px 0px;
+        font-size: 2.5em;
+    }
+    #gameTypeSelector{
+        width: 50%;
+    }
+
+    /*#region select*/
+    .radio-input input {
+        display: none;
+    }
+
+    .radio-input {
+        --container_width: 300px;
+        width: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-radius: 0 0 15px 15px;
+        background-color: #b3b3b3;
+        color: #000000;
+        width: var(--container_width);
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .radio-input label {
+        width: 100%;
+        padding: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        font-weight: 600;
+        letter-spacing: -1px;
+        font-size: 14px;
+    }
+
+    .selection {
+        display: none;
+        position: absolute;
+        height: 100%;
+        width: calc(var(--container_width) / 2);
+        z-index: 0;
+        left: 0;
+        top: 0;
+        transition: .15s ease;
+    }
+
+    .radio-input label:has(input:checked) {
+        color: black;   
+    }
+
+    .radio-input label:has(input:checked) ~ .selection {
+        background-color: green;
+        display: inline-block;
+    }
+
+    .radio-input label:nth-child(1):has(input:checked) ~ .selection {
+        transform: translateX(calc(var(--container_width) * 0/2));
+    }
+
+    .radio-input label:nth-child(2):has(input:checked) ~ .selection {
+        transform: translateX(calc(var(--container_width) * 1/2));
+    }
+    /*#endregion select*/
+
+    /*#region input*/
+    .inputBox {
+        position: relative;
+        padding: 10px;
+    }
+
+    .inputBox input {
+        padding: 15px 20px;
+        outline: none;
+        background: transparent;
+        border-radius: 5px;
+        border: 1px solid#000000;
+        font-size: 1em;
+    }
+
+    .inputBox span {
+        position: absolute;
+        left: 0;
+        font-size: 0.7em;
+        transform: translateX(14px) translateY(-7.5px);
+        padding: 0 6px 1px 5px;
+        border-radius: 2px;
+        background: #212121;
+        letter-spacing: 1px;
+        border: 1px solid #e8e8e8;
+        color: #e8e8e8;
+    }
+
+    h3{
+        margin: 0;
+    }
+    /*#endregion input*/
+
+    /*#region btn*/
+    #btnDiv{
+        width: fit-content;
+        margin: auto;
+        padding-bottom: 10px;
+        display:flex
+    }
+    button {
+        cursor: pointer;
+        font-weight: 700;
+        font-family: Helvetica,"sans-serif";
+        transition: all .2s;
+        padding: 10px 20px;
+        border-radius: 100px;
+        background: #cfef00;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        margin: 5px;
+    }
+
+    button:hover {
+        background: #c4e201;
+    }   
+
+    button > svg {
+        width: 34px;
+        margin-left: 10px;
+        transition: transform .3s ease-in-out;
+    }
+
+    button:hover svg {
+        transform: translateX(5px);
+    }
+
+    button:active {
+        transform: scale(0.95);
+    }
+    /*#endregion btn*/
+
+    .double{
+        display: none;
+    }
+    </style>
+
+    <div id="createGameForm">
+        <h1>Create Game</h1>
+        <div class="radio-input">
+            <label>
+            <input class="gameMode" type="radio" id="value-1" name="value-radio" value="solo" checked="checked">
+            <span>solo</span>
+            </label>
+            <label>
+              <input class="gameMode" type="radio" id="value-2" name="value-radio" value="double">
+            <span>double</span>
+            </label>
+            <span class="selection"></span>
+          </div>
+
+          <div id="team1">
+            <h3>Team 1:</h3>
+              <div class="inputBox">
+                <input id="team1Player1" type="text" placeholder="Name here...">
+                <span>Player 1:</span>
+              </div>
+    
+              <div class="inputBox double">
+                <input id="team1Player2" type="text" placeholder="Name here...">
+                <span>Player 2:</span>
+              </div>
+          </div>
+
+          <div id="team2">
+            <h3>Team 2:</h3>
+              <div class="inputBox">
+                <input id="team2Player1" type="text" placeholder="Name here...">
+                <span>Player 1:</span>
+              </div>
+    
+              <div class="inputBox double">
+                <input id="team2Player2" type="text" placeholder="Name here...">
+                <span>Player 2:</span>
+              </div>
+          </div>
+          <div id="btnDiv">
+                <button id="cancelBtn">cancel</button>
+                <button id="continueBtn">
+                    <span>Continue</span>
+                    <svg width="34" height="34" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="37" cy="37" r="35.5" stroke="black" stroke-width="3"></circle>
+                        <path d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z" fill="black"></path>
+                    </svg>
+                </button>
+          </div>
+    </div>
+`
+
+class comp extends HTMLElement
+{
+    constructor(){
+        super();
+        this.shadow = this.attachShadow({mode: "open"});
+        this.shadow.append(template.content.cloneNode(true));
+        //#region elementSelection
+        this.gameTypeElement = this.shadowRoot.querySelectorAll(".gameMode");
+        this.continue = this.shadowRoot.querySelector("#continueBtn");
+        this.cancel = this.shadowRoot.querySelector("#cancelBtn");
+        //#endregion
+        this.gameType = "solo";
+        }
+        connectedCallback(){
+            this.gameTypeElement.forEach(option => {
+                option.addEventListener("click", ()=>{
+                    this.gameType = option.value;
+                    this.updateForm();
+                });
+            });
+            this.continue.addEventListener("click", ()=>{
+                this.createGame();
+            });
+            this.cancel.addEventListener("click", ()=>{
+                this.cancelGame();
+            });
+        }
+
+        updateForm(){
+            switch (this.gameType)
+            {
+                case "solo":
+                    this.shadowRoot.querySelectorAll(".double").forEach(element => {
+                        element.style.display = "none";
+                    });
+                    break;
+                case "double":
+                    this.shadowRoot.querySelectorAll(".double").forEach(element => {
+                        element.style.display = "block";
+                    });
+                    break;
+            }
+        }
+//#region create or cancel gameCreation
+        createGame(){
+            let players = [];
+            let team1Player1 = this.shadowRoot.querySelector("#team1Player1").value;
+            let team1Player2 = this.shadowRoot.querySelector("#team1Player2").value;
+            let team2Player1 = this.shadowRoot.querySelector("#team2Player1").value;
+            let team2Player2 = this.shadowRoot.querySelector("#team2Player2").value;
+
+            let errors = [];
+            let errorstring = "";
+
+            switch (this.gameType)
+            {
+                case "solo":
+                    if(team1Player1!=""){players.push(team1Player1);}
+                    else{errors.push("team 1 player 1 is nog leeg");}
+
+                    if(team2Player1!=""){players.push(team2Player1);}
+                    else{errors.push("team 2 player 1 is nog leeg");}
+
+                    break;
+                case "double":
+                    if(team1Player1!=""){players.push(team1Player1);}
+                    else{errors.push("team 1 player 1 is nog leeg");}
+
+                    if(team1Player2!=""){players.push(team1Player2);}
+                    else{errors.push("team 1 player 2 is nog leeg");}
+
+                    if(team2Player1!=""){players.push(team2Player1);}
+                    else{errors.push("team 2 player 2 is nog leeg");}
+
+                    if(team2Player2!=""){players.push(team2Player2);}
+                    else{errors.push("team 2 player 2 is nog leeg");}
+
+                    break;
+            }
+
+            if(errors.length != 0){
+                errors.forEach(element => {
+                    
+                    errorstring += element + "\r\n";
+                });
+                alert(errorstring);
+            }
+            else{
+                this.createGameEvent(players);
+            }
+        }
+        cancelGame(){
+            let array = ["cancel"];
+            this.createGameEvent(array);
+        }
+        createGameEvent(info){ //wordt getriggerd wanneer de scoren geupdate wordt
+            this.dispatchEvent(new CustomEvent("createGameEvent", {
+                bubbles: true,
+                composed: true,
+                detail: info
+            }))
+        }
+//#endregion create or cancel gameCreation
+
+}
+
+customElements.define('create-comp', comp)
