@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+<body>
+    <table id="gameTable">
+        <tr>
+            <th>Team 1</th>
+            <th>Points Team1</th>
+            <th>Points Team2</th>
+            <th>Team 2</th>
+        </tr>
+    </table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+$.ajax({
+    url: 'getHistory.php',
+    dataType: 'json',
+    success: function(data) {
+        console.log(data[0]);
+        var table = document.getElementById('gameTable');
+        //console.log(data[0]["game"]["team1 names"]);
+        for(let i = 0; i < data.length; i++){
+            var row = document.createElement("tr");
+            row.innerHTML = "<td>" + data[i]["game"]["team1 names"] + "</td><td>" + data[i]["game"]["team1 sets"] + "</td><td>" + data[i]["game"]["team2 sets"] + "</td><td>" + data[i]["game"]["team2 names"] + "</td>";
+            table.appendChild(row);
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+    }
+});
+
+// Wrap your AJAX call in a function
+function fetchLiveGames() {
+    $.ajax({
+        url: 'getLiveGames.php',
+        dataType: 'json',
+        success: function(data){
+            console.log(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+        }
+    });
+}
+
+// Call the function immediately to fetch the live games
+fetchLiveGames();
+
+// Then set an interval to call the function every 5 seconds (5000 milliseconds)
+setInterval(fetchLiveGames, 5000);
+    </script>
+</body>
+</html>
