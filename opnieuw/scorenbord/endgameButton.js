@@ -55,6 +55,20 @@ class app extends HTMLElement
         this.shadow.append(template.content.cloneNode(true))
         
         }
+
+        connectedCallback(){
+            this.shadowRoot.querySelector("button").addEventListener('click', ()=>{
+                this.EndGameEvent("EndGame");
+            })
+        }
+
+        EndGameEvent(info){
+            this.dispatchEvent(new CustomEvent("EndGameEvent", {
+                bubbles: true,
+                composed: true,
+                detail: info
+            }))
+        }
 }
 
 customElements.define('endgamebtn-comp', app);

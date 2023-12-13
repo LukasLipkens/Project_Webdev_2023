@@ -373,7 +373,12 @@ class comp extends HTMLElement
     }
     winner(team){
         this.scoreObject.gameStatus = 0;
-        //hier moet nog een schermtje opgeroepen worden met een kleine overview van de game waarna je terug naar de mygames pagina gestuurd wordt
+        //end game knop toevoegen
+        let endgamebtn = document.createElement(`endgamebtn-comp`);
+        this.endgame.append(endgamebtn);
+        //score knoppen weg halen
+        this.shadowRoot.querySelector("#T_1").remove();
+        this.shadowRoot.querySelector("#T_2").remove();
     }
 //#endregion PuntenTelling
 
@@ -444,9 +449,7 @@ class comp extends HTMLElement
                 this.board.append(scoreBtn);
             }
         }
-        //end game knop toevoegen
-        let endgamebtn = document.createElement(`endgamebtn-comp`);
-        this.endgame.append(endgamebtn);
+
         //random team opslag geven
         this.updateServe(0);
     }

@@ -95,12 +95,14 @@ class comp extends HTMLElement
         
         //vul deze array met alle games die op de homepagina moeten worden weergegeven
         //remove functie is nog niet geimplementeerd
-        //het vullen en updaten van de homepagina met de gegevens van de database worden best verplaatst naar een dedicated function
+        //het vullen en updaten van de homepagina met de gegevens van de database worden best verplaatst naar een dedicated function\
+        this.gamesData.push(this.scoreObject);
         this.gamesData.push(e.detail);
 
         this.home.gameUpdate = this.gamesData
         this.home.setAttribute("update", "1")
     }
+
     
 }
 

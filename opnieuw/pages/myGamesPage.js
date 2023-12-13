@@ -120,6 +120,7 @@ class comp extends HTMLElement
                 }
 
             });
+            this.addEventListener("EndGameEvent", this.EndGameEvent);  
             this.addEventListener("createGameEvent", this.createGameEvent);
         }  
 
@@ -135,9 +136,10 @@ class comp extends HTMLElement
                 this.formIsShown = false;
             }
             else{
+                this.gameContainer.style.display = "block";
                 let scoreBoard = document.createElement("scorenbord-comp");
                 scoreBoard.setAttribute("type", "admin");
-                scoreBoard.setAttribute("gameId", "0412202301");
+                scoreBoard.setAttribute("gameId", "0412202301"); //hier moet een game id worden aangemaakt
 
                 this.shadowRoot.querySelector("#gameForm").remove();
                 this.formIsShown = false;
@@ -164,6 +166,12 @@ class comp extends HTMLElement
                 }
                 
             }
+        }
+        EndGameEvent(){
+            this.gameContainer.style.display = "none";
+            this.mainContainer.style.display = "block";
+            this.shadowRoot.querySelector("scorenbord-comp").remove();
+
         }
 }
 
