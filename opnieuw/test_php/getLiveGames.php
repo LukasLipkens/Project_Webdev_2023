@@ -1,12 +1,5 @@
 <?php
-
     include_once '../config/database.php';
-
-    session_start();
-
-    //$session_id = $_SESSION['id'];
-
-    $session_id = 1;
 
     $sql = "SELECT 
     g.gameId,
@@ -27,17 +20,18 @@
     tblteamspeler ts ON t.gameId = ts.gameId AND t.teamId = ts.teamId
   JOIN 
     tblspelers s ON ts.spelerId = s.id
-    WHERE g.state = 'fin' AND s.id = ".$session_id."
+    WHERE g.state = 'on'
   GROUP BY 
     g.gameId;";
 
     $result = $conn->query($sql);
+    $liveGames = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    $own_games = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    //here we add an extra array for the points
 
     $games = array();
 
-    foreach($own_games as $game){
+    foreach($liveGames as $game){
         $gameId = $game['gameId'];
         $fullgame = array_merge($game, array('game' => $game));
 

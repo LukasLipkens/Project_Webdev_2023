@@ -113,6 +113,8 @@ class comp extends HTMLElement
         this.formIsShown = false;
         }
         connectedCallback(){
+            this.gameId;
+            this.players = [];
             this.creatGame.addEventListener("click", ()=>{
                 if(!this.formIsShown){
                     this.showCreateGameForm(); 
@@ -136,34 +138,102 @@ class comp extends HTMLElement
                 this.formIsShown = false;
             }
             else{
-                this.gameContainer.style.display = "block";
-                let scoreBoard = document.createElement("scorenbord-comp");
-                scoreBoard.setAttribute("type", "admin");
-                scoreBoard.setAttribute("gameId", "0412202301"); //hier moet een game id worden aangemaakt
-
-                this.shadowRoot.querySelector("#gameForm").remove();
-                this.formIsShown = false;
-
-                this.mainContainer.style.display = "none";
 
                 
-                this.gameContainer.appendChild(scoreBoard);
-                
-                //namen in het component zetten
-                let bord = this.shadowRoot.querySelector("scorenbord-comp");
-                if(e.detail.length == 2){
-                    bord.scoreObject.team1.players = [e.detail[0]];
-                    bord.team1.innerHTML = `<h4>${e.detail[0]}</h4>`;
-                    bord.scoreObject.team2.players = [e.detail[1]];
-                    bord.team2.innerHTML = `<h4>${e.detail[1]}</h4>`;
-                }
-                else{
-                    bord.scoreObject.team1.players = [e.detail[0], e.detail[1]];
-                    bord.team1.innerHTML = `<h4>${e.detail[0]}</h4><h4>${e.detail[1]}</h4>`;
-                    bord.scoreObject.team2.players = [e.detail[2], e.detail[3]];
-                    bord.team2.innerHTML = `<h4>${e.detail[2]}</h4><h4>${e.detail[3]}</h4>`;
+                console.log(e.detail);
 
-                }
+                //game aanmaken in de database
+                $.ajax({
+                    url: './test_php/addGame.php',
+                    dataType: 'json',
+                    success: (data)=>{
+                        this.gameId = +data;
+                        console.log(this.gameId);
+
+                        //hier maken we het veld voor een game aan
+                        this.gameContainer.style.display = "block";
+                        let scoreBoard = document.createElement("scorenbord-comp");
+                        scoreBoard.setAttribute("type", "admin");
+                        scoreBoard.setAttribute("gameId", `${this.gameId}`); //hier moet een game id worden aangemaakt
+        
+                        this.shadowRoot.querySelector("#gameForm").remove();
+                        this.formIsShown = false;
+        
+                        this.mainContainer.style.display = "none";
+        
+                        
+                        this.gameContainer.appendChild(scoreBoard);
+
+                        //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
+                        //namen in het component zetten
+                        let bord = this.shadowRoot.querySelector("scorenbord-comp");
+        
+                        this.players = e.detail;
+                        if(e.detail.length == 3){
+                            bord.scoreObject.team1.players = [this.players[0]];
+                            bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
+                            bord.scoreObject.team2.players = [this.players[2]];
+                            bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
+        
+                            //spelers toevoegen aan de game
+                            $.ajax({
+                                url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=1&spelerId='+this.players[0].id,
+                                dataType: 'json',
+                                success: (data)=>{
+        
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                                }
+                            });
+                            $.ajax({
+                                url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=2&spelerId='+this.players[2].id,
+                                dataType: 'json',
+                                success: (data)=>{
+        
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                                }
+                            });
+                        }
+                        else{
+                            bord.scoreObject.team1.players = [this.players[0], this.players[1]];
+                            bord.team1.innerHTML = `<h4>${this.players[0]}</h4><h4>${this.players[1]}</h4>`;
+                            bord.scoreObject.team2.players = [this.players[2], this.players[3]];
+                            bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
+        
+                            let teamId;
+                            for(let i = 0; i< this.players.length; i++){
+                                if(i<2){
+                                    teamId = 1;
+                                }
+                                else{
+                                    teamId = 2;
+                                }
+                                $.ajax({
+                                    url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId='+teamId+'&spelerId='+this.players[i].id,
+                                    dataType: 'json',
+                                    success: (data)=>{
+        
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                                    }
+                                });
+                            }
+        
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                    }
+                });
+
+
+
+
+
                 
             }
         }
@@ -171,7 +241,16 @@ class comp extends HTMLElement
             this.gameContainer.style.display = "none";
             this.mainContainer.style.display = "block";
             this.shadowRoot.querySelector("scorenbord-comp").remove();
-
+            $.ajax({
+                url: './test_php/endGame.php?gameId='+this.gameId,
+                dataType: 'json',
+                success: (data)=>{
+                    console.log(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                }
+            });
         }
 }
 

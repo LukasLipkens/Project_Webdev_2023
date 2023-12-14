@@ -163,7 +163,7 @@ template.innerHTML = /*html*/`
         display: none;
     }
     </style>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div id="createGameForm">
         <h1>Create Game</h1>
         <div class="radio-input">
@@ -181,12 +181,12 @@ template.innerHTML = /*html*/`
           <div id="team1">
             <h3>Team 1:</h3>
               <div class="inputBox">
-                <input id="team1Player1" type="text" placeholder="Name here...">
+                <input id="team1Player1" player="1" type="text" placeholder="Name here...">
                 <span>Player 1:</span>
               </div>
     
               <div class="inputBox double">
-                <input id="team1Player2" type="text" placeholder="Name here...">
+                <input id="team1Player2" player="2" type="text" placeholder="Name here...">
                 <span>Player 2:</span>
               </div>
           </div>
@@ -194,12 +194,12 @@ template.innerHTML = /*html*/`
           <div id="team2">
             <h3>Team 2:</h3>
               <div class="inputBox">
-                <input id="team2Player1" type="text" placeholder="Name here...">
+                <input id="team2Player1" player="3" type="text" placeholder="Name here...">
                 <span>Player 1:</span>
               </div>
     
               <div class="inputBox double">
-                <input id="team2Player2" type="text" placeholder="Name here...">
+                <input id="team2Player2" player="4" type="text" placeholder="Name here...">
                 <span>Player 2:</span>
               </div>
           </div>
@@ -227,9 +227,12 @@ class comp extends HTMLElement
         this.continue = this.shadowRoot.querySelector("#continueBtn");
         this.cancel = this.shadowRoot.querySelector("#cancelBtn");
         //#endregion
+
         this.gameType = "solo";
         }
         connectedCallback(){
+            this.playerList = [];
+
             this.gameTypeElement.forEach(option => {
                 option.addEventListener("click", ()=>{
                     this.gameType = option.value;
@@ -242,8 +245,55 @@ class comp extends HTMLElement
             this.cancel.addEventListener("click", ()=>{
                 this.cancelGame();
             });
-        }
 
+            this.inputs = this.shadowRoot.querySelectorAll(".inputBox input");
+            this.inputs.forEach(input => {
+                let divplayerList = document.createElement('div');
+                divplayerList.classList.add('playerList');
+                input.parentNode.appendChild(divplayerList);
+
+            input.addEventListener("keyup", (event)=>{
+                //we maken hier target aan zodat dit ook nog beschikbaar is in de ajax call
+                let target = event.target;
+
+                //Hier resetten we even alle playerLists
+                let allLists = this.shadowRoot.querySelectorAll(".playerList");
+                allLists.forEach(element => { element.innerHTML = ""; });
+
+                $.ajax({
+                    url: './test_php/searchUser.php?search='+ event.target.value,
+                    dataType: 'json',
+                    success: (data)=>{
+                        //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
+                        let divplayerListS = target.parentNode.querySelector(`.playerList`);
+                        divplayerListS.innerHTML = "";
+
+                        if(data.length != 0 && target.value != ""){
+                            data.forEach(element => {
+                                console.log(element);
+                                divplayerListS.innerHTML += "<p>"+element.gebruikersnaam+"</p>";
+                            });
+                            let playerOptions = divplayerListS.querySelectorAll("p");
+                            playerOptions.forEach((playerOption, index) => {
+                                playerOption.addEventListener("click", ()=>{
+                                    let indexP = target.getAttribute("player");
+                                    this.playerList[indexP-1] = data[index];
+                                    //console.log(this.playerList);
+                                    target.value = playerOption.innerHTML;
+                                    divplayerListS.innerHTML = "";
+                                });
+                            });
+                        
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                    }
+                });
+
+        });
+    });
+    }
         updateForm(){
             switch (this.gameType)
             {
@@ -304,7 +354,8 @@ class comp extends HTMLElement
                 alert(errorstring);
             }
             else{
-                this.createGameEvent(players);
+                //this.createGameEvent(players);
+                this.createGameEvent(this.playerList);
             }
         }
         cancelGame(){

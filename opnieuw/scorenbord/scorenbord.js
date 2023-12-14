@@ -200,6 +200,7 @@ class comp extends HTMLElement
     }
 
     connectedCallback(){
+        this.setNr = 1;
         this.type = this.getAttribute("type");
         if(this.type == "admin"){
             this.UpdateToAdmin();
@@ -225,6 +226,16 @@ class comp extends HTMLElement
         this.game(action, player);
         /*einde spel*/
         this.pushScoreEvent(this.scoreObject);
+        $.ajax({
+            url: './test_php/updateGame.php?gameId='+this.scoreObject.game+'&puntenT1='+this.scoreObject.team1.points+'&puntenT2='+this.scoreObject.team2.points+'&gamesT1='+this.scoreObject.team1.game+'&gamesT2='+this.scoreObject.team2.game+'&setsT1='+this.scoreObject.team1.sets+'&setsT2='+this.scoreObject.team2.sets+'&serving='+this.scoreObject.serving,
+            dataType: 'json',
+            success: (data)=>{
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+            }
+        });
     }
 
     game(action, team){
@@ -344,6 +355,19 @@ class comp extends HTMLElement
     }
     sets(team){
         /*reset de match punten*/
+        let gamesT1 = +this.scoreObject.team1.game;
+        let gamesT2 = +this.scoreObject.team2.game;
+
+        $.ajax({
+            url: './test_php/addSet.php?gameId='+this.scoreObject.game+'&setNr='+this.setNr+'&gamesT1='+gamesT1+'&gamesT2='+gamesT2,
+            dataType: 'json',
+            success: (data)=>{
+                this.setNr += 1;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+            }
+        });
         this.gameT1.innerHTML = "0";
         this.scoreObject.team1.game = 0;
         this.gameT2.innerHTML = "0";
