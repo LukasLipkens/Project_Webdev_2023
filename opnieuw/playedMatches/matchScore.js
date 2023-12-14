@@ -1,5 +1,6 @@
 //#region IMPORTS
 import "../playedMatches/individualScore.js"
+import { scoreData } from '../playerData.js'
 //#endregion IMPORTS
 
 const template = document.createElement("template");
@@ -198,7 +199,6 @@ class MatchComponent extends HTMLElement {
         this.arrowImage = this.shadowRoot.querySelectorAll('.arrow-image');
         this.container = this.shadowRoot.querySelector('#container');
 
-        this.singleScoreLine = document.createElement('single-score-comp');
         this.matchContent = this.shadowRoot.querySelector('#item-content');
     }
 
@@ -206,17 +206,8 @@ class MatchComponent extends HTMLElement {
         this.getPlayerData();
         this.editScoreAndPlayers();
         this.setupEventListeners();
-        this.addContentToMatch();
+        this.createScoreComponents();
     }
-
-    // getDate() {
-    //     this.currentDate = new Date();
-    //     this.day = this.currentDate.getDay();
-    //     this.month = this.currentDate.getMonth() + 1;
-    //     this.year = this.currentDate.getFullYear() % 100; // neemt de laatst twee cijfers
-
-    //     this.dateText.innerHTML = `${this.day}/${this.month}/${this.year}`;
-    // }
 
     getPlayerData() {
         this.gameId = this.getAttribute('id');
@@ -272,13 +263,22 @@ class MatchComponent extends HTMLElement {
         }
     }
 
-    addContentToMatch() {
-        this.singleScoreLine.setAttribute('id', this.gameId);
-        this.singleScoreLine.setAttribute('playerName1', this.player1);
-        this.singleScoreLine.setAttribute('playerName2', this.player2);
-        this.singleScoreLine.setAttribute('score1', this.player1Score);
-        this.singleScoreLine.setAttribute('score2', this.player2Score);
-        this.matchContent.append(this.singleScoreLine);
+    createScoreComponents() {
+        scoreData.forEach((line) => {
+            if (line.gameId == this.gameId) {
+                this.singleScoreComp = document.createElement('single-score-comp');
+
+                this.singleScoreComp.setAttribute('id', this.gameId);
+                this.singleScoreComp.setAttribute('playerName1', this.player1);
+                this.singleScoreComp.setAttribute('playerName2', this.player2);
+
+                this.singleScoreComp.setAttribute('setNr', line.setNr);
+                this.singleScoreComp.setAttribute('team1Points', line.team1Points);
+                this.singleScoreComp.setAttribute('team2Points', line.team2Points);
+
+                this.matchContent.append(this.singleScoreComp);
+            };
+        });
     }
 }
 

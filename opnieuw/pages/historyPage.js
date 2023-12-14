@@ -1,6 +1,6 @@
 //#region IMPORTS
 import '../playedMatches/matchScore.js'
-import playerData from '../playerData.js'
+import { playerData } from '../playerData.js'
 //#endregion IMPORTS
 
 const template = document.createElement("template");
@@ -80,32 +80,8 @@ class HistoryComp extends HTMLElement {
     }
 
     connectedCallback() {
-        // this.generateMatchData(); // for testing with playerData.js
         this.renderPage();
     }
-
-    // generateMatchData() {
-    //     this.matchData = [];
-
-    //     for (let i = 0; i < playerData.length; i++) {
-    //         for (let j = i + 1; j < playerData.length; j++) {
-    //             const player1 = playerData[i];
-    //             const player2 = playerData[j];
-
-    //             if (player1.name !== player2.name) {
-    //                 const match = {
-    //                     playerName1: player1.name,
-    //                     playerName2: player2.name,
-    //                     score1: player1.score,
-    //                     score2: player2.score,
-    //                     whoWon: player1.score > player2.score ? player1.name : player2.name
-    //                 };
-
-    //                 this.matchData.push(match);
-    //             }
-    //         }
-    //     }
-    // }
 
     renderPage() {
         this.totalPages = Math.ceil(this.matchData.length / this.itemsPerPage);

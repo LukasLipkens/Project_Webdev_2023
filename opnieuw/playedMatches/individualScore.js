@@ -54,14 +54,14 @@ template.innerHTML = /*html*/ `
         <div id="game-container-box">
             <div id="left-box">
                 <img src="./images/player1.png" alt="playerOne">
-                <p>Player 1</p>
+                <p></p>
             </div>
             <div id="center-box">
-                <p id="score-box">0 - 0</p>
+                <p id="score-box"></p>
             </div>
             <div id="right-box">
                 <img src="./images/player2.png" alt="playerTwo">
-                <p>Player 2</p>
+                <p></p>
             </div>
         </div>
     </div>
@@ -79,14 +79,19 @@ class SingleScoreComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.playerName1 = this.getAttribute('playerName1');
-        this.playerName2 = this.getAttribute('playerName2');
-        this.score1 = '0';
-        this.score2 = '0';
+        this.setScoreData();
+    }
 
-        this.leftPlayer.innerText = this.playerName1;
-        this.rightPlayer.innerText = this.playerName2;
-        this.scores.innerText = `${this.score1} - ${this.score2}`;
+    setScoreData() {
+        this.player1 = this.getAttribute('playerName1');
+        this.player2 = this.getAttribute('playerName2');
+        this.setNr = this.getAttribute('setNr');
+        this.team1 = this.getAttribute('team1Points');
+        this.team2 = this.getAttribute('team2Points');
+
+        this.leftPlayer.innerText = this.player1;
+        this.rightPlayer.innerText = this.player2;
+        this.scores.innerText = `${this.team1} - ${this.team2}`;
     }
 }
 
