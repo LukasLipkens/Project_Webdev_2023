@@ -101,6 +101,8 @@ class HistoryComp extends HTMLElement {
 
             this.matchComponent.setAttribute('id', item.gameId);
             this.matchComponent.setAttribute('date', item.date);
+            this.matchComponent.setAttribute('startTime', item.startTime);
+            this.matchComponent.setAttribute('endTime', item.endTime);
             this.matchComponent.setAttribute('playerName1', item.player1);
             this.matchComponent.setAttribute('playerName2', item.player2);
             this.matchComponent.setAttribute('score1', item.player1Score);

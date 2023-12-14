@@ -22,6 +22,7 @@ template.innerHTML = /*html*/ `
             height: 63px;
             border-radius: 10px 0 0 10px;
             margin-left: 15px;
+
         }
         #item-container {
             border: 2px solid #d1d1d1;
@@ -104,7 +105,7 @@ template.innerHTML = /*html*/ `
         #item-container.expanded {
             height: 350px;
         }
-        #expanded .arrow-image {
+        .expanded .arrow-image {
             transform: rotate(180deg);
         }
         #item-content-box {
@@ -112,13 +113,23 @@ template.innerHTML = /*html*/ `
             justify-content: space-evenly;
             width: auto;
         }
+        #item-content-box p:first-child {
+            padding: 10px 20px;
+            border: 1px solid green;
+            border-radius: 10px;
+        }
+        #item-content-box p:last-child {
+            padding: 10px 20px;
+            border: 1px solid green;
+            border-radius: 10px;
+        }
         #startTime, #endTime {
             width: 30%;
             height: auto;
             text-align: center;
             margin: 0;
-            padding: 10px 0 0 0;
             font-size: 20px;
+            font-weight: bold;
         }
         #fill {
             width: 40%;
@@ -134,25 +145,25 @@ template.innerHTML = /*html*/ `
             <div id="game-container">
                 <div id="left">
                     <img src="./images/player1.png" alt="playerOne">
-                    <p>Player 1</p>
+                    <p></p>
                 </div>
                 <div id="center">
                     <p id="drawLeft">DRAW</p>
                     <img id="winnerLeft" src="./images/winner.png" alt="winner-tag">
-                    <p id="score">0 - 0</p>
+                    <p id="score"></p>
                     <img id="winnerRight" src="./images/winner.png" alt="winner-tag">
                     <p id="drawRight">DRAW</p>
                 </div>
                 <div id="right">
                     <img src="./images/player2.png" alt="playerTwo">
-                    <p>Player 2</p>
+                    <p></p>
                 </div>
             </div>
             <div id="item-content">
                 <div id="item-content-box">
-                    <p id="startTime">starting time</p>
+                    <p>STARTTIJD: <span id="startTime"></span></p>
                     <p id="fill"></p>
-                    <p id="endTime">ending time</p>
+                    <p>EINDTIJD: <span id="endTime"></span></p>
                 </div>
                 <!-- container for displaying single-score-components -->
             </div>
@@ -173,7 +184,7 @@ template.innerHTML = /*html*/ `
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M19.7782 19.7782C15.4824 24.0739 8.51759 24.0739 4.22183 19.7782C-0.0739417 15.4824 -0.0739417 8.51759 4.22183 4.22183C8.51759 -0.0739419 15.4824 -0.0739419 19.7782 4.22183C24.0739 8.51759 24.0739 15.4824 19.7782 19.7782ZM18.364 18.364C14.8492 21.8787 9.15076 21.8787 5.63604 18.364C2.12132 14.8492 2.12132 9.15076 5.63604 5.63604C9.15076 2.12132 14.8492 2.12132 18.364 5.63604C21.8787 9.15076 21.8787 14.8492 18.364 18.364Z"
-                fill="currentColor"
+                fill="green"
             />
             </svg>
         </div>
@@ -187,6 +198,8 @@ class MatchComponent extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this.dateText = this.shadowRoot.querySelector('#text');
+        this.startingTime = this.shadowRoot.querySelector('#startTime');
+        this.endingTime = this.shadowRoot.querySelector('#endTime');
 
         this.winnerLeft = this.shadowRoot.querySelector('#winnerLeft');
         this.winnerRight = this.shadowRoot.querySelector('#winnerRight');
@@ -212,6 +225,8 @@ class MatchComponent extends HTMLElement {
     getPlayerData() {
         this.gameId = this.getAttribute('id');
         this.date = this.getAttribute('date');
+        this.startTime = this.getAttribute('startTime');
+        this.endTime = this.getAttribute('endTime');
         this.player1 = this.getAttribute('playerName1');
         this.player2 = this.getAttribute('playerName2');
         this.player1Score = this.getAttribute('score1');
@@ -235,7 +250,9 @@ class MatchComponent extends HTMLElement {
             this.drawRight.style.display = 'block';
         }
 
-        this.dateText.innerHTML = `${this.date}`;
+        this.dateText.innerHTML = this.date;
+        this.startingTime.innerHTML = this.startTime;
+        this.endingTime.innerHTML = this.endTime;
         this.leftPlayer.innerHTML = this.player1;
         this.rightPlayer.innerHTML = this.player2;
         this.scores.innerHTML = `${this.player1Score} - ${this.player2Score}`;

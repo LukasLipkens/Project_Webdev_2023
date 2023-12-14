@@ -9,7 +9,6 @@ template.innerHTML = /*html*/ `
         #item-content-box {
             display: flex;
             height: 50px;
-            margin-top: 10px;
         }
         #game-container-box {
             display: flex;
