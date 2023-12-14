@@ -70,7 +70,6 @@ class HistoryComp extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
         this.matchData = playerData;
-        console.log(this.matchData);
 
         this.currentPage = 1;
         this.itemsPerPage = 8;
@@ -101,7 +100,6 @@ class HistoryComp extends HTMLElement {
             this.matchComponent = document.createElement('match-comp');
 
             this.matchComponent.setAttribute('id', item.gameId);
-            console.log(item.gameId);
             this.matchComponent.setAttribute('date', item.date);
             this.matchComponent.setAttribute('playerName1', item.player1);
             this.matchComponent.setAttribute('playerName2', item.player2);
@@ -118,7 +116,6 @@ class HistoryComp extends HTMLElement {
     }
 
     toggleMatchComp(gameId) {
-        console.log(gameId);
         this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
         this.matchComponents.forEach((component) => {
             let componentId = component.getAttribute('id');

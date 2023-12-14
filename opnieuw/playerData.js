@@ -7,7 +7,8 @@ export const playerData = [
     { gameId: 6, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
     { gameId: 7, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
     { gameId: 8, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 9, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() }
+    { gameId: 9, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 10, date: "12/12/'23", player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
     // ...
 ];
 
