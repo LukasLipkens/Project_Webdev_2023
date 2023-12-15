@@ -1,14 +1,15 @@
 export const playerData = [
     { gameId: 1, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 2, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 3, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 4, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 5, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 6, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 7, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 8, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 9, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
-    { gameId: 10, date: getDate(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 2, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 3, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 4, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 5, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 6, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 7, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 8, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 9, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 10, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
+    { gameId: 11, date: getDate(), startTime: getStartingTime(), endTime: getEndingTime(), player1: getRandomName(), player2: getRandomName(), player1Score: getRandomScore(), player2Score: getRandomScore() },
     // ...
 ];
 
@@ -34,6 +35,8 @@ export const scoreData = [
     { gameId: 8, teamId: 1, setNr: 3, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
     { gameId: 8, teamId: 1, setNr: 4, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
     { gameId: 8, teamId: 1, setNr: 5, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
+    { gameId: 5, teamId: 1, setNr: 1, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
+    { gameId: 5, teamId: 1, setNr: 2, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
     { gameId: 5, teamId: 1, setNr: 1, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
     { gameId: 5, teamId: 1, setNr: 2, team1Points: getRandomSetScore(), team2Points: getRandomSetScore() },
 ];

@@ -69,8 +69,8 @@ class HistoryComp extends HTMLElement {
         super();
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
-        this.matchData = playerData;
-
+        this.matchData = playerData; 
+        
         this.currentPage = 1;
         this.itemsPerPage = 8;
 
@@ -79,13 +79,13 @@ class HistoryComp extends HTMLElement {
     }
 
     connectedCallback() {
-        this.renderPage();
+        this.renderPage(); // deze gaat de hoeveelheid pagina's bepalen afhankelijk van u aantal objecten en hoeveel items je wil displayen op het scherm.
     }
 
     renderPage() {
         this.totalPages = Math.ceil(this.matchData.length / this.itemsPerPage);
 
-        this.showPage();
+        this.showPage(); // 
         this.renderPagination(this.totalPages);
     }
 
