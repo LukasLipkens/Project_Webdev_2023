@@ -281,21 +281,35 @@ class MatchComponent extends HTMLElement {
     }
 
     createScoreComponents() {
-        scoreData.forEach((line) => {
-            if (line.gameId == this.gameId) {
-                this.singleScoreComp = document.createElement('single-score-comp');
+        //wat ik hier ga doen is niet efficient dus dit moeten we nog optimaliseren
 
-                this.singleScoreComp.setAttribute('id', this.gameId);
-                this.singleScoreComp.setAttribute('playerName1', this.player1);
-                this.singleScoreComp.setAttribute('playerName2', this.player2);
+        fetch('./test_php/getHistory.php',{
+            type:'GET',
+            headers:{
+                'Content-type': 'aplication/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data =>{
+            data.forEach((game) => {
+                if (game.gameId == this.gameId) {
+                    game["points"].forEach(line => {
+                        this.singleScoreComp = document.createElement('single-score-comp');
+    
+                        this.singleScoreComp.setAttribute('id', this.gameId);
+                        this.singleScoreComp.setAttribute('playerName1', this.player1);
+                        this.singleScoreComp.setAttribute('playerName2', this.player2);
+        
+                        this.singleScoreComp.setAttribute('setNr', line.setNr);
+                        this.singleScoreComp.setAttribute('team1Points', line["gamesT1"]);
+                        this.singleScoreComp.setAttribute('team2Points', line["gamesT2"]);
+        
+                        this.matchContent.append(this.singleScoreComp);
+                    })
+                };
+            });
+        })
 
-                this.singleScoreComp.setAttribute('setNr', line.setNr);
-                this.singleScoreComp.setAttribute('team1Points', line.team1Points);
-                this.singleScoreComp.setAttribute('team2Points', line.team2Points);
-
-                this.matchContent.append(this.singleScoreComp);
-            };
-        });
     }
 }
 

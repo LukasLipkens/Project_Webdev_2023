@@ -18,11 +18,23 @@ class comp extends HTMLElement
         this.displayedGames = [];
     }
     connectedCallback(){
-        // Call the function immediately to fetch the live games
-this.fetchLiveGames();
+        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener("message", (e) => {
+            const reader = new FileReader();
+            reader.onload = ()=> {
+                console.log(reader.result);
+                let message = reader.result;
+                if(message == "refresh"){
+                    console.log("refreshing");
+                    this.fetchLiveGames();
+                }
+            }
+            reader.readAsText(e.data);
 
-// We gebruiken hier bind om de this van de functie te binden aan de this van de class
-setInterval(this.fetchLiveGames.bind(this), 5000);
+        });
+        this.fetchLiveGames();
+        
+        console.log('Server started at ws://localhost:8080');
     }
     static get observedAttributes() {
         return ['update'];
@@ -51,28 +63,20 @@ setInterval(this.fetchLiveGames.bind(this), 5000);
     }
 
     fetchLiveGames(){
-        $.ajax({
-            url: './test_php/getLiveGames.php',
-            type: 'GET',
-            dataType: 'json',
-            success: (data) => {
-                this.shadowRoot.querySelector("#gamesDiv").innerHTML = "";
-                this.gameUpdate = data;
-                this.gameUpdate.forEach(game => {
-                    // if(this.displayedGames.indexOf(game["gameId"]) == -1){
-                    //     this.displayedGames.push(game["gameId"])
-
-                    //     this.addGame(game);
-
-                    // }
-                    // else{
-                    //     this.updateGame(game)
-                    // }
-                    //console.log(game);
-                    this.addGame(game);
-                });
-            }
-        });
+        fetch('./test_php/getLiveGames.php',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.shadowRoot.querySelector("#gamesDiv").innerHTML = "";
+            this.gameUpdate = data;
+            this.gameUpdate.forEach(game => {
+                this.addGame(game);
+            });
+        })
     }
 
     addGame(gameToAdd){//voegt de game toe als het id van de game nog niet bestaat

@@ -117,18 +117,23 @@ class comp extends HTMLElement
 
     connectedCallback()
     {
+        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener('open', function (event) {
+            console.log('Connection opened');
+        });
         this.button.forEach(btn => {
             btn.addEventListener('mousedown', (e) =>{
-                //console.log("btn Clicked");
                 //console.log(this.getAttribute("loggedIn"));
+                // this.socket.send("test");
                 this.button.forEach(btn =>{
                     btn.classList.remove("active");
                 })
                 btn.classList.toggle("active");
                 this.ChangePageEvent(btn.getAttribute("id"));
-            })
-        });
-    }
+            });
+
+    });
+}
 
     ChangePageEvent(id){
         this.dispatchEvent(new CustomEvent("ChangePageEvent", {

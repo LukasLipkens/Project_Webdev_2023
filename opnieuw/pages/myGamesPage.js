@@ -113,6 +113,13 @@ class comp extends HTMLElement
         this.formIsShown = false;
         }
         connectedCallback(){
+
+            //create a websocket
+            this.socket = new WebSocket("ws://localhost:8080");
+            this.socket.addEventListener('open', function (event) {
+                console.log('Connection opened');
+            });
+
             this.gameId;
             this.players = [];
             this.creatGame.addEventListener("click", ()=>{
@@ -143,10 +150,14 @@ class comp extends HTMLElement
                 console.log(e.detail);
 
                 //game aanmaken in de database
-                $.ajax({
-                    url: './test_php/addGame.php',
-                    dataType: 'json',
-                    success: (data)=>{
+                fetch('./test_php/addGame.php', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
                         this.gameId = +data;
                         console.log(this.gameId);
 
@@ -176,25 +187,22 @@ class comp extends HTMLElement
                             bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
         
                             //spelers toevoegen aan de game
-                            $.ajax({
-                                url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=1&spelerId='+this.players[0].id,
-                                dataType: 'json',
-                                success: (data)=>{
-        
+
+                            fetch('./test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=1&spelerId='+this.players[0].id, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
                                 },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                                }
-                            });
-                            $.ajax({
-                                url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=2&spelerId='+this.players[2].id,
-                                dataType: 'json',
-                                success: (data)=>{
-        
+                            })
+                            fetch('./test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId=2&spelerId='+this.players[2].id, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
                                 },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                this.socket.send("refresh");
                             });
                         }
                         else{
@@ -211,24 +219,23 @@ class comp extends HTMLElement
                                 else{
                                     teamId = 2;
                                 }
-                                $.ajax({
-                                    url: './test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId='+teamId+'&spelerId='+this.players[i].id,
-                                    dataType: 'json',
-                                    success: (data)=>{
-        
+                                fetch('./test_php/addPlayerToTeam.php?gameId='+this.gameId+'&teamId='+teamId+'&spelerId='+this.players[i].id, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
                                     },
-                                    error: function(jqXHR, textStatus, errorThrown) {
-                                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                                    }
-                                });
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    //console.log(data);
+                                    this.socket.send("refresh");
+                                })
                             }
         
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                    }
-                });
+
+                );
 
 
 
@@ -241,16 +248,17 @@ class comp extends HTMLElement
             this.gameContainer.style.display = "none";
             this.mainContainer.style.display = "block";
             this.shadowRoot.querySelector("scorenbord-comp").remove();
-            $.ajax({
-                url: './test_php/endGame.php?gameId='+this.gameId,
-                dataType: 'json',
-                success: (data)=>{
-                    console.log(data);
+            fetch('./test_php/endGame.php?gameId='+this.gameId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                }
-            });
+            })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                this.socket.send("refresh");
+            })
         }
 }
 
