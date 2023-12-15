@@ -157,7 +157,8 @@ class HistoryComponent extends HTMLElement {
 
         if (this.currentPage < 1) {
             this.currentPage = 1;
-        } else if (this.currentPage > this.totalPages) {
+        } 
+        else if (this.currentPage > this.totalPages) {
             this.currentPage = this.totalPages;
         }
         console.log('current page right now: ', this.currentPage);
