@@ -202,6 +202,8 @@ class comp extends HTMLElement
     connectedCallback(){
         this.setNr = 1;
         this.type = this.getAttribute("type");
+        // let endgamebtn = document.createElement(`endgamebtn-comp`);
+        // this.endgame.append(endgamebtn);
         if(this.type == "admin"){
             this.UpdateToAdmin();
         }

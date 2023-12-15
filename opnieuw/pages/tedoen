@@ -1,3 +1,4 @@
 -Nu punten updaten in database -> dit kan gewoon gedaan worden door bij elke keer dat er een punt omhoog of omlaag gaat een update van het scoreobject te sturen
 -game eindigen
 -op de homepagina de game laten zien
+-ajax vervangen door fetch

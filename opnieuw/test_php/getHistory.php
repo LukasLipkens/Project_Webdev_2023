@@ -3,6 +3,8 @@
 
     $sql = "SELECT 
     g.gameId,
+    g.starttijd as 'starttijd',
+    g.eindtijd as 'eindtijd',
     GROUP_CONCAT(IF(t.teamId = 1, s.gebruikersnaam, NULL)) AS 'team1 names',
     GROUP_CONCAT(IF(t.teamId = 2, s.gebruikersnaam, NULL)) AS 'team2 names',
     MAX(IF(t.teamId = 1, t.punten, NULL)) AS 'team1 punten',
