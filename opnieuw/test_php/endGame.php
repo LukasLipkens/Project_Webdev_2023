@@ -10,4 +10,10 @@
 
     $insert = $conn->query($sql);
 
+    $sql = "UPDATE tblgames
+    SET eindtijd = NOW()
+    WHERE gameId = $gameId;";
+
+    $insert = $conn->query($sql);
+
     echo json_encode("succes");

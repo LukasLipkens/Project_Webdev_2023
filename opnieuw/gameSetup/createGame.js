@@ -260,36 +260,67 @@ class comp extends HTMLElement
                 let allLists = this.shadowRoot.querySelectorAll(".playerList");
                 allLists.forEach(element => { element.innerHTML = ""; });
 
-                $.ajax({
-                    url: './test_php/searchUser.php?search='+ event.target.value,
-                    dataType: 'json',
-                    success: (data)=>{
-                        //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
-                        let divplayerListS = target.parentNode.querySelector(`.playerList`);
-                        divplayerListS.innerHTML = "";
+                // $.ajax({
+                //     url: './test_php/searchUser.php?search='+ event.target.value,
+                //     dataType: 'json',
+                //     success: (data)=>{
+                //         //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
+                //         let divplayerListS = target.parentNode.querySelector(`.playerList`);
+                //         divplayerListS.innerHTML = "";
 
-                        if(data.length != 0 && target.value != ""){
-                            data.forEach(element => {
-                                console.log(element);
-                                divplayerListS.innerHTML += "<p>"+element.gebruikersnaam+"</p>";
-                            });
-                            let playerOptions = divplayerListS.querySelectorAll("p");
-                            playerOptions.forEach((playerOption, index) => {
-                                playerOption.addEventListener("click", ()=>{
-                                    let indexP = target.getAttribute("player");
-                                    this.playerList[indexP-1] = data[index];
-                                    //console.log(this.playerList);
-                                    target.value = playerOption.innerHTML;
-                                    divplayerListS.innerHTML = "";
-                                });
-                            });
+                //         if(data.length != 0 && target.value != ""){
+                //             data.forEach(element => {
+                //                 console.log(element);
+                //                 divplayerListS.innerHTML += "<p>"+element.gebruikersnaam+"</p>";
+                //             });
+                //             let playerOptions = divplayerListS.querySelectorAll("p");
+                //             playerOptions.forEach((playerOption, index) => {
+                //                 playerOption.addEventListener("click", ()=>{
+                //                     let indexP = target.getAttribute("player");
+                //                     this.playerList[indexP-1] = data[index];
+                //                     //console.log(this.playerList);
+                //                     target.value = playerOption.innerHTML;
+                //                     divplayerListS.innerHTML = "";
+                //                 });
+                //             });
                         
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
-                    }
-                });
+                //         }
+                //     },
+                //     error: function(jqXHR, textStatus, errorThrown) {
+                //         console.error("AJAX request failed: " + textStatus + ', ' + errorThrown);
+                //     }
+                // });
+                fetch('./test_php/searchUser.php?search='+ event.target.value, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                                        //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
+                                        let divplayerListS = target.parentNode.querySelector(`.playerList`);
+                                        divplayerListS.innerHTML = "";
+                
+                                        if(data.length != 0 && target.value != ""){
+                                            data.forEach(element => {
+                                                console.log(element);
+                                                divplayerListS.innerHTML += "<p>"+element.gebruikersnaam+"</p>";
+                                            });
+                                            let playerOptions = divplayerListS.querySelectorAll("p");
+                                            playerOptions.forEach((playerOption, index) => {
+                                                playerOption.addEventListener("click", ()=>{
+                                                    let indexP = target.getAttribute("player");
+                                                    this.playerList[indexP-1] = data[index];
+                                                    //console.log(this.playerList);
+                                                    target.value = playerOption.innerHTML;
+                                                    divplayerListS.innerHTML = "";
+                                                });
+                                            });
+                                        
+                                        }
+                                    })
 
         });
     });

@@ -3,6 +3,9 @@
 
     $sql = "SELECT 
     g.gameId,
+    g.starttijd as 'starttijd',
+    g.eindtijd as 'eindtijd',
+    g.date as 'date',
     GROUP_CONCAT(IF(t.teamId = 1, s.gebruikersnaam, NULL)) AS 'team1 names',
     GROUP_CONCAT(IF(t.teamId = 2, s.gebruikersnaam, NULL)) AS 'team2 names',
     MAX(IF(t.teamId = 1, t.punten, NULL)) AS 'team1 punten',
@@ -38,10 +41,8 @@
       $gameId = $game['gameId'];
       $fullgame = array_merge($game, array('game' => $game));
 
-      $sql = "SELECT ts.teamId, s.setNr, s.gamesT1, s.gamesT2
+      $sql = "SELECT s.setNr, s.gamesT1, s.gamesT2
       FROM tblgames g
-      JOIN tblteamspeler ts ON g.gameId = ts.gameId
-      JOIN tblspelers p ON ts.spelerId = p.id
       JOIN tblSets s ON g.gameId = s.gameId
       WHERE s.gameId=".$gameId."
       ORDER BY s.setNr;";

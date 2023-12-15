@@ -69,8 +69,8 @@ class HistoryComp extends HTMLElement {
         super();
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
-        this.matchData = playerData; 
-        
+        this.matchData = playerData;
+
         this.currentPage = 1;
         this.itemsPerPage = 8;
 
@@ -79,7 +79,41 @@ class HistoryComp extends HTMLElement {
     }
 
     connectedCallback() {
-        this.renderPage(); // deze gaat de hoeveelheid pagina's bepalen afhankelijk van u aantal objecten en hoeveel items je wil displayen op het scherm.
+        this.renderPage();
+        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener("message", (e) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                console.log(reader.result);
+                let message = reader.result;
+                if (message == "refresh") {
+                    console.log("refreshing");
+                    this.fetchGames();
+                }
+            }
+            reader.readAsText(e.data);
+
+        });
+        this.fetchGames();
+    }
+
+    fetchGames() {
+        fetch('./test_php/getHistory.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // data.forEach(element => {
+
+                // })
+                //vrij ugly inplementatie van de data van de database
+                this.matchData = data;
+                this.showPage();
+            })
     }
 
     renderPage() {
@@ -101,12 +135,12 @@ class HistoryComp extends HTMLElement {
 
             this.matchComponent.setAttribute('id', item.gameId);
             this.matchComponent.setAttribute('date', item.date);
-            this.matchComponent.setAttribute('startTime', item.startTime);
-            this.matchComponent.setAttribute('endTime', item.endTime);
-            this.matchComponent.setAttribute('playerName1', item.player1);
-            this.matchComponent.setAttribute('playerName2', item.player2);
-            this.matchComponent.setAttribute('score1', item.player1Score);
-            this.matchComponent.setAttribute('score2', item.player2Score);
+            this.matchComponent.setAttribute('startTime', item.starttijd);
+            this.matchComponent.setAttribute('endTime', item.eindtijd);
+            this.matchComponent.setAttribute('playerName1', item["team1 names"]);
+            this.matchComponent.setAttribute('playerName2', item["team2 names"]);
+            this.matchComponent.setAttribute('score1', item["team1 sets"]);
+            this.matchComponent.setAttribute('score2', item["team2 sets"]);
             this.pageContainer.append(this.matchComponent);
 
             this.dispatchEvent(new CustomEvent('matchData', { detail: item }));
