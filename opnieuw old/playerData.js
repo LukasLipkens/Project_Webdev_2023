@@ -1,5 +1,7 @@
 let value;
 
+
+
 export const playingInfo = [
     {
         fieldData: [
