@@ -290,13 +290,22 @@ class MatchComponent extends HTMLElement {
             if (line.gameId == this.gameId) {
                 this.singleScoreComp = document.createElement('single-score-comp');
 
-                this.singleScoreComp.setAttribute('id', this.gameId);
-                this.singleScoreComp.setAttribute('playerName1', this.player1);
-                this.singleScoreComp.setAttribute('playerName2', this.player2);
+                // this.singleScoreComp.setAttribute('id', this.gameId);
+                // this.singleScoreComp.setAttribute('playerName1', this.player1);
+                // this.singleScoreComp.setAttribute('playerName2', this.player2);
 
-                this.singleScoreComp.setAttribute('setNr', line.setNr);
-                this.singleScoreComp.setAttribute('team1Points', line.team1Points);
-                this.singleScoreComp.setAttribute('team2Points', line.team2Points);
+                // this.singleScoreComp.setAttribute('setNr', line.setNr);
+                // this.singleScoreComp.setAttribute('team1Points', line.team1Points);
+                // this.singleScoreComp.setAttribute('team2Points', line.team2Points);
+
+                this.singleScoreComp.setScoreData({
+                    gameId: this.gameId,
+                    player1: this.player1,
+                    player2: this.player2,
+                    setNr: line.setNr,
+                    team1Points: line.team1Points,
+                    team2Points: line.team2Points,
+                });
 
                 this.matchContent.append(this.singleScoreComp);
             };

@@ -78,20 +78,24 @@ class SingleScoreComponent extends HTMLElement {
         this.scores = this.shadowRoot.querySelector('#score-box');
     }
 
-    connectedCallback() {
-        this.setScoreData();
-    }
+    connectedCallback() { }
 
-    setScoreData() {
-        this.player1 = this.getAttribute('playerName1');
-        this.player2 = this.getAttribute('playerName2');
-        this.setNr = this.getAttribute('setNr');
-        this.team1 = this.getAttribute('team1Points');
-        this.team2 = this.getAttribute('team2Points');
+    setScoreData(scoreData) {
+        // this.player1 = this.getAttribute('playerName1');
+        // this.player2 = this.getAttribute('playerName2');
+        // this.setNr = this.getAttribute('setNr');
+        // this.team1 = this.getAttribute('team1Points');
+        // this.team2 = this.getAttribute('team2Points');
+
+        this.player1 = scoreData.player1;
+        this.player2 = scoreData.player2;
+        this.setNr = scoreData.setNr;
+        this.team1Points = scoreData.team1Points;
+        this.team2Points = scoreData.team2Points;
 
         this.leftPlayer.innerText = this.player1;
         this.rightPlayer.innerText = this.player2;
-        this.scores.innerText = `${this.team1} - ${this.team2}`;
+        this.scores.innerText = `${this.team1Points} - ${this.team2Points}`;
     }
 }
 
