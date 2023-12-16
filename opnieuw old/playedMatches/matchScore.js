@@ -200,8 +200,8 @@ class MatchComponent extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' });
         this.shadowRoot.append(template.content.cloneNode(true));
 
-        this.scoreData = playingInfo[0].scoringData;
-
+        //this.scoreData = playingInfo[0].scoringData;
+        
         this.dateText = this.shadowRoot.querySelector('#text');
         this.startingTime = this.shadowRoot.querySelector('#startTime');
         this.endingTime = this.shadowRoot.querySelector('#endTime');
@@ -221,6 +221,8 @@ class MatchComponent extends HTMLElement {
     }
 
     connectedCallback() {
+        this.scoreData = JSON.parse(this.getAttribute('matchData'));
+        //console.log(this.scoreData);
         this.getPlayerData();
         this.editScoreAndPlayers();
         this.setupEventListeners();
@@ -286,29 +288,23 @@ class MatchComponent extends HTMLElement {
     }
 
     createScoreComponents() {
-        this.scoreData.forEach((line) => {
-            if (line.gameId == this.gameId) {
+        this.points = this.scoreData["points"];
+        console.log(this.points);
+        this.points.forEach((line) => {
                 this.singleScoreComp = document.createElement('single-score-comp');
-
-                // this.singleScoreComp.setAttribute('id', this.gameId);
-                // this.singleScoreComp.setAttribute('playerName1', this.player1);
-                // this.singleScoreComp.setAttribute('playerName2', this.player2);
-
-                // this.singleScoreComp.setAttribute('setNr', line.setNr);
-                // this.singleScoreComp.setAttribute('team1Points', line.team1Points);
-                // this.singleScoreComp.setAttribute('team2Points', line.team2Points);
 
                 this.singleScoreComp.setScoreData({
                     gameId: this.gameId,
                     player1: this.player1,
                     player2: this.player2,
                     setNr: line.setNr,
-                    team1Points: line.team1Points,
-                    team2Points: line.team2Points,
+                    team1Points: line["gamesT1"],
+                    team2Points: line["gamesT2"],
                 });
+                console.log(line);
 
                 this.matchContent.append(this.singleScoreComp);
-            };
+
         });
     }
 }

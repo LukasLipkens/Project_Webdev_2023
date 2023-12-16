@@ -70,7 +70,7 @@ class HistoryComp extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
 
-        this.matchData = playingInfo[0].fieldData;
+        //this.matchData = playingInfo[0].fieldData;
         this.currentPage = 1;
         this.itemsPerPage = 8;
 
@@ -79,6 +79,7 @@ class HistoryComp extends HTMLElement {
     }
 
     connectedCallback() {
+        this.matchData = [];
         this.renderPage();
         this.socket = new WebSocket("ws://localhost:8080");
         this.socket.addEventListener("message", (e) => {
@@ -105,7 +106,7 @@ class HistoryComp extends HTMLElement {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 // data.forEach(element => {
 
                 // })
@@ -129,6 +130,8 @@ class HistoryComp extends HTMLElement {
         this.pageContainer.innerHTML = "";
 
         for (let item of this.pageItems) {
+            //console.log(JSON.stringify(item));
+            //console.log(item);
             this.matchComponent = document.createElement('match-comp');
 
             this.matchComponent.setAttribute('id', item.gameId);
@@ -139,6 +142,8 @@ class HistoryComp extends HTMLElement {
             this.matchComponent.setAttribute('playerName2', item["team2 names"]);
             this.matchComponent.setAttribute('score1', item["team1 sets"]);
             this.matchComponent.setAttribute('score2', item["team2 sets"]);
+            this.matchComponent.setAttribute('matchData', JSON.stringify(item));
+            //console.log(this.matchComponent.getAttribute('matchData'));
             this.pageContainer.append(this.matchComponent);
 
             this.dispatchEvent(new CustomEvent('matchData', { detail: item }));
