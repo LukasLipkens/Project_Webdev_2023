@@ -113,6 +113,7 @@ class HistoryComp extends HTMLElement {
                 //vrij ugly inplementatie van de data van de database
                 this.matchData = data;
                 this.showPage();
+                this.renderPage();
             })
     }
     renderPage() {
@@ -128,7 +129,7 @@ class HistoryComp extends HTMLElement {
         this.pageItems = this.matchData.slice(this.startIndex, this.endIndex); // determines the items for THAT page
 
         this.pageContainer.innerHTML = "";
-
+        console.log(this.matchData);
         for (let item of this.pageItems) {
             //console.log(JSON.stringify(item));
             //console.log(item);
@@ -169,7 +170,7 @@ class HistoryComp extends HTMLElement {
 
     renderPagination(totalPages) {
         this.pagination.innerHTML = "";
-
+        console.log("test");
         for (let i = 1; i <= totalPages; i++) {
             this.pageItem = document.createElement('li');
             this.pageItem.textContent = i;

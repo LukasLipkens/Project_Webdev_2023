@@ -289,7 +289,7 @@ class MatchComponent extends HTMLElement {
 
     createScoreComponents() {
         this.points = this.scoreData["points"];
-        console.log(this.points);
+        //console.log(this.points);
         this.points.forEach((line) => {
                 this.singleScoreComp = document.createElement('single-score-comp');
 
@@ -301,7 +301,7 @@ class MatchComponent extends HTMLElement {
                     team1Points: line["gamesT1"],
                     team2Points: line["gamesT2"],
                 });
-                console.log(line);
+                //console.log(line);
 
                 this.matchContent.append(this.singleScoreComp);
 
