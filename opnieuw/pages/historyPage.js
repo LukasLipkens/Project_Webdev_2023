@@ -113,6 +113,7 @@ class HistoryComp extends HTMLElement {
                 //vrij ugly inplementatie van de data van de database
                 this.matchData = data;
                 this.showPage();
+                this.renderPage();
             })
     }
 
