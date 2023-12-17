@@ -81,12 +81,6 @@ class SingleScoreComponent extends HTMLElement {
     connectedCallback() { }
 
     setScoreData(scoreData) {
-        // this.player1 = this.getAttribute('playerName1');
-        // this.player2 = this.getAttribute('playerName2');
-        // this.setNr = this.getAttribute('setNr');
-        // this.team1 = this.getAttribute('team1Points');
-        // this.team2 = this.getAttribute('team2Points');
-
         this.player1 = scoreData.player1;
         this.player2 = scoreData.player2;
         this.setNr = scoreData.setNr;

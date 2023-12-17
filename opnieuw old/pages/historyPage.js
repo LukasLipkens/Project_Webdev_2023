@@ -188,7 +188,7 @@ class HistoryComp extends HTMLElement {
 
     changePage(pageNumber) {
         this.currentPage = pageNumber;
-        this.renderPage(); 
+        this.renderPage();
     }
 }
 

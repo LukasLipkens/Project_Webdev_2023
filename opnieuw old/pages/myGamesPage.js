@@ -2,6 +2,7 @@
 import "../gameSetup/createGame.js"
 import { playingInfo } from "../playerData.js";
 import "../playedMatches/matchScore.js"
+import "../gameSetup/endGameView.js"
 //#endregion IMPORTS
 
 const template = document.createElement("template")
@@ -77,6 +78,10 @@ template.innerHTML = /*html*/`
             top: 20%;
             left: 50%;
         }
+        #gameView {
+            text-align: center;
+            border: 2px solid blue;
+        }
     </style>
     <div id="myGamesContainer">
         <div id="startView">
@@ -110,6 +115,7 @@ class comp extends HTMLElement {
 
         this.allGames = playingInfo[0].fieldData;
         this.currentId = "";
+        this.EndGameView = null;
 
         this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
         this.creatGame = this.shadowRoot.querySelector("#createGameBtn");
@@ -177,28 +183,45 @@ class comp extends HTMLElement {
     }
 
     EndGameEvent(e) {
-        let gameInfo = this.allGames.find(game => game.gameId == this.currentId);
-        if (gameInfo) {
-            this.matchComponent = document.createElement('match-comp');
-
-            this.matchComponent.setAttribute('id', gameInfo.gameId);
-            this.matchComponent.setAttribute('date', gameInfo.date);
-            this.matchComponent.setAttribute('startTime', gameInfo.startTime);
-            this.matchComponent.setAttribute('endTime', gameInfo.endTime);
-            this.matchComponent.setAttribute('playerName1', gameInfo.player1);
-            this.matchComponent.setAttribute('playerName2', gameInfo.player2);
-            this.matchComponent.setAttribute('score1', gameInfo.player1Score);
-            this.matchComponent.setAttribute('score2', gameInfo.player2Score);
-            this.myHistory.appendChild(this.matchComponent);
-
-            this.matchComponent.addEventListener('toggleContent', (event) => {
-                this.toggleMatchComp(event.detail);
-            });
+        this.endGameView = document.createElement('endview-comp');
+        this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
+        if (this.gameInfo) {
+            this.endGameView.setMatchInfo({
+                date: this.gameInfo.date,
+                startTime: this.gameInfo.startTime,
+                endTime: this.gameInfo.endTime,
+                playerName1: this.gameInfo.player1,
+                playerName2: this.gameInfo.player2,
+                score1: this.gameInfo.player1Score,
+                score2: this.gameInfo.player2Score
+            })
         }
+        this.gameContainer.appendChild(this.endGameView);
 
-        this.gameContainer.style.display = "none";
-        this.mainContainer.style.display = "block";
-        this.shadowRoot.querySelector("scorenbord-comp").remove();
+        this.endGameView.addEventListener("backToMyGamesPage", () => {
+            if (this.gameInfo) {
+                this.matchComponent = document.createElement('match-comp');
+
+                this.matchComponent.setAttribute('id', this.gameInfo.gameId);
+                this.matchComponent.setAttribute('date', this.gameInfo.date);
+                this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
+                this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
+                this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
+                this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
+                this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
+                this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
+                this.myHistory.appendChild(this.matchComponent);
+
+                this.matchComponent.addEventListener('toggleContent', (event) => {
+                    this.toggleMatchComp(event.detail);
+                });
+            }
+
+            this.gameContainer.style.display = "none";
+            this.mainContainer.style.display = "block";
+            this.shadowRoot.querySelector("scorenbord-comp").remove();
+            this.endGameView.remove();
+        });
     }
 
     toggleMatchComp(gameId) {
