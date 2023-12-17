@@ -199,8 +199,6 @@ class MatchComponent extends HTMLElement {
         super();
         this.shadow = this.attachShadow({ mode: 'open' });
         this.shadowRoot.append(template.content.cloneNode(true));
-
-        //this.scoreData = playingInfo[0].scoringData;
         
         this.dateText = this.shadowRoot.querySelector('#text');
         this.startingTime = this.shadowRoot.querySelector('#startTime');
