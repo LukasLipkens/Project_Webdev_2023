@@ -207,7 +207,7 @@ class comp extends HTMLElement
                         }
                         else{
                             bord.scoreObject.team1.players = [this.players[0], this.players[1]];
-                            bord.team1.innerHTML = `<h4>${this.players[0]}</h4><h4>${this.players[1]}</h4>`;
+                            bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
                             bord.scoreObject.team2.players = [this.players[2], this.players[3]];
                             bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
         

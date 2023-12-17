@@ -410,8 +410,8 @@ class comp extends HTMLElement
         let endgamebtn = document.createElement(`endgamebtn-comp`);
         this.endgame.append(endgamebtn);
         //score knoppen weg halen
-        this.shadowRoot.querySelector("#T_1").remove();
-        this.shadowRoot.querySelector("#T_2").remove();
+        // this.shadowRoot.querySelector("#T_1").remove();
+        // this.shadowRoot.querySelector("#T_2").remove();
         this.socket.send("refresh");
     }
 //#endregion PuntenTelling
