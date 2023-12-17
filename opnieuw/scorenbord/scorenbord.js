@@ -398,7 +398,7 @@ class comp extends HTMLElement
                 break;
         }
         console.log(T1 + "|" + T2)
-        if(T1 == 2 || T2 == 2){
+        if((T1 == 2 || T2 == 2) && (T1 < 2 || T2 < 2)){
             this.winner(team);
         }
         
