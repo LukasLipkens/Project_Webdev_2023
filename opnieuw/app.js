@@ -47,8 +47,6 @@ class comp extends HTMLElement
     connectedCallback(){
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
         this.showPages("home") //beginPagina laten zien bij laden site
-
-        this.addEventListener("pushScoreEvent", this.pushScoreEvent);
     }
 //#region update page
     ChangePageEvent(e){
@@ -85,23 +83,6 @@ class comp extends HTMLElement
         
     }
 //#endregion updatePage
-
-    pushScoreEvent(e){
-        //console.log(e.detail);
-        this.home = this.shadowRoot.querySelector("home-comp");
-        //this.home.gameUpdate = e.detail; //update de waarde gameUpdate in het home component
-        
-        this.gamesData.splice(0, this.gamesData.length); //maak array leeg om hem weer te vullen
-        
-        //vul deze array met alle games die op de homepagina moeten worden weergegeven
-        //remove functie is nog niet geimplementeerd
-        //het vullen en updaten van de homepagina met de gegevens van de database worden best verplaatst naar een dedicated function\
-        this.gamesData.push(this.scoreObject);
-        this.gamesData.push(e.detail);
-
-        this.home.gameUpdate = this.gamesData
-        this.home.setAttribute("update", "1")
-    }
 
     
 }

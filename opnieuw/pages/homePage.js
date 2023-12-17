@@ -36,31 +36,6 @@ class comp extends HTMLElement
         
         console.log('Server started at ws://localhost:8080');
     }
-    static get observedAttributes() {
-        return ['update'];
-    }
-    attributeChangedCallback(name, oldValue, newValue) {
-        // Triggered when the observed attribute changes
-        // if(name === "update"){
-        //     if(newValue == "1"){
-        //         console.log(this.gameUpdate);
-                
-        //         this.gameUpdate.forEach(game => {
-        //             if(this.displayedGames.indexOf(game["game"]) == -1){
-        //                 this.displayedGames.push(game["game"])
-    
-        //                 this.addGame(game);
-    
-        //             }
-        //             else{
-        //                 this.updateGame(game)
-        //             }
-        //         });
-
-        //         this.setAttribute("update", "0");
-        //     }
-        // }
-    }
 
     fetchLiveGames(){
         fetch('./test_php/getLiveGames.php',{
@@ -118,16 +93,25 @@ class comp extends HTMLElement
 
     // }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
-        // if(gameToAdd .team1.players.length == 1){
-        //     game.team1.innerHTML = `<h4>${gameToAdd.team1.players[0]}</h4>`;
-        //     game.team2.innerHTML = `<h4>${gameToAdd.team2.players[0]}</h4>`;
-        // }
-        // else{
-        //     game.team1.innerHTML = `<h4>${gameToAdd.team1.players[0]}</h4><h4>${gameToAdd.team1.players[1]}</h4>`;
-        //     game.team2.innerHTML = `<h4>${gameToAdd.team2.players[0]}</h4><h4>${gameToAdd.team2.players[1]}</h4>`;
-        // }
-        game.team1.innerHTML = `<h5>${gameToAdd["game"]["team1 names"]}</h5>`;
-        game.team2.innerHTML = `<h5>${gameToAdd["game"]["team2 names"]}</h5>`;
+        let namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
+        let namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
+        
+        switch (namesTeam1.length){
+            case 1:
+                game.team1.innerHTML = `<h4>${namesTeam1[0]}</h4>`;
+                break;
+            case 2:
+                game.team1.innerHTML = `<h4>${namesTeam1[0]}</h4><h4>${namesTeam1[1]}</h4>`;
+                break;
+        }
+        switch (namesTeam2.length){
+            case 1:
+                game.team2.innerHTML = `<h4>${namesTeam2[0]}</h4>`;
+                break;
+            case 2:
+                game.team2.innerHTML = `<h4>${namesTeam2[0]}</h4><h4>${namesTeam2[1]}</h4>`;
+                break;
+        }
     }
 }
 

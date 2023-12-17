@@ -232,7 +232,6 @@ class comp extends HTMLElement
         /*begin spel*/
         this.game(action, player);
         /*einde spel*/
-        this.pushScoreEvent(this.scoreObject);
 
         fetch("./test_php/updateGame.php?gameId="+this.scoreObject.game+"&puntenT1="+this.scoreObject.team1.points+"&puntenT2="+this.scoreObject.team2.points+"&gamesT1="+this.scoreObject.team1.game+"&gamesT2="+this.scoreObject.team2.game+"&setsT1="+this.scoreObject.team1.sets+"&setsT2="+this.scoreObject.team2.sets+"&serving="+this.scoreObject.serving,{
             method: "GET",
@@ -415,14 +414,6 @@ class comp extends HTMLElement
         this.socket.send("refresh");
     }
 //#endregion PuntenTelling
-
-    pushScoreEvent(info){ //wordt getriggerd wanneer de scoren geupdate wordt
-        this.dispatchEvent(new CustomEvent("pushScoreEvent", {
-            bubbles: true,
-            composed: true,
-            detail: info
-        }))
-    }
 
     updateServe(status, team){
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
