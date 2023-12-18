@@ -39,21 +39,37 @@ class comp extends HTMLElement
         this.addEventListener("signIn", this.SignIn);
         this.addEventListener("signOut", this.SignOut);
         this.addEventListener("signUp", this.SignUp);
+        this.addEventListener("getHistory", this.GetHistory);
+        this.addEventListener("getLiveGames", this.GetLiveGames);
+        
 
         this.showPages("home") //beginPagina laten zien bij laden site
     }
+    //In getHistory roepen we alle history games op en sturen deze door naar de history page
+    GetHistory(){
+    }
+    //In getLiveGames roepen we alle live games op en sturen deze door naar de home page
+    GetLiveGames(){
+    }
+    //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e){
     }
+    //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e){
     }
+    //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
     EndGame(e){
     }
+    //In AddGameSet voegen we een game set toe aan de database
     AddGameSet(e){
     }
+    //In SignIn loggen we een gebruiker in, als dit niet lukt geven we een error als dit wel lukt updaten we navigatie en slagen user op
     SignIn(e){
     }
+    //In SignOut loggen we een gebruiker uit, we updaten navigatie en verwijderen user
     SignOut(e){
     }
+    //In SignUp maken we een nieuwe gebruiker aan, als dit niet lukt geven we een error als dit wel lukt, dan gebruiken we login met deze gegevens en updaten we navigatie en slagen user op
     SignUp(e){
     }
 //#region update page
