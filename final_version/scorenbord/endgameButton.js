@@ -58,12 +58,12 @@ class app extends HTMLElement
 
         connectedCallback(){
             this.shadowRoot.querySelector("button").addEventListener('click', ()=>{
-                this.EndGameEvent("EndGame");
+                this.EndGame(this.getAttribute("gameid"));
             })
         }
 
-        EndGameEvent(info){
-            this.dispatchEvent(new CustomEvent("EndGameEvent", {
+        EndGame(info){
+            this.dispatchEvent(new CustomEvent("endGame", {
                 bubbles: true,
                 composed: true,
                 detail: info

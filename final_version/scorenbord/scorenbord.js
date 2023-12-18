@@ -200,12 +200,6 @@ class comp extends HTMLElement
     }
 
     connectedCallback(){
-        //create a websocket
-        this.socket = new WebSocket("ws://localhost:8080");
-        this.socket.addEventListener('open', function (event) {
-            console.log('Connection opened');
-        });
-
         this.setNr = 1;
         this.type = this.getAttribute("type");
 
@@ -222,6 +216,13 @@ class comp extends HTMLElement
 
     UpdateGame(info){ //wordt getriggerd wanneer de scoren geupdate wordt
         this.dispatchEvent(new CustomEvent("updateGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
+    AddGameSet(info){
+        this.dispatchEvent(new CustomEvent("addGameSet", {
             bubbles: true,
             composed: true,
             detail: info
@@ -361,25 +362,14 @@ class comp extends HTMLElement
     }
     sets(team){
         /*reset de match punten*/
-        let gamesT1 = +this.scoreObject.team1.game;
-        let gamesT2 = +this.scoreObject.team2.game;
+        let info = [this.setNr, this.scoreObject.game, this.scoreObject.team1.game, this.scoreObject.team2.game];
+        this.setNr++;  //setNr moet altijd verhoogd worden ook bij fout in fecht
+        this.AddGameSet(info);
 
-        fetch("./test_php/addSet.php?gameId="+this.scoreObject.game+"&setNr="+this.setNr+"&gamesT1="+gamesT1+"&gamesT2="+gamesT2,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.setNr += 1;
-        });
         this.gameT1.innerHTML = "0";
         this.scoreObject.team1.game = 0;
         this.gameT2.innerHTML = "0";
         this.scoreObject.team2.game = 0;
-
 
         let T1 = +this.setsT1.innerHTML;
         let T2 = +this.setsT2.innerHTML;
@@ -406,6 +396,7 @@ class comp extends HTMLElement
         this.scoreObject.gameStatus = 0;
         //end game knop toevoegen
         let endgamebtn = document.createElement(`endgamebtn-comp`);
+        endgamebtn.setAttribute("gameid", this.getAttribute("gameid"))
         this.endgame.append(endgamebtn);
         //score knoppen weg halen
         // this.shadowRoot.querySelector("#T_1").remove();

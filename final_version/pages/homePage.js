@@ -15,6 +15,7 @@ class comp extends HTMLElement
         this.shadow.append(template.content.cloneNode(true));
         
         this.displayedGames = [];
+        this.newGames = [];
     }
     connectedCallback(){
         console.log("getLiveGames");
@@ -30,7 +31,11 @@ class comp extends HTMLElement
     }
 
     Update(gameupdate){
+        console.log(gameupdate);
         gameupdate.forEach(game => {
+
+            this.newGames.push(game["gameId"])
+
             if(this.displayedGames.indexOf(game["gameId"]) == -1){
                 this.displayedGames.push(game["gameId"])
 
@@ -41,6 +46,11 @@ class comp extends HTMLElement
             else{
                 console.log("updated: " + game["gameId"])
                 this.updateGame(game)
+            }
+        });
+        this.displayedGames.forEach(game => { //dit kan ik nog niet testen dus hoop dat het werkt
+            if(this.newGames.indexOf(game) == -1){
+                this.removeGame(game);
             }
         });
     }
@@ -77,11 +87,10 @@ class comp extends HTMLElement
         game.setsT2.innerHTML = gameToUpdate["game"]["team2 sets"];
 
         game.updateServe(1, gameToUpdate["serving"]);
-
-        if(gameToUpdate.gameStatus == 0){// om een game te verwijderen moet er een laatste keer een update komen van de server waarin staat dat de gamestatus = 0
-            game.remove();
-        }
-
+    }
+    removeGame(gameToRemove){
+        let game = this.shadowRoot.querySelector(`#game-${gameToRemove}`);
+        game.remove();
     }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
         let namesTeam1;
@@ -111,28 +120,6 @@ class comp extends HTMLElement
                 game.team2.innerHTML = `<h4>${namesTeam2[0]}</h4><h4>${namesTeam2[1]}</h4>`;
                 break;
         }
-    }
-
-//old
-    addGameOld(gameToAdd){//voegt de game toe als het id van de game nog niet bestaat
-        let nieuwScorenbord = document.createElement("scorenbord-comp");
-        nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);
-        //console.log(this.gameUpdate);
-        this.shadowRoot.querySelector("#gamesDiv").append(nieuwScorenbord);
-
-        let game = this.shadowRoot.querySelector(`#game-${gameToAdd["gameId"]}`);
-        game.pointsT1.innerHTML = gameToAdd["game"]["team1 punten"];
-        game.pointsT2.innerHTML = gameToAdd["game"]["team2 punten"];
-
-        game.gameT1.innerHTML = gameToAdd["game"]["team1 games"];
-        game.gameT2.innerHTML = gameToAdd["game"]["team2 games"];
-
-        game.setsT1.innerHTML = gameToAdd["game"]["team1 sets"];
-        game.setsT2.innerHTML = gameToAdd["game"]["team2 sets"];
-
-        game.updateServe(1, gameToAdd["serving"]);
-
-        this.putnames(game, gameToAdd);
     }
     
 }

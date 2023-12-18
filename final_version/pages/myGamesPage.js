@@ -112,32 +112,14 @@ class comp extends HTMLElement {
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
 
         this.addEventListener("EndGameEvent", this.EndGameEvent);
-        this.addEventListener("createGameEvent", this.createGameEvent);
-
         this.formIsShown = false;
     }
     connectedCallback() {
+        this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
         this.allGames = [];
         this.currentId = "";
         this.EndGameView = null;
-        this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
-
-        //create a websocket
-        this.socket = new WebSocket("ws://localhost:8080");
-        this.socket.addEventListener('open', function (event) {
-            console.log('Connection opened');
-        });
-
-        this.gameId;
-        this.players = [];
-        this.creatGame.addEventListener("click", () => {
-            if (!this.formIsShown) {
-                this.showCreateGameForm();
-                this.formIsShown = true
-            }
-
-        });
-
+        this.creatGame.addEventListener("click", () => {this.showCreateGameForm();});
     }
 
     showCreateGameForm() {
@@ -185,76 +167,78 @@ class comp extends HTMLElement {
                     }
         }
     }
-    EndGameEvent() {
+    EndGame(data, gameId) {
         // this.gameContainer.style.display = "none";
         // this.mainContainer.style.display = "block";
         // this.shadowRoot.querySelector("scorenbord-comp").remove();
         this.endGameView = document.createElement('endview-comp');
-        fetch('./test_php/endGame.php?gameId=' + this.gameId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                //console.log(data);
-                this.socket.send("refresh");
-                fetch('./test_php/getHistory.php', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        this.allGames = data;
-                        this.currentId = this.gameId;
-                        this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
-                        if (this.gameInfo) {
-                            this.endGameView.setMatchInfo({
-                                gameId: this.gameInfo.gameId,
-                                date: this.gameInfo.date,
-                                startTime: this.gameInfo.starttijd,
-                                endTime: this.gameInfo.eindtijd,
-                                player1: this.gameInfo["team1 names"],
-                                player2: this.gameInfo["team2 names"],
-                                score1: this.gameInfo["team1 sets"],
-                                score2: this.gameInfo["team2 sets"],
-                                scoringData: this.gameInfo["points"],
-                            })
-                        }
-                        this.gameContainer.appendChild(this.endGameView);
-
-                        this.endGameView.addEventListener("backToMyGamesPage", () => {
-                            if (this.gameInfo) {
-                                this.matchComponent = document.createElement('match-comp');
-
-                                this.matchComponent.setAttribute('id', this.gameInfo.gameId);
-                                this.matchComponent.setAttribute('date', this.gameInfo.date);
-                                this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
-                                this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
-                                this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
-                                this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
-                                this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
-                                this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
-                                this.myHistory.appendChild(this.matchComponent);
-
-                                this.matchComponent.addEventListener('toggleContent', (event) => {
-                                    this.toggleMatchComp(event.detail);
-                                });
-                            }
-
-                            this.gameContainer.style.display = "none";
-                            this.mainContainer.style.display = "block";
-                            this.shadowRoot.querySelector("scorenbord-comp").remove();
-                            this.endGameView.remove();
-                        });
-
-
-                    });
-
+        // fetch('./test_php/endGame.php?gameId=' + this.gameId, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         //console.log(data);
+        //         this.socket.send("refresh");
+        //         fetch('./test_php/getHistory.php', {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //         })
+        //             .then(response => response.json())
+        //             .then(data => {
+                        
+        this.allGames = data;
+        this.currentId = gameId;
+        this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
+        if (this.gameInfo) {
+            this.endGameView.setMatchInfo({
+                gameId: this.gameInfo.gameId,
+                date: this.gameInfo.date,
+                startTime: this.gameInfo.starttijd,
+                endTime: this.gameInfo.eindtijd,
+                player1: this.gameInfo["team1 names"],
+                player2: this.gameInfo["team2 names"],
+                score1: this.gameInfo["team1 sets"],
+                score2: this.gameInfo["team2 sets"],
+                scoringData: this.gameInfo["points"],
             })
+        }
+        this.gameContainer.appendChild(this.endGameView);
+
+        this.endGameView.addEventListener("backToMyGamesPage", () => {
+            console.log(this.gameInfo);
+            if (this.gameInfo) {
+                this.matchComponent = document.createElement('match-comp');
+
+                this.matchComponent.setAttribute('id', this.gameInfo.gameId);
+                this.matchComponent.setAttribute('date', this.gameInfo.date);
+                this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
+                this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
+                this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
+                this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
+                this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
+                this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
+                this.myHistory.appendChild(this.matchComponent);
+
+                this.matchComponent.addEventListener('toggleContent', (event) => {
+                    this.toggleMatchComp(event.detail);
+                });
+            }
+
+            this.gameContainer.style.display = "none";
+            this.mainContainer.style.display = "block";
+            this.shadowRoot.querySelector("scorenbord-comp").remove();
+            this.endGameView.remove();
+        });
+
+
+            //         });
+
+            // })
 
     }
     toggleMatchComp(gameId) {
