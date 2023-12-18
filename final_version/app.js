@@ -110,21 +110,30 @@ class comp extends HTMLElement
             }
         ]
 
-        console.log("updating Live Games");
-
         let home = this.shadowRoot.querySelector("home-comp");
-
         home.Update(genericData);
         
     }
     //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e){
+        let mygames = this.shadowRoot.querySelector("mygames-comp");
+
+        let gameId = null
+        if(e.detail.length != 1){
+            //hier moet het gameId aangevraagd worden
+            //dit moet gedaan worden met een fetch
+            gameId = 99;
+        }
+        mygames.createGame(e.detail, gameId);
+
     }
     //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e){
+
     }
     //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
     EndGame(e){
+
     }
     //In AddGameSet voegen we een game set toe aan de database
     AddGameSet(e){
@@ -173,8 +182,6 @@ class comp extends HTMLElement
         
     }
 //#endregion updatePage
-
-    
 }
 
-customElements.define('app-comp', comp)
+customElements.define('app-comp', comp);
