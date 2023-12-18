@@ -355,16 +355,15 @@ class comp extends HTMLElement
                 alert(errorstring);
             }
             else{
-                //this.createGameEvent(players);
-                this.createGameEvent(this.playerList);
+                this.AddGame(this.playerList);
             }
         }
         cancelGame(){
             let array = ["cancel"];
-            this.createGameEvent(array);
+            this.AddGame(array);
         }
-        createGameEvent(info){ //wordt getriggerd wanneer de scoren geupdate wordt
-            this.dispatchEvent(new CustomEvent("createGameEvent", {
+        AddGame(info){ //wordt getriggerd wanneer de scoren geupdate wordt
+            this.dispatchEvent(new CustomEvent("addGame", {
                 bubbles: true,
                 composed: true,
                 detail: info

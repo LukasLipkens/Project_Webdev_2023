@@ -111,6 +111,9 @@ class comp extends HTMLElement {
         this.mainContainer = this.shadowRoot.querySelector("#startView");
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
 
+        this.addEventListener("EndGameEvent", this.EndGameEvent);
+        this.addEventListener("createGameEvent", this.createGameEvent);
+
         this.formIsShown = false;
     }
     connectedCallback() {
@@ -134,8 +137,7 @@ class comp extends HTMLElement {
             }
 
         });
-        this.addEventListener("EndGameEvent", this.EndGameEvent);
-        this.addEventListener("createGameEvent", this.createGameEvent);
+
     }
 
     showCreateGameForm() {
@@ -144,33 +146,17 @@ class comp extends HTMLElement {
         this.mainContainer.append(gameForm);
     }
 
-    createGameEvent(e) {
-        if (e.detail.length == 1) {
+    createGame(e, gameId) {
+        if (e.length == 1) {
             this.shadowRoot.querySelector("#gameForm").remove();
             this.formIsShown = false;
         }
         else {
-
-
-            //console.log(e.detail);
-
-            //game aanmaken in de database
-            fetch('./test_php/addGame.php', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    this.gameId = +data;
-                    //console.log(this.gameId);
-
                     //hier maken we het veld voor een game aan
                     this.gameContainer.style.display = "block";
                     let scoreBoard = document.createElement("scorenbord-comp");
                     scoreBoard.setAttribute("type", "admin");
-                    scoreBoard.setAttribute("gameId", `${this.gameId}`); //hier moet een game id worden aangemaakt
+                    scoreBoard.setAttribute("gameId", `${gameId}`); //hier moet een game id worden aangemaakt
 
                     this.shadowRoot.querySelector("#gameForm").remove();
                     this.formIsShown = false;
@@ -184,63 +170,19 @@ class comp extends HTMLElement {
                     //namen in het component zetten
                     let bord = this.shadowRoot.querySelector("scorenbord-comp");
 
-                    this.players = e.detail;
-                    if (e.detail.length == 3) {
+                    this.players = e;
+                    if (e.length == 3) {
                         bord.scoreObject.team1.players = [this.players[0]];
                         bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
                         bord.scoreObject.team2.players = [this.players[2]];
                         bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
-
-                        //spelers toevoegen aan de game
-
-                        fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=1&spelerId=' + this.players[0].id, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                        fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=2&spelerId=' + this.players[2].id, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                this.socket.send("refresh");
-                            });
                     }
                     else {
                         bord.scoreObject.team1.players = [this.players[0], this.players[1]];
                         bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
                         bord.scoreObject.team2.players = [this.players[2], this.players[3]];
                         bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
-
-                        let teamId;
-                        for (let i = 0; i < this.players.length; i++) {
-                            if (i < 2) {
-                                teamId = 1;
-                            }
-                            else {
-                                teamId = 2;
-                            }
-                            fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=' + teamId + '&spelerId=' + this.players[i].id, {
-                                method: 'GET',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    //console.log(data);
-                                    this.socket.send("refresh");
-                                })
-                        }
-
                     }
-                },
-
-                );
         }
     }
     EndGameEvent() {

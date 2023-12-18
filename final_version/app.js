@@ -354,18 +354,39 @@ class comp extends HTMLElement {
             }
         ]
 
-        console.log("updating Live Games");
-
         let home = this.shadowRoot.querySelector("home-comp");
-
         home.Update(genericData);
 
     }
     //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e) {
+        let mygames = this.shadowRoot.querySelector("mygames-comp");
+
+        let gameId = null
+        if(e.detail.length != 1){
+            //hier moet het gameId aangevraagd worden
+            //dit moet gedaan worden met een fetch
+            gameId = 99;
+        }
+        mygames.createGame(e.detail, gameId);
     }
     //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e) {
+        console.log(e.detail)
+        //hier moet een fetch komen die de game data update van de geme die in e zit
+        /*
+            fetch("./test_php/updateGame.php?gameId="+this.scoreObject.game+"&puntenT1="+this.scoreObject.team1.points+"&puntenT2="+this.scoreObject.team2.points+"&gamesT1="+this.scoreObject.team1.game+"&gamesT2="+this.scoreObject.team2.game+"&setsT1="+this.scoreObject.team1.sets+"&setsT2="+this.scoreObject.team2.sets+"&serving="+this.scoreObject.serving,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.socket.send("refresh");
+            });
+        */
+        this.GetLiveGames()
     }
     //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
     EndGame(e) {
