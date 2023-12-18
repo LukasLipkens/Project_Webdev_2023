@@ -46,7 +46,31 @@ class comp extends HTMLElement
 
     connectedCallback(){
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
+
+
+        this.addEventListener("addGame", this.AddGame);
+        this.addEventListener("updateGame", this.UpdateGame);
+        this.addEventListener("endGame", this.EndGame);
+        this.addEventListener("addGameSet", this.AddGameSet);
+        this.addEventListener("signIn", this.SignIn);
+        this.addEventListener("signOut", this.SignOut);
+        this.addEventListener("signUp", this.SignUp);
+
         this.showPages("home") //beginPagina laten zien bij laden site
+    }
+    AddGame(e){
+    }
+    UpdateGame(e){
+    }
+    EndGame(e){
+    }
+    AddGameSet(e){
+    }
+    SignIn(e){
+    }
+    SignOut(e){
+    }
+    SignUp(e){
     }
 //#region update page
     ChangePageEvent(e){
