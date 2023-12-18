@@ -19,32 +19,16 @@ class comp extends HTMLElement
         this.shadow = this.attachShadow({mode: "open"});
         this.shadow.append(template.content.cloneNode(true));
 
+        this.user = null; //gebruiker die is ingelogd
+
         //navigatie
         this.cachedPages = []; //pagina's die al eerder werden weergegeven
         this.currentPage = ""; //pagina die momenteel wordt weergegeven
-        this.mainPage = this.shadowRoot.querySelector(".mainPage");
-        this.gamesData = []; //in deze array komen de games die moeten worden weergegeven op de homepagina
-
-
-        this.scoreObject = { //dit is een testje
-            game: 2,
-            team1: {
-                players: ["testPersoon1"],
-                points: 15,
-                game: 1,
-                sets: 1,
-            },
-            team2: {
-                players: ["testPersoon2"],
-                points: 30,
-                game: 4,
-                sets: 0,
-            },
-            serving: 1,
-        }
+        this.mainPage = this.shadowRoot.querySelector(".mainPage");    
     }
 
     connectedCallback(){
+        
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
 
 
