@@ -14,6 +14,7 @@ class comp extends HTMLElement
         this.shadow = this.attachShadow({mode: "open"});
         this.shadow.append(template.content.cloneNode(true));
         
+        this.gameUpdate;
         this.displayedGames = [];
     }
     connectedCallback(){
@@ -29,7 +30,7 @@ class comp extends HTMLElement
         }))
     }
 
-    Update(gameupdate){
+    Update(gameupdate = []){
         gameupdate.forEach(game => {
             if(this.displayedGames.indexOf(game["gameId"]) == -1){
                 this.displayedGames.push(game["gameId"])
