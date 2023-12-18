@@ -220,6 +220,14 @@ class comp extends HTMLElement
 
     }
 
+    UpdateGame(info){ //wordt getriggerd wanneer de scoren geupdate wordt
+        this.dispatchEvent(new CustomEvent("updateGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
+
 //#region PuntenTelling
     UpdateScoreEvent(e){
         //console.log("btnPress Received " + e.detail);
@@ -233,16 +241,7 @@ class comp extends HTMLElement
         this.game(action, player);
         /*einde spel*/
 
-        fetch("./test_php/updateGame.php?gameId="+this.scoreObject.game+"&puntenT1="+this.scoreObject.team1.points+"&puntenT2="+this.scoreObject.team2.points+"&gamesT1="+this.scoreObject.team1.game+"&gamesT2="+this.scoreObject.team2.game+"&setsT1="+this.scoreObject.team1.sets+"&setsT2="+this.scoreObject.team2.sets+"&serving="+this.scoreObject.serving,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.socket.send("refresh");
-        });
+        this.UpdateGame(this.scoreObject);
     }
 
     game(action, team){

@@ -55,6 +55,12 @@ class comp extends HTMLElement
         game.pointsT1.innerHTML = gameToAdd["game"]["team1 punten"];
         game.pointsT2.innerHTML = gameToAdd["game"]["team2 punten"];
 
+        game.gameT1.innerHTML = gameToAdd["game"]["team1 games"];
+        game.gameT2.innerHTML = gameToAdd["game"]["team2 games"];
+
+        game.setsT1.innerHTML = gameToAdd["game"]["team1 sets"];
+        game.setsT2.innerHTML = gameToAdd["game"]["team2 sets"];
+
         game.updateServe(1, gameToAdd["serving"]);
 
         this.putnames(game, gameToAdd);
