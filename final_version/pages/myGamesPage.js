@@ -1,5 +1,5 @@
 //#region IMPORTS
-import "../gameSetup/createGame.js" 
+import "../gameSetup/createGame.js"
 import "../playedMatches/matchScore.js"
 import "../gameSetup/endGameView.js"
 //#endregion IMPORTS
@@ -101,104 +101,159 @@ template.innerHTML = /*html*/`
     </div>
 `
 
-class comp extends HTMLElement
-{
-    constructor(){
+class comp extends HTMLElement {
+    constructor() {
         super();
-        this.shadow = this.attachShadow({mode: "open"});
+        this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
-        
+
         this.creatGame = this.shadowRoot.querySelector("#createGameBtn");
         this.mainContainer = this.shadowRoot.querySelector("#startView");
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
 
-        this.addEventListener("EndGameEvent", this.EndGameEvent);  
-        this.addEventListener("addGame", this.AddGame);
-
         this.formIsShown = false;
-        }
-        connectedCallback(){
-            this.allGames = [];
-            this.currentId = "";
-            this.EndGameView = null;
-            this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
+    }
+    connectedCallback() {
+        this.allGames = [];
+        this.currentId = "";
+        this.EndGameView = null;
+        this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
 
-            //create a websocket
-            this.socket = new WebSocket("ws://localhost:8080");
-            this.socket.addEventListener('open', function (event) {
-                console.log('Connection opened');
-            });
+        //create a websocket
+        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener('open', function (event) {
+            console.log('Connection opened');
+        });
 
-            this.gameId;
-            this.players = [];
-            this.creatGame.addEventListener("click", ()=>{
-                if(!this.formIsShown){
-                    this.showCreateGameForm(); 
-                    this.formIsShown = true
-                }
-
-            });
-
-        }  
-
-        showCreateGameForm(){
-            let gameForm = document.createElement("create-comp");
-            gameForm.setAttribute("id", "gameForm");
-            this.mainContainer.append(gameForm);
-        }
-
-        createGame(e, gameId){
-            if(e.length == 1){
-                this.shadowRoot.querySelector("#gameForm").remove();
-                this.formIsShown = false;
+        this.gameId;
+        this.players = [];
+        this.creatGame.addEventListener("click", () => {
+            if (!this.formIsShown) {
+                this.showCreateGameForm();
+                this.formIsShown = true
             }
-            else{
-                        //hier maken we het veld voor een game aan
-                        this.gameContainer.style.display = "block";
-                        let scoreBoard = document.createElement("scorenbord-comp");
-                        scoreBoard.setAttribute("type", "admin");
-                        scoreBoard.setAttribute("gameId", `${gameId}`); //hier moet een game id worden aangemaakt
-        
-                        this.shadowRoot.querySelector("#gameForm").remove();
-                        this.formIsShown = false;
-        
-                        this.mainContainer.style.display = "none";
-        
-                        
-                        this.gameContainer.appendChild(scoreBoard);
 
-                        //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
-                        //namen in het component zetten
-                        let bord = this.shadowRoot.querySelector("scorenbord-comp");
-        
-                        this.players = e;
-                        if(e.length == 3){//enkel
-                            bord.scoreObject.team1.players = [this.players[0]];
-                            bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
-                            bord.scoreObject.team2.players = [this.players[2]];
-                            bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
-        
-                        }
-                        else{//dubbel
-                            bord.scoreObject.team1.players = [this.players[0], this.players[1]];
-                            bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
-                            bord.scoreObject.team2.players = [this.players[2], this.players[3]];
-                            bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
-        
-                        }
-                    }
+        });
+        this.addEventListener("EndGameEvent", this.EndGameEvent);
+        this.addEventListener("createGameEvent", this.createGameEvent);
+    }
+
+    showCreateGameForm() {
+        let gameForm = document.createElement("create-comp");
+        gameForm.setAttribute("id", "gameForm");
+        this.mainContainer.append(gameForm);
+    }
+
+    createGameEvent(e) {
+        if (e.detail.length == 1) {
+            this.shadowRoot.querySelector("#gameForm").remove();
+            this.formIsShown = false;
         }
-        EndGameEvent(){
-            // this.gameContainer.style.display = "none";
-            // this.mainContainer.style.display = "block";
-            // this.shadowRoot.querySelector("scorenbord-comp").remove();
-            this.endGameView = document.createElement('endview-comp');
-            fetch('./test_php/endGame.php?gameId='+this.gameId, {
+        else {
+
+
+            //console.log(e.detail);
+
+            //game aanmaken in de database
+            fetch('./test_php/addGame.php', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.gameId = +data;
+                    //console.log(this.gameId);
+
+                    //hier maken we het veld voor een game aan
+                    this.gameContainer.style.display = "block";
+                    let scoreBoard = document.createElement("scorenbord-comp");
+                    scoreBoard.setAttribute("type", "admin");
+                    scoreBoard.setAttribute("gameId", `${this.gameId}`); //hier moet een game id worden aangemaakt
+
+                    this.shadowRoot.querySelector("#gameForm").remove();
+                    this.formIsShown = false;
+
+                    this.mainContainer.style.display = "none";
+
+
+                    this.gameContainer.appendChild(scoreBoard);
+
+                    //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
+                    //namen in het component zetten
+                    let bord = this.shadowRoot.querySelector("scorenbord-comp");
+
+                    this.players = e.detail;
+                    if (e.detail.length == 3) {
+                        bord.scoreObject.team1.players = [this.players[0]];
+                        bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
+                        bord.scoreObject.team2.players = [this.players[2]];
+                        bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
+
+                        //spelers toevoegen aan de game
+
+                        fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=1&spelerId=' + this.players[0].id, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                        fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=2&spelerId=' + this.players[2].id, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                this.socket.send("refresh");
+                            });
+                    }
+                    else {
+                        bord.scoreObject.team1.players = [this.players[0], this.players[1]];
+                        bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
+                        bord.scoreObject.team2.players = [this.players[2], this.players[3]];
+                        bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
+
+                        let teamId;
+                        for (let i = 0; i < this.players.length; i++) {
+                            if (i < 2) {
+                                teamId = 1;
+                            }
+                            else {
+                                teamId = 2;
+                            }
+                            fetch('./test_php/addPlayerToTeam.php?gameId=' + this.gameId + '&teamId=' + teamId + '&spelerId=' + this.players[i].id, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    //console.log(data);
+                                    this.socket.send("refresh");
+                                })
+                        }
+
+                    }
+                },
+
+                );
+        }
+    }
+    EndGameEvent() {
+        // this.gameContainer.style.display = "none";
+        // this.mainContainer.style.display = "block";
+        // this.shadowRoot.querySelector("scorenbord-comp").remove();
+        this.endGameView = document.createElement('endview-comp');
+        fetch('./test_php/endGame.php?gameId=' + this.gameId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
             .then(response => response.json())
             .then(data => {
                 //console.log(data);
@@ -209,68 +264,68 @@ class comp extends HTMLElement
                         'Content-Type': 'application/json',
                     },
                 })
-                .then(response => response.json())
-                .then(data => {
-                    this.allGames = data;
-                    this.currentId = this.gameId;
-                    this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
-                    if (this.gameInfo) {
-                        this.endGameView.setMatchInfo({
-                            gameId: this.gameInfo.gameId,
-                            date: this.gameInfo.date,
-                            startTime: this.gameInfo.starttijd,
-                            endTime: this.gameInfo.eindtijd,
-                            player1: this.gameInfo["team1 names"],
-                            player2: this.gameInfo["team2 names"],
-                            score1: this.gameInfo["team1 sets"],
-                            score2: this.gameInfo["team2 sets"],
-                            scoringData: this.gameInfo["points"],
-                        })
-                    }
-                    this.gameContainer.appendChild(this.endGameView);
-            
-                    this.endGameView.addEventListener("backToMyGamesPage", () => {
+                    .then(response => response.json())
+                    .then(data => {
+                        this.allGames = data;
+                        this.currentId = this.gameId;
+                        this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
                         if (this.gameInfo) {
-                            this.matchComponent = document.createElement('match-comp');
-            
-                            this.matchComponent.setAttribute('id', this.gameInfo.gameId);
-                            this.matchComponent.setAttribute('date', this.gameInfo.date);
-                            this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
-                            this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
-                            this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
-                            this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
-                            this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
-                            this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
-                            this.myHistory.appendChild(this.matchComponent);
-            
-                            this.matchComponent.addEventListener('toggleContent', (event) => {
-                                this.toggleMatchComp(event.detail);
-                            });
+                            this.endGameView.setMatchInfo({
+                                gameId: this.gameInfo.gameId,
+                                date: this.gameInfo.date,
+                                startTime: this.gameInfo.starttijd,
+                                endTime: this.gameInfo.eindtijd,
+                                player1: this.gameInfo["team1 names"],
+                                player2: this.gameInfo["team2 names"],
+                                score1: this.gameInfo["team1 sets"],
+                                score2: this.gameInfo["team2 sets"],
+                                scoringData: this.gameInfo["points"],
+                            })
                         }
-            
-                        this.gameContainer.style.display = "none";
-                        this.mainContainer.style.display = "block";
-                        this.shadowRoot.querySelector("scorenbord-comp").remove();
-                        this.endGameView.remove();
+                        this.gameContainer.appendChild(this.endGameView);
+
+                        this.endGameView.addEventListener("backToMyGamesPage", () => {
+                            if (this.gameInfo) {
+                                this.matchComponent = document.createElement('match-comp');
+
+                                this.matchComponent.setAttribute('id', this.gameInfo.gameId);
+                                this.matchComponent.setAttribute('date', this.gameInfo.date);
+                                this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
+                                this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
+                                this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
+                                this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
+                                this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
+                                this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
+                                this.myHistory.appendChild(this.matchComponent);
+
+                                this.matchComponent.addEventListener('toggleContent', (event) => {
+                                    this.toggleMatchComp(event.detail);
+                                });
+                            }
+
+                            this.gameContainer.style.display = "none";
+                            this.mainContainer.style.display = "block";
+                            this.shadowRoot.querySelector("scorenbord-comp").remove();
+                            this.endGameView.remove();
+                        });
+
+
                     });
 
-
-                });
-    
             })
-            
-        }
-        toggleMatchComp(gameId) {
-            this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
-            this.matchComponents.forEach((component) => {
-                let componentId = component.getAttribute('id');
-                if (componentId === gameId) {
-                    component.toggle(true);
-                } else {
-                    component.toggle(false);
-                }
-            });
-        }
+
+    }
+    toggleMatchComp(gameId) {
+        this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
+        this.matchComponents.forEach((component) => {
+            let componentId = component.getAttribute('id');
+            if (componentId === gameId) {
+                component.toggle(true);
+            } else {
+                component.toggle(false);
+            }
+        });
+    }
 }
 
 customElements.define('mygames-comp', comp)

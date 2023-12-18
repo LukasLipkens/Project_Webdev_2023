@@ -239,8 +239,8 @@ class MatchComponent extends HTMLElement {
         this.score1 = this.scoresData.score1;
         this.score2 = this.scoresData.score2;
 
-        console.log('indiviData :', this.indiviData);
-        console.log('scoresData :', this.scoresData);
+        // console.log('indiviData :', this.indiviData);
+        // console.log('scoresData :', this.scoresData);
 
         this.editScoreAndPlayers();
         this.setupEventListeners();
