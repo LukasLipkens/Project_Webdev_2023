@@ -18,61 +18,65 @@ class comp extends HTMLElement
         this.displayedGames = [];
     }
     connectedCallback(){
-        this.socket = new WebSocket("ws://localhost:8080");
-        this.socket.addEventListener("message", (e) => {
-            const reader = new FileReader();
-            reader.onload = ()=> {
-                console.log(reader.result);
-                let message = reader.result;
-                if(message == "refresh"){
-                    console.log("refreshing");
-                    this.fetchLiveGames();
-                }
-            }
-            reader.readAsText(e.data);
-
-        });
-        this.fetchLiveGames();
-        
-        console.log('Server started at ws://localhost:8080');
+        console.log("getLiveGames");
+        this.GetLiveGames("getLiveGames")
     }
 
-    fetchLiveGames(){
-        fetch('./test_php/getLiveGames.php',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.shadowRoot.querySelector("#gamesDiv").innerHTML = "";
-            this.gameUpdate = data;
-            this.gameUpdate.forEach(game => {
+    GetLiveGames(info){ //wordt getriggerd wanneer de scoren geupdate wordt
+        this.dispatchEvent(new CustomEvent("getLiveGames", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
+
+    Update(gameupdate = []){
+        gameupdate.forEach(game => {
+            if(this.displayedGames.indexOf(game["gameId"]) == -1){
+                this.displayedGames.push(game["gameId"])
+
+                console.log("added: " + game["gameId"])
                 this.addGame(game);
-            });
-        })
+
+            }
+            else{
+                console.log("updated: " + game["gameId"])
+                this.updateGame(game)
+            }
+        });
     }
 
     addGame(gameToAdd){//voegt de game toe als het id van de game nog niet bestaat
         let nieuwScorenbord = document.createElement("scorenbord-comp");
         nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);
-        //console.log(this.gameUpdate);
+
         this.shadowRoot.querySelector("#gamesDiv").append(nieuwScorenbord);
 
         let game = this.shadowRoot.querySelector(`#game-${gameToAdd["gameId"]}`);
         game.pointsT1.innerHTML = gameToAdd["game"]["team1 punten"];
         game.pointsT2.innerHTML = gameToAdd["game"]["team2 punten"];
 
-        game.gameT1.innerHTML = gameToAdd["game"]["team1 games"];
-        game.gameT2.innerHTML = gameToAdd["game"]["team2 games"];
-
-        game.setsT1.innerHTML = gameToAdd["game"]["team1 sets"];
-        game.setsT2.innerHTML = gameToAdd["game"]["team2 sets"];
-
         game.updateServe(1, gameToAdd["serving"]);
 
         this.putnames(game, gameToAdd);
+    }
+    updateGame(gameToUpdate){//update de game wanneer het id van de game al weergegeven wordt
+        let game = this.shadowRoot.querySelector(`#game-${gameToUpdate["gameId"]}`);
+        game.pointsT1.innerHTML = gameToUpdate["game"]["team1 punten"];
+        game.pointsT2.innerHTML = gameToUpdate["game"]["team2 punten"];
+
+        game.gameT1.innerHTML = gameToUpdate["game"]["team1 games"];
+        game.gameT2.innerHTML = gameToUpdate["game"]["team2 games"];
+
+        game.setsT1.innerHTML = gameToUpdate["game"]["team1 sets"];
+        game.setsT2.innerHTML = gameToUpdate["game"]["team2 sets"];
+
+        game.updateServe(1, gameToUpdate["serving"]);
+
+        if(gameToUpdate.gameStatus == 0){// om een game te verwijderen moet er een laatste keer een update komen van de server waarin staat dat de gamestatus = 0
+            game.remove();
+        }
+
     }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
         let namesTeam1;
@@ -103,6 +107,29 @@ class comp extends HTMLElement
                 break;
         }
     }
+
+//old
+    addGameOld(gameToAdd){//voegt de game toe als het id van de game nog niet bestaat
+        let nieuwScorenbord = document.createElement("scorenbord-comp");
+        nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);
+        //console.log(this.gameUpdate);
+        this.shadowRoot.querySelector("#gamesDiv").append(nieuwScorenbord);
+
+        let game = this.shadowRoot.querySelector(`#game-${gameToAdd["gameId"]}`);
+        game.pointsT1.innerHTML = gameToAdd["game"]["team1 punten"];
+        game.pointsT2.innerHTML = gameToAdd["game"]["team2 punten"];
+
+        game.gameT1.innerHTML = gameToAdd["game"]["team1 games"];
+        game.gameT2.innerHTML = gameToAdd["game"]["team2 games"];
+
+        game.setsT1.innerHTML = gameToAdd["game"]["team1 sets"];
+        game.setsT2.innerHTML = gameToAdd["game"]["team2 sets"];
+
+        game.updateServe(1, gameToAdd["serving"]);
+
+        this.putnames(game, gameToAdd);
+    }
+    
 }
 
 customElements.define('home-comp', comp)
