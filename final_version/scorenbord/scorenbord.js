@@ -401,7 +401,6 @@ class comp extends HTMLElement
         //score knoppen weg halen
         // this.shadowRoot.querySelector("#T_1").remove();
         // this.shadowRoot.querySelector("#T_2").remove();
-        this.socket.send("refresh");
     }
 //#endregion PuntenTelling
 

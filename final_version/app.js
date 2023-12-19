@@ -29,6 +29,24 @@ class comp extends HTMLElement {
 
     connectedCallback() {
 
+        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket.addEventListener("open", () => {
+            console.log("connected to server");
+        });
+        this.socket.addEventListener("message", (e) => {
+            let reader = new FileReader();
+            reader.onload = () =>{
+                if(reader.readyState == 2){
+                    let text = reader.result;
+                    if (text == "refresh") {
+                        this.GetLiveGames();
+                        this.GetHistory();
+                    }
+                }
+            }
+            reader.readAsText(e.data);
+        });
+
         this.addEventListener("ChangePageEvent", this.ChangePageEvent);
 
 
@@ -55,7 +73,7 @@ class comp extends HTMLElement {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 let history = this.shadowRoot.querySelector("history-comp");
                 history.Update(data);
             });
@@ -71,7 +89,7 @@ class comp extends HTMLElement {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 let home = this.shadowRoot.querySelector("home-comp");
                 home.Update(data);
             });
@@ -81,32 +99,78 @@ class comp extends HTMLElement {
     //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e) {
         let mygames = this.shadowRoot.querySelector("mygames-comp");
+        let playerList = e.detail;
+        let gameId = null;
+        let teams = [[],[]];
+        playerList.forEach((player, index) => {
+            if(length == 3){
+                if(index == 0){
+                    teams[0].push(player.id);
+                }
+                else{
+                    teams[1].push(player.id);
+                }
+                return;
+            }
+            else{
+                if(index >= 2){
+                    teams[1].push(player.id);
+                }
+                else{
+                    teams[0].push(player.id);
+                }
+            }
 
-        let gameId = null
-        if (e.detail.length != 1) {
-            //hier moet het gameId aangevraagd worden
-            //dit moet gedaan worden met een fetch
-            gameId = 99;
-        }
-        mygames.createGame(e.detail, gameId);
+        });
+        // console.log(playerList);
+        // console.log(teams);
+
+        fetch("./test_php/addGame.php", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                gameId = data;
+                mygames.createGame(e.detail, gameId);
+                teams.forEach((team, index) => {
+                    for(let player of team){
+                            fetch("./test_php/addPlayerToTeam.php?gameId=" + player.gameId + "&spelerId=" + player.id + "&teamId=" + index+1, {
+                                method: "GET",
+                                headers: {
+                                    "Content-Type": "application/json; charset=utf-8",
+                                },
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    //console.log(data);
+                                });
+                    }
+                });
+            });
+        
     }
     //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e) {
         console.log(e.detail)
         //hier moet een fetch komen die de game data update van de geme die in e zit
-        /*
-            fetch("./test_php/updateGame.php?gameId="+this.scoreObject.game+"&puntenT1="+this.scoreObject.team1.points+"&puntenT2="+this.scoreObject.team2.points+"&gamesT1="+this.scoreObject.team1.game+"&gamesT2="+this.scoreObject.team2.game+"&setsT1="+this.scoreObject.team1.sets+"&setsT2="+this.scoreObject.team2.sets+"&serving="+this.scoreObject.serving,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            })
-            .then(response => response.json())
-            .then(data => {
-                this.socket.send("refresh");
-            });
-        */
-        this.GetLiveGames()
+        let scoreObject = e.detail;
+        
+        fetch("./test_php/updateGame.php?gameId="+scoreObject.game+"&puntenT1="+scoreObject.team1.points+"&puntenT2="+scoreObject.team2.points+"&gamesT1="+scoreObject.team1.game+"&gamesT2="+scoreObject.team2.game+"&setsT1="+scoreObject.team1.sets+"&setsT2="+scoreObject.team2.sets+"&serving="+scoreObject.serving,{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.socket.send("refresh");
+        });
+        
+        //this.GetLiveGames()
     }
     //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
     EndGame(e) {
@@ -114,238 +178,47 @@ class comp extends HTMLElement {
         let mygames = this.shadowRoot.querySelector("mygames-comp");
 
         //hier moet de game beindigd worden in de database (endGame.php)
+        fetch("./test_php/endGame.php?gameId=" + e.detail, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
 
-        //hier moet een fetch komen die de history data ophaald (getHistory.php)
-        let data = [
-            {
-                gameId: 99,
-                starttijd: '10:00:00',
-                eindtijd: '12:00:00',
-                date: '2023-01-01',
-                'team1 names': 'Alice,Bob',
-                'team2 names': 'Charlie,David',
-                'team1 punten': 25,
-                'team2 punten': 20,
-                'team1 games': 3,
-                'team2 games': 2,
-                'team1 sets': 2,
-                'team2 sets': 1,
-                serving: 'Team1',
-                points: [
-                    { setNr: 1, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 2, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 3, gamesT1: 25, gamesT2: 20 },
-                ]
-            },
-            {
-                gameId: 2,
-                starttijd: '2023-01-02 14:30:00',
-                eindtijd: '2023-01-02 16:45:00',
-                date: '2023-01-02',
-                'team1 names': 'Eve,Frank',
-                'team2 names': 'Grace,Hank',
-                'team1 punten': 22,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 22, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 20, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 18, gamesT2: 25 },
-                ]
-            },
-            {
-                gameId: 3,
-                starttijd: '2023-01-03 08:45:00',
-                eindtijd: '2023-01-03 11:15:00',
-                date: '2023-01-03',
-                'team1 names': 'Grace,Hank',
-                'team2 names': 'Alice,Bob',
-                'team1 punten': 23,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 23, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 21, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 19, gamesT2: 25 },
-                ]
-            },
-            {
-                gameId: 4,
-                starttijd: '2023-01-04 16:00:00',
-                eindtijd: '2023-01-04 18:30:00',
-                date: '2023-01-04',
-                'team1 names': 'David,Eve',
-                'team2 names': 'Frank,Grace',
-                'team1 punten': 25,
-                'team2 punten': 22,
-                'team1 games': 3,
-                'team2 games': 2,
-                'team1 sets': 2,
-                'team2 sets': 1,
-                serving: 'Team1',
-                points: [
-                    { setNr: 1, gamesT1: 25, gamesT2: 22 },
-                    { setNr: 2, gamesT1: 25, gamesT2: 22 },
-                    { setNr: 3, gamesT1: 25, gamesT2: 22 },
-                ]
-            },
-            {
-                gameId: 5,
-                starttijd: '2023-01-01 10:00:00',
-                eindtijd: '2023-01-01 12:00:00',
-                date: '2023-01-01',
-                'team1 names': 'Alice,Bob',
-                'team2 names': 'Charlie,David',
-                'team1 punten': 25,
-                'team2 punten': 20,
-                'team1 games': 3,
-                'team2 games': 2,
-                'team1 sets': 2,
-                'team2 sets': 1,
-                serving: 'Team1',
-                points: [
-                    { setNr: 1, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 2, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 3, gamesT1: 25, gamesT2: 20 },
-                ]
-            },
-            {
-                gameId: 6,
-                starttijd: '2023-01-02 14:30:00',
-                eindtijd: '2023-01-02 16:45:00',
-                date: '2023-01-02',
-                'team1 names': 'Eve,Frank',
-                'team2 names': 'Grace,Hank',
-                'team1 punten': 22,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 22, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 20, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 18, gamesT2: 25 },
-                ]
-            },
-            {
-                gameId: 7,
-                starttijd: '2023-01-03 08:45:00',
-                eindtijd: '2023-01-03 11:15:00',
-                date: '2023-01-03',
-                'team1 names': 'Grace,Hank',
-                'team2 names': 'Alice,Bob',
-                'team1 punten': 23,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 23, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 21, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 19, gamesT2: 25 },
-                ]
-            },
-            {
-                gameId: 8,
-                starttijd: '2023-01-04 16:00:00',
-                eindtijd: '2023-01-04 18:30:00',
-                date: '2023-01-04',
-                'team1 names': 'David,Eve',
-                'team2 names': 'Frank,Grace',
-                'team1 punten': 25,
-                'team2 punten': 22,
-                'team1 games': 3,
-                'team2 games': 2,
-                'team1 sets': 2,
-                'team2 sets': 1,
-                serving: 'Team1',
-                points: [
-                    { setNr: 1, gamesT1: 25, gamesT2: 22 },
-                    { setNr: 2, gamesT1: 25, gamesT2: 22 },
-                    { setNr: 3, gamesT1: 25, gamesT2: 22 },
-                ]
-            },
-            {
-                gameId: 9,
-                starttijd: '2023-01-01 10:00:00',
-                eindtijd: '2023-01-01 12:00:00',
-                date: '2023-01-01',
-                'team1 names': 'Alice,Bob',
-                'team2 names': 'Charlie,David',
-                'team1 punten': 25,
-                'team2 punten': 20,
-                'team1 games': 3,
-                'team2 games': 2,
-                'team1 sets': 2,
-                'team2 sets': 1,
-                serving: 'Team1',
-                points: [
-                    { setNr: 1, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 2, gamesT1: 25, gamesT2: 20 },
-                    { setNr: 3, gamesT1: 25, gamesT2: 20 },
-                ]
-            },
-            {
-                gameId: 10,
-                starttijd: '2023-01-02 14:30:00',
-                eindtijd: '2023-01-02 16:45:00',
-                date: '2023-01-02',
-                'team1 names': 'Eve,Frank',
-                'team2 names': 'Grace,Hank',
-                'team1 punten': 22,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 22, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 20, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 18, gamesT2: 25 },
-                ]
-            },
-            {
-                gameId: 11,
-                starttijd: '2023-01-03 08:45:00',
-                eindtijd: '2023-01-03 11:15:00',
-                date: '2023-01-03',
-                'team1 names': 'Grace,Hank',
-                'team2 names': 'Alice,Bob',
-                'team1 punten': 23,
-                'team2 punten': 25,
-                'team1 games': 2,
-                'team2 games': 3,
-                'team1 sets': 1,
-                'team2 sets': 2,
-                serving: 'Team2',
-                points: [
-                    { setNr: 1, gamesT1: 23, gamesT2: 25 },
-                    { setNr: 2, gamesT1: 21, gamesT2: 25 },
-                    { setNr: 3, gamesT1: 19, gamesT2: 25 },
-                ]
-            }
-        ];
+                fetch("./test_php/getHistory.php", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        mygames.EndGame(data, e.detail);
+                        this.socket.send("refresh");
+                    }
+                );
+            });
 
-        mygames.EndGame(data, e.detail);
     }
     //In AddGameSet voegen we een game set toe aan de database
     AddGameSet(e) {
         console.log("./test_php/addSet.php?gameId=" + e.detail[1] + "&setNr=" + e.detail[0] + "&gamesT1=" + e.detail[2] + "&gamesT2=" + e.detail[3])
 
         //hier moet de fetch komen (addSet.php)
+        fetch("./test_php/addSet.php?gameId=" + e.detail[1] + "&setNr=" + e.detail[0] + "&gamesT1=" + e.detail[2] + "&gamesT2=" + e.detail[3], {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                this.socket.send("refresh");
+            });
     }
     //In SignIn loggen we een gebruiker in, als dit niet lukt geven we een error als dit wel lukt updaten we navigatie en slagen user op
     SignIn(e) {
