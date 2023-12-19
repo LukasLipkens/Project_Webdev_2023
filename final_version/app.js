@@ -60,8 +60,10 @@ class comp extends HTMLElement {
         this.addEventListener("getHistory", this.GetHistory);
         this.addEventListener("getLiveGames", this.GetLiveGames);
 
-
-        this.showPages("home") //beginPagina laten zien bij laden site
+        this.showPages("history");
+        this.showPages("myGames");
+        this.showPages("login");
+        this.showPages("home"); //beginPagina laten zien bij laden site
     }
     //In getHistory roepen we alle history games op en sturen deze door naar de history page
     GetHistory() {
@@ -231,7 +233,6 @@ class comp extends HTMLElement {
     }
     //#region update page
     ChangePageEvent(e) {
-        console.log("btnPress Received " + e.detail);
         this.showPages(e.detail);
     }
     showPages(page) {
@@ -242,7 +243,6 @@ class comp extends HTMLElement {
         }
 
         if (this.cachedPages.indexOf(page) !== -1) {
-            console.log("i already cached! " + page)
 
             this.shadowRoot.querySelector(`#${page}`).style.display = "block";
             this.shadowRoot.querySelector(`#${page}`).setAttribute("hasupdate", "true"); //checken of er een nieuwe match gestart is of niet het updaten van de punten wordt in het scorebord component gedaan volgens mij
@@ -250,7 +250,6 @@ class comp extends HTMLElement {
         }
         else {
             this.cachedPages.push(page)
-            console.log(`the ${page} has been chached`)
 
             let newPage = document.createElement(`${page}-comp`);
             newPage.setAttribute("id", page);
@@ -259,7 +258,6 @@ class comp extends HTMLElement {
             this.mainPage.append(newPage);
 
         }
-        console.log(this.cachedPages);
 
     }
     //#endregion updatePage
