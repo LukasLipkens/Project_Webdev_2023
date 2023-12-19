@@ -28,6 +28,10 @@ class comp extends HTMLElement {
     }
 
     connectedCallback() {
+        this.showPages("history");
+        this.showPages("myGames");
+        this.showPages("login");
+        this.showPages("home"); //beginPagina laten zien bij laden site
 
         this.socket = new WebSocket("ws://localhost:8080");
         this.socket.addEventListener("open", () => {
@@ -60,10 +64,6 @@ class comp extends HTMLElement {
         this.addEventListener("getHistory", this.GetHistory);
         this.addEventListener("getLiveGames", this.GetLiveGames);
 
-        this.showPages("history");
-        this.showPages("myGames");
-        this.showPages("login");
-        this.showPages("home"); //beginPagina laten zien bij laden site
     }
     //In getHistory roepen we alle history games op en sturen deze door naar de history page
     GetHistory() {
