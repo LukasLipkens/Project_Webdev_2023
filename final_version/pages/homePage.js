@@ -51,6 +51,7 @@ class comp extends HTMLElement
         });
         this.displayedGames.forEach(game => { //dit kan ik nog niet testen dus hoop dat het werkt
             if(this.newGames.indexOf(game) == -1){
+                this.displayedGames.pop(game);
                 this.removeGame(game);
             }
         });
@@ -91,19 +92,20 @@ class comp extends HTMLElement
     }
     removeGame(gameToRemove){
         let game = this.shadowRoot.querySelector(`#game-${gameToRemove}`);
+        console.log(game);
         game.remove();
     }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
         let namesTeam1;
         let namesTeam2;
         console.log(gameToAdd);
-        if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
+        //if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
             namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
             namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
-        }else{
-            namesTeam1 = [gameToAdd["game"]["team1 names"]];
-            namesTeam2 = [gameToAdd["game"]["team2 names"]];
-        }
+        // }else{
+        //     namesTeam1 = [gameToAdd["game"]["team1 names"]];
+        //     namesTeam2 = [gameToAdd["game"]["team2 names"]];
+        // }
         
         switch (namesTeam1.length){
             case 1:
