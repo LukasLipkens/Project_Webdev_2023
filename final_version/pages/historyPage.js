@@ -111,10 +111,10 @@ class HistoryComp extends HTMLElement {
         this.pageContainer.innerHTML = "";
 
         for (let item of this.pageItems) {
-            this.matchComponent = document.createElement('match-comp');
-            this.matchComponent.setAttribute('id', item.gameId); // moet er wel zijn om de "pijltjes" te kunnen togglen..
+            let matchComponent = document.createElement('match-comp');
+            matchComponent.setAttribute('id', item.gameId); // moet er wel zijn om de "pijltjes" te kunnen togglen..
 
-            this.matchComponent.setMatchData({
+            matchComponent.setMatchData({
                 gameId: item.gameId,
                 date: item.date,
                 startTime: item.starttijd,
@@ -125,9 +125,9 @@ class HistoryComp extends HTMLElement {
                 score2: item["team2 sets"],
                 scoringData: item["points"],
             });
-            this.pageContainer.append(this.matchComponent);
+            this.pageContainer.append(matchComponent);
 
-            this.matchComponent.addEventListener('toggleContent', (event) => {
+            matchComponent.addEventListener('toggleContent', (event) => {
                 this.toggleMatchComp(event.detail);
             });
         }

@@ -110,16 +110,16 @@ class comp extends HTMLElement {
         this.creatGame = this.shadowRoot.querySelector("#createGameBtn");
         this.mainContainer = this.shadowRoot.querySelector("#startView");
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
-
-        this.addEventListener("EndGameEvent", this.EndGameEvent);
+        this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
+        // this.addEventListener("EndGameEvent", this.EndGameEvent);
         this.formIsShown = false;
     }
+
     connectedCallback() {
-        this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
         this.allGames = [];
         this.currentId = "";
         this.EndGameView = null;
-        this.creatGame.addEventListener("click", () => {this.showCreateGameForm();});
+        this.creatGame.addEventListener("click", () => { this.showCreateGameForm(); });
     }
 
     showCreateGameForm() {
@@ -134,65 +134,45 @@ class comp extends HTMLElement {
             this.formIsShown = false;
         }
         else {
-                    //hier maken we het veld voor een game aan
-                    this.gameContainer.style.display = "block";
-                    let scoreBoard = document.createElement("scorenbord-comp");
-                    scoreBoard.setAttribute("type", "admin");
-                    scoreBoard.setAttribute("gameId", `${gameId}`); //hier moet een game id worden aangemaakt
+            //hier maken we het veld voor een game aan
+            this.gameContainer.style.display = "block";
+            let scoreBoard = document.createElement("scorenbord-comp");
+            scoreBoard.setAttribute("type", "admin");
+            scoreBoard.setAttribute("gameId", `${gameId}`); //hier moet een game id worden aangemaakt
 
-                    this.shadowRoot.querySelector("#gameForm").remove();
-                    this.formIsShown = false;
+            this.shadowRoot.querySelector("#gameForm").remove();
+            this.formIsShown = false;
 
-                    this.mainContainer.style.display = "none";
+            this.mainContainer.style.display = "none";
 
 
-                    this.gameContainer.appendChild(scoreBoard);
+            this.gameContainer.appendChild(scoreBoard);
 
-                    //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
-                    //namen in het component zetten
-                    let bord = this.shadowRoot.querySelector("scorenbord-comp");
+            //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
+            //namen in het component zetten
+            let bord = this.shadowRoot.querySelector("scorenbord-comp");
 
-                    this.players = e;
-                    if (e.length == 3) {
-                        bord.scoreObject.team1.players = [this.players[0]];
-                        bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
-                        bord.scoreObject.team2.players = [this.players[2]];
-                        bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
-                    }
-                    else {
-                        bord.scoreObject.team1.players = [this.players[0], this.players[1]];
-                        bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
-                        bord.scoreObject.team2.players = [this.players[2], this.players[3]];
-                        bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
-                    }
+            this.players = e;
+            if (e.length == 3) {
+                bord.scoreObject.team1.players = [this.players[0]];
+                bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4>`;
+                bord.scoreObject.team2.players = [this.players[2]];
+                bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4>`;
+            }
+            else {
+                bord.scoreObject.team1.players = [this.players[0], this.players[1]];
+                bord.team1.innerHTML = `<h4>${this.players[0].gebruikersnaam}</h4><h4>${this.players[1].gebruikersnaam}</h4>`;
+                bord.scoreObject.team2.players = [this.players[2], this.players[3]];
+                bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
+            }
         }
     }
+
     EndGame(data, gameId) {
-        // this.gameContainer.style.display = "none";
-        // this.mainContainer.style.display = "block";
-        // this.shadowRoot.querySelector("scorenbord-comp").remove();
         this.endGameView = document.createElement('endview-comp');
-        // fetch('./test_php/endGame.php?gameId=' + this.gameId, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         //console.log(data);
-        //         this.socket.send("refresh");
-        //         fetch('./test_php/getHistory.php', {
-        //             method: 'GET',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //         })
-        //             .then(response => response.json())
-        //             .then(data => {
-                        
         this.allGames = data;
         this.currentId = gameId;
+
         this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
         if (this.gameInfo) {
             this.endGameView.setMatchInfo({
@@ -210,21 +190,24 @@ class comp extends HTMLElement {
         this.gameContainer.appendChild(this.endGameView);
 
         this.endGameView.addEventListener("backToMyGamesPage", () => {
-            console.log(this.gameInfo);
             if (this.gameInfo) {
-                this.matchComponent = document.createElement('match-comp');
+                let matchComponent = document.createElement('match-comp');
+                matchComponent.setAttribute('id', this.gameInfo.gameId);
 
-                this.matchComponent.setAttribute('id', this.gameInfo.gameId);
-                this.matchComponent.setAttribute('date', this.gameInfo.date);
-                this.matchComponent.setAttribute('startTime', this.gameInfo.startTime);
-                this.matchComponent.setAttribute('endTime', this.gameInfo.endTime);
-                this.matchComponent.setAttribute('playerName1', this.gameInfo.player1);
-                this.matchComponent.setAttribute('playerName2', this.gameInfo.player2);
-                this.matchComponent.setAttribute('score1', this.gameInfo.player1Score);
-                this.matchComponent.setAttribute('score2', this.gameInfo.player2Score);
-                this.myHistory.appendChild(this.matchComponent);
+                matchComponent.setMatchData({
+                    gameId: this.gameInfo.gameId,
+                    date: this.gameInfo.date,
+                    startTime: this.gameInfo.starttijd,
+                    endTime: this.gameInfo.eindtijd,
+                    player1: this.gameInfo["team1 names"],
+                    player2: this.gameInfo["team2 names"],
+                    score1: this.gameInfo["team1 sets"],
+                    score2: this.gameInfo["team2 sets"],
+                    scoringData: this.gameInfo["points"],
+                });
+                this.myHistory.appendChild(matchComponent);
 
-                this.matchComponent.addEventListener('toggleContent', (event) => {
+                matchComponent.addEventListener('toggleContent', (event) => {
                     this.toggleMatchComp(event.detail);
                 });
             }
@@ -234,23 +217,24 @@ class comp extends HTMLElement {
             this.shadowRoot.querySelector("scorenbord-comp").remove();
             this.endGameView.remove();
         });
-
-
-            //         });
-
-            // })
-
     }
+
     toggleMatchComp(gameId) {
-        this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
-        this.matchComponents.forEach((component) => {
-            let componentId = component.getAttribute('id');
-            if (componentId === gameId) {
-                component.toggle(true);
-            } else {
-                component.toggle(false);
-            }
-        });
+        if (gameId != null) {
+            this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
+            this.matchComponents.forEach((component) => {
+                let componentId = component.getAttribute('id');
+                console.log('componentId: ', componentId);
+                if (componentId == gameId) {
+                    component.toggle(true);
+                } else {
+                    component.toggle(false);
+                }
+            });
+        }
+        else {
+            console.error("gameId is null!");
+        }
     }
 }
 

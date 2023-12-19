@@ -83,7 +83,7 @@ class comp extends HTMLElement {
         let mygames = this.shadowRoot.querySelector("mygames-comp");
 
         let gameId = null
-        if(e.detail.length != 1){
+        if (e.detail.length != 1) {
             //hier moet het gameId aangevraagd worden
             //dit moet gedaan worden met een fetch
             gameId = 99;
@@ -110,17 +110,17 @@ class comp extends HTMLElement {
     }
     //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
     EndGame(e) {
-       console.log(e);//moet gameId bevatten
-       let mygames = this.shadowRoot.querySelector("mygames-comp");
+        console.log(e);//moet gameId bevatten
+        let mygames = this.shadowRoot.querySelector("mygames-comp");
 
-       //hier moet de game beindigd worden in de database (endGame.php)
+        //hier moet de game beindigd worden in de database (endGame.php)
 
-       //hier moet een fetch komen die de history data ophaald (getHistory.php)
+        //hier moet een fetch komen die de history data ophaald (getHistory.php)
         let data = [
             {
                 gameId: 99,
-                starttijd: '2023-01-01 10:00:00',
-                eindtijd: '2023-01-01 12:00:00',
+                starttijd: '10:00:00',
+                eindtijd: '12:00:00',
                 date: '2023-01-01',
                 'team1 names': 'Alice,Bob',
                 'team2 names': 'Charlie,David',
@@ -343,7 +343,7 @@ class comp extends HTMLElement {
     }
     //In AddGameSet voegen we een game set toe aan de database
     AddGameSet(e) {
-        console.log("./test_php/addSet.php?gameId="+e.detail[1]+"&setNr="+e.detail[0]+"&gamesT1="+e.detail[2]+"&gamesT2="+e.detail[3])
+        console.log("./test_php/addSet.php?gameId=" + e.detail[1] + "&setNr=" + e.detail[0] + "&gamesT1=" + e.detail[2] + "&gamesT2=" + e.detail[3])
 
         //hier moet de fetch komen (addSet.php)
     }

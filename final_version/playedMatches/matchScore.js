@@ -1,6 +1,5 @@
 //#region IMPORTS
 import "../playedMatches/individualScore.js"
-// import { playingInfo } from '../playerData.js'
 //#endregion IMPORTS
 
 const template = document.createElement("template");
@@ -219,15 +218,7 @@ class MatchComponent extends HTMLElement {
     }
 
     setMatchData(matchData) {
-        // this.gameId = this.getAttribute('id');
-        // this.date = this.getAttribute('date');
-        // this.startTime = this.getAttribute('startTime');
-        // this.endTime = this.getAttribute('endTime');
-        // this.player1 = this.getAttribute('playerName1');
-        // this.player2 = this.getAttribute('playerName2');
-        // this.player1Score = this.getAttribute('score1');
-        // this.player2Score = this.getAttribute('score2');
-        console.log("arrived at matchComp");
+        // console.log("arrived at matchComp");
         this.scoresData = matchData;
         this.indiviData = this.scoresData.scoringData;
         this.gameId = this.scoresData.gameId;
@@ -239,17 +230,12 @@ class MatchComponent extends HTMLElement {
         this.score1 = this.scoresData.score1;
         this.score2 = this.scoresData.score2;
 
-        // console.log('indiviData :', this.indiviData);
-        // console.log('scoresData :', this.scoresData);
-
         this.editScoreAndPlayers();
         this.setupEventListeners();
         this.createScoreComponents();
     }
 
-    connectedCallback() {
-        // this.getPlayerData();
-    }
+    connectedCallback() { }
 
     editScoreAndPlayers() {
         this.winnerLeft.style.visibility = 'hidden';
@@ -257,10 +243,10 @@ class MatchComponent extends HTMLElement {
         this.drawLeft.style.display = 'none';
         this.drawRight.style.display = 'none';
 
-        if (this.player1 > this.player2) {
+        if (this.score1 > this.score2) {
             this.winnerLeft.style.visibility = 'visible';
         }
-        else if (this.player2 > this.player1) {
+        else if (this.score2 > this.score1) {
             this.winnerRight.style.visibility = 'visible';
         }
         else {
@@ -300,16 +286,7 @@ class MatchComponent extends HTMLElement {
 
     createScoreComponents() {
         this.indiviData.forEach((line) => {
-            //     if (line.gameId == this.gameId) {
             this.singleScoreComp = document.createElement('single-score-comp');
-
-            // this.singleScoreComp.setAttribute('id', this.gameId);
-            // this.singleScoreComp.setAttribute('playerName1', this.player1);
-            // this.singleScoreComp.setAttribute('playerName2', this.player2);
-
-            // this.singleScoreComp.setAttribute('setNr', line.setNr);
-            // this.singleScoreComp.setAttribute('team1Points', line.team1Points);
-            // this.singleScoreComp.setAttribute('team2Points', line.team2Points);
 
             this.singleScoreComp.setScoreData({
                 gameId: this.gameId,
@@ -322,7 +299,6 @@ class MatchComponent extends HTMLElement {
 
             this.matchContent.append(this.singleScoreComp);
         });
-        //  });
     }
 }
 
