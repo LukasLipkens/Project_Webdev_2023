@@ -18,7 +18,7 @@ class comp extends HTMLElement
         this.newGames = [];
     }
     connectedCallback(){
-        console.log("getLiveGames");
+        //console.log("getLiveGames");
         this.GetLiveGames("getLiveGames")
     }
 
@@ -39,12 +39,12 @@ class comp extends HTMLElement
             if(this.displayedGames.indexOf(game["gameId"]) == -1){
                 this.displayedGames.push(game["gameId"])
 
-                console.log("added: " + game["gameId"])
+                //console.log("added: " + game["gameId"])
                 this.addGame(game);
 
             }
             else{
-                console.log("updated: " + game["gameId"])
+                //console.log("updated: " + game["gameId"])
                 this.updateGame(game)
             }
         });

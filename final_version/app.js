@@ -86,6 +86,7 @@ class comp extends HTMLElement {
     }
     //In getLiveGames roepen we alle live games op en sturen deze door naar de home page
     GetLiveGames() {
+        console.log("getLiveGames");
         fetch("./test_php/getLiveGames.php", {
             method: "GET",
             headers: {
@@ -138,12 +139,13 @@ class comp extends HTMLElement {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 gameId = data;
                 mygames.createGame(e.detail, gameId);
                 teams.forEach((team, index) => {
                     for(let player of team){
-                            fetch("./test_php/addPlayerToTeam.php?gameId=" + player.gameId + "&spelerId=" + player.id + "&teamId=" + index+1, {
+                        console.log(player, team, index+1);
+                            fetch("./test_php/addPlayerToTeam.php?gameId=" + gameId + "&spelerId=" + player + "&teamId=" + (index+1), {
                                 method: "GET",
                                 headers: {
                                     "Content-Type": "application/json; charset=utf-8",
@@ -152,6 +154,7 @@ class comp extends HTMLElement {
                                 .then(response => response.json())
                                 .then(data => {
                                     //console.log(data);
+                                    this.socket.send("refresh");
                                 });
                     }
                 });
@@ -160,7 +163,7 @@ class comp extends HTMLElement {
     }
     //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e) {
-        console.log(e.detail)
+        //console.log(e.detail)
         //hier moet een fetch komen die de game data update van de geme die in e zit
         let scoreObject = e.detail;
         
@@ -192,6 +195,7 @@ class comp extends HTMLElement {
             .then(response => response.json())
             .then(data => {
                 //console.log(data);
+                this.socket.send("refresh");
 
                 fetch("./test_php/getHistory.php", {
                     method: "GET",
@@ -201,8 +205,9 @@ class comp extends HTMLElement {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        mygames.EndGame(data, e.detail);
                         this.socket.send("refresh");
+                        mygames.EndGame(data, e.detail);
+                        console.log("ophalen history");
                     }
                 );
             });

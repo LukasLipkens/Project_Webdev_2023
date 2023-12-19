@@ -92,7 +92,7 @@ class HistoryComp extends HTMLElement {
 
     Update(gameData) {
         this.matchData = gameData;
-        console.log('history: ', gameData);
+        //console.log('history: ', gameData);
         this.renderPage();
     }
 
