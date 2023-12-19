@@ -91,7 +91,6 @@ class comp extends HTMLElement
     }
     removeGame(gameToRemove){
         let game = this.shadowRoot.querySelector(`#game-${gameToRemove}`);
-        
         game.remove();
     }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
