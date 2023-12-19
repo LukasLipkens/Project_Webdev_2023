@@ -32,6 +32,7 @@ class comp extends HTMLElement
 
     Update(gameupdate){
         console.log(gameupdate);
+        this.newGames = [];
         gameupdate.forEach(game => {
 
             this.newGames.push(game["gameId"])
@@ -90,6 +91,7 @@ class comp extends HTMLElement
     }
     removeGame(gameToRemove){
         let game = this.shadowRoot.querySelector(`#game-${gameToRemove}`);
+        
         game.remove();
     }
     putnames(game, gameToAdd){//zet de namen van de spelers in het scorenbord
