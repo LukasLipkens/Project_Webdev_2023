@@ -263,12 +263,29 @@ class comp extends HTMLElement {
                 }
                 else {
                     this.user = data;
+                    console.log(data);
                     this.showPages("myGames");
                     let navigatie = this.shadowRoot.querySelector("navigatie-comp");
                     navigatie.Update(this.user);
                     this.GetUserGames();
-                    // let login = this.shadowRoot.querySelector("login-comp");
-                    // login.Update(this.user);
+
+                    /*parsen voor userName xD */
+                    let userData = data.split(",");
+                    let userName = "";
+                    userData.forEach(element => {
+                        element = element.replace(/"/g, '');
+                        element = element.replace(/{/g, '');
+                        element = element.replace(/}/g, '');
+                        let temp = element.split(":");
+                        console.log(temp);
+                        if(temp[0] == "gebruikersnaam"){
+                            userName = temp[1];
+                            console.log(userName);
+                        }
+                    });
+                    //naam van de player op de mygames pagina zetten
+                    let mygames = this.shadowRoot.querySelector("mygames-comp");
+                    mygames.shadowRoot.querySelector("#playerName").innerHTML = userName;
                 }
         })
     }
