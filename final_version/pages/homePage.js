@@ -144,7 +144,6 @@ class comp extends HTMLElement {
         let namesTeam1;
         let namesTeam2;
         console.log(gameToAdd);
-<<<<<<< HEAD
         //if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
         namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
         namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
@@ -152,19 +151,16 @@ class comp extends HTMLElement {
         //     namesTeam1 = [gameToAdd["game"]["team1 names"]];
         //     namesTeam2 = [gameToAdd["game"]["team2 names"]];
         // }
-
-        switch (namesTeam1.length) {
-=======
-        if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
+        // switch (namesTeam1.length) {
+        if (gameToAdd["game"]["team1 names"].indexOf(",") != -1) {
             namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
             namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
-        }else{
+        } else {
             namesTeam1 = [gameToAdd["game"]["team1 names"]];
             namesTeam2 = [gameToAdd["game"]["team2 names"]];
         }
-        
-        switch (namesTeam1.length){
->>>>>>> 24d6356db036334deec763d2448616681993de71
+
+        switch (namesTeam1.length) {
             case 1:
                 game.team1.innerHTML = `<h4>${namesTeam1[0]}</h4>`;
                 break;
@@ -181,7 +177,6 @@ class comp extends HTMLElement {
                 break;
         }
     }
-
 }
 
 customElements.define('home-comp', comp)
