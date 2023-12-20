@@ -7,12 +7,13 @@ template.innerHTML = /*html*/ `
     <style>
 
         #historyContainer {
-            border: 2px solid black;
+            border: 5px solid black;
             border-radius: 10px;
             width: 1200px;
+            min-height: 750px;
             margin: auto;
             margin-top: 20px;
-            padding-top: 10px;
+            padding-top: 20px;
         }
         #title {
             font-size: 60px;
