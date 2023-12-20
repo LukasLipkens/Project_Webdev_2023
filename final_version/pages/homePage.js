@@ -99,13 +99,13 @@ class comp extends HTMLElement
         let namesTeam1;
         let namesTeam2;
         console.log(gameToAdd);
-        //if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
+        if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
             namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
             namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
-        // }else{
-        //     namesTeam1 = [gameToAdd["game"]["team1 names"]];
-        //     namesTeam2 = [gameToAdd["game"]["team2 names"]];
-        // }
+        }else{
+            namesTeam1 = [gameToAdd["game"]["team1 names"]];
+            namesTeam2 = [gameToAdd["game"]["team2 names"]];
+        }
         
         switch (namesTeam1.length){
             case 1:
