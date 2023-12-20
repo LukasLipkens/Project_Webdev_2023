@@ -144,6 +144,7 @@ class comp extends HTMLElement {
         let namesTeam1;
         let namesTeam2;
         console.log(gameToAdd);
+<<<<<<< HEAD
         //if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
         namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
         namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
