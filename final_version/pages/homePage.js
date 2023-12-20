@@ -153,6 +153,17 @@ class comp extends HTMLElement {
         // }
 
         switch (namesTeam1.length) {
+=======
+        if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
+            namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
+            namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
+        }else{
+            namesTeam1 = [gameToAdd["game"]["team1 names"]];
+            namesTeam2 = [gameToAdd["game"]["team2 names"]];
+        }
+        
+        switch (namesTeam1.length){
+>>>>>>> 24d6356db036334deec763d2448616681993de71
             case 1:
                 game.team1.innerHTML = `<h4>${namesTeam1[0]}</h4>`;
                 break;
