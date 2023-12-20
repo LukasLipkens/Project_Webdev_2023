@@ -106,13 +106,17 @@ class HistoryComp extends HTMLElement {
     showPage() {
         this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
         this.endIndex = this.startIndex + this.itemsPerPage;
+
+        this.matchData.sort((a, b) => b.gameId - a.gameId);
         this.pageItems = this.matchData.slice(this.startIndex, this.endIndex);
 
         this.pageContainer.innerHTML = "";
 
-        for (let item of this.pageItems) {
+        for (let i = 0; i < this.pageItems.length; i++) {
+            const item = this.pageItems[i];
+            console.log('history: ', item);
             let matchComponent = document.createElement('match-comp');
-            matchComponent.setAttribute('id', item.gameId); // moet er wel zijn om de "pijltjes" te kunnen togglen..
+            matchComponent.setAttribute('id', item.gameId);
 
             matchComponent.setMatchData({
                 gameId: item.gameId,
@@ -159,6 +163,7 @@ class HistoryComp extends HTMLElement {
 
             this.pageItem.addEventListener('click', () => {
                 this.changePage(i);
+                console.log('next');
             });
         }
     }
