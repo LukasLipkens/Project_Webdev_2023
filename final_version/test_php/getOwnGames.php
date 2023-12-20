@@ -4,12 +4,16 @@
 
     session_start();
 
-    //$session_id = $_SESSION['id'];
+    $session_id = $_SESSION['user'];
 
-    $session_id = 1;
+    $session_id = json_decode($session_id);
+    $session_id = $session_id->{'id'};
 
     $sql = "SELECT 
     g.gameId,
+    g.starttijd as 'starttijd',
+    g.eindtijd as 'eindtijd',
+    g.date as 'date',
     GROUP_CONCAT(IF(t.teamId = 1, s.gebruikersnaam, NULL)) AS 'team1 names',
     GROUP_CONCAT(IF(t.teamId = 2, s.gebruikersnaam, NULL)) AS 'team2 names',
     MAX(IF(t.teamId = 1, t.punten, NULL)) AS 'team1 punten',
@@ -27,9 +31,13 @@
     tblteamspeler ts ON t.gameId = ts.gameId AND t.teamId = ts.teamId
   JOIN 
     tblspelers s ON ts.spelerId = s.id
-    WHERE g.state = 'fin' AND s.id = ".$session_id."
-  GROUP BY 
-    g.gameId;";
+WHERE g.state = 'fin' AND g.gameId IN (
+		SELECT gameId FROM tblteamspeler WHERE spelerId = ".$session_id."
+)
+GROUP BY
+	g.gameId
+ORDER BY
+	g.date DESC;";
 
     $result = $conn->query($sql);
 
@@ -50,10 +58,15 @@
         // JOIN tblSets s ON g.gameId = s.gameId
         // WHERE s.gameId=".$gameId."
         // ORDER BY s.setNr;";
+        $sql = "SELECT s.setNr, s.gamesT1, s.gamesT2
+        FROM tblgames g
+        JOIN tblSets s ON g.gameId = s.gameId
+        WHERE s.gameId=".$gameId."
+        ORDER BY s.setNr;";
         
-        // $result = $conn->query($sql);
-        // $points = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        // $fullgame = array_merge($fullgame, array('points' => $points));
+        $result = $conn->query($sql);
+        $points = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $fullgame = array_merge($fullgame, array('points' => $points));
     
         $games[] = $fullgame;
     }

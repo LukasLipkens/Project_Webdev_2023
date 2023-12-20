@@ -286,23 +286,43 @@ class app extends HTMLElement
 
         this.signIn.addEventListener("click", ()=>{
           if(empty(this.email.value)){
-            console.log("1");
+            //console.log("1");
 
               this.email.value = "";
           }
           else if(empty(this.password.value)){
-            console.log("2");
+            //console.log("2");
 
               this.password.value = "";
           }
           else{
-            console.log("3");
-              this.CheckLogin("email="+this.email.value +"&password="+ this.password.value);
+            //console.log("3");
+            let data = {
+              email: this.email.value,
+              password: this.password.value
+            }
+            this.dispatchEvent(new CustomEvent("signIn", {composed: true, bubbles: true, detail: data}));
           }
         });
 
         this.signUp.addEventListener("click", ()=>{
-              this.AddUser("email="+this.upEmail.value + "&password="+ this.upPass.value + "&name="+this.upName.value);
+          if(empty(this.upEmail.value)){
+            alert("Please fill in your email");
+          }
+          else if(empty(this.upPass.value)){
+            alert("Please fill in your password");
+          }
+          else if(empty(this.upName.value)){
+            alert("Please fill in your name");
+          }
+          else{
+            let data = {
+              email: this.upEmail.value,
+              password: this.upPass.value,
+              name: this.upName.value
+            }
+            this.dispatchEvent(new CustomEvent("signUp", {composed: true, bubbles: true, detail: data}));
+          }
         });
 
         //animatie voor de login en sign up:
@@ -319,41 +339,11 @@ class app extends HTMLElement
         });
 
       }
-      CheckLogin(str) {
-            const xhttp = new XMLHttpRequest();
-            xhttp.addEventListener("load", ()=> {
-                console.log(xhttp.responseText);
-                //We moeten nu dit nog aanpassen dat er als er een andere user wilt inloggen
-                let arr = xhttp.response;
-                console.log(arr);
-                if(!(arr.includes("Error"))){
-                  this.ChangePageEvent("myGames");
-                }
 
-
-            });
-            xhttp.open("GET", "login.php?"+str);
-            xhttp.send();
-      }
-
-      AddUser(str){
-          const xhttp = new XMLHttpRequest();
-          xhttp.addEventListener(("load"), ()=>{
-            let response = xhttp.response;
-            console.log(response);
-            if(response == "succes"){
-              this.CheckLogin(str);
-            }
-          });
-          xhttp.open("GET", "addUser.php?"+str);
-          xhttp.send();
-      }
-          ChangePageEvent(id){
-            this.dispatchEvent(new CustomEvent("ChangePageEvent", {
-                bubbles: true,
-                composed: true,
-                detail: id
-            }))
+        Error(){
+          this.email.classList.add("is-invalid");
+          this.password.classList.add("is-invalid");
+          alert("Wrong email or password");
         }
           
 }

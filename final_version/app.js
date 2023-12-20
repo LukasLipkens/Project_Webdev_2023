@@ -3,7 +3,7 @@ import "./navigatie.js"
 import "./pages/homePage.js"
 import "./pages/historyPage.js"
 import "./pages/myGamesPage.js"
-import "./pages/loginPage.js"
+import "./pages/login.js"
 import "./scorenbord/scorenbord.js"
 //#endregion IMPORTS
 
@@ -43,6 +43,7 @@ class comp extends HTMLElement {
                     if (text == "refresh") {
                         this.GetLiveGames();
                         this.GetHistory();
+                        if(this.user != null) this.GetUserGames();
                     }
                 }
             }
@@ -99,8 +100,21 @@ class comp extends HTMLElement {
                 let home = this.shadowRoot.querySelector("home-comp");
                 home.Update(data);
             });
-
-
+    }
+    //In GetUserGames halen we de games van de user op
+    GetUserGames() {
+        fetch("./test_php/getOwnGames.php", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            let mygames = this.shadowRoot.querySelector("mygames-comp");
+            mygames.Update(data);
+        });
     }
     //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e) {
@@ -232,13 +246,60 @@ class comp extends HTMLElement {
     }
     //In SignIn loggen we een gebruiker in, als dit niet lukt geven we een error als dit wel lukt updaten we navigatie en slagen user op
     SignIn(e) {
+        let userinfo = e.detail;
+        fetch("./test_php/login.php?email=" + userinfo.email + "&password=" + userinfo.password, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                if (data == "error") {
+                    //console.log("error");
+                    let login = this.shadowRoot.querySelector("login-comp");
+                    login.Error();
+                }
+                else {
+                    this.user = data;
+                    this.showPages("myGames");
+                    let navigatie = this.shadowRoot.querySelector("navigatie-comp");
+                    navigatie.Update(this.user);
+                    this.GetUserGames();
+                    // let login = this.shadowRoot.querySelector("login-comp");
+                    // login.Update(this.user);
+                }
+        })
     }
     //In SignOut loggen we een gebruiker uit, we updaten navigatie en verwijderen user
     SignOut(e) {
+        this.user = null;
+        let navigatie = this.shadowRoot.querySelector("navigatie-comp");
+        navigatie.Update(this.user);
+        this.showPages("home");
+        fetch("./test_php/logout.php");
     }
     //In SignUp maken we een nieuwe gebruiker aan, als dit niet lukt geven we een error als dit wel lukt, dan gebruiken we login met deze gegevens en updaten we navigatie en slagen user op
     SignUp(e) {
-    }
+        fetch("./test_php/addUser.php?email=" + e.detail.email + "&password=" + e.detail.password + "&name=" + e.detail.name, {
+            method: "GET",
+            })
+            .then(response => response.text())
+            .then((data)=>{
+                //console.log(data);
+                if (data != "") {
+                    console.log(data);
+                    let login = this.shadowRoot.querySelector("login-comp");
+                    login.Error();
+                }
+                else {
+                    this.SignIn(e);
+                }
+    }).catch((error) => {
+        console.log(error);
+    });
+}
     //#region update page
     ChangePageEvent(e) {
         this.showPages(e.detail);

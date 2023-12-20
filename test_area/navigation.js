@@ -104,34 +104,6 @@ template.innerHTML = /*html*/`
         justify-content: flex-end;
     }
 
-    ul#account{
-        display: flex;
-        position:relative;
-        flex-direction : column;
-        width: 10%;
-        margin: auto 2rem;
-    }
-    ul#account img{
-        width: 6rem;
-        position: relative;
-    }
-    ul#account.hidden{
-        display: none;
-    }
-    ul#account.hidden img{
-        display: none;
-    }
-
-    ul#account>ul{
-        position: absolute;
-        top: 6.5rem;
-        background-color: lightgrey;
-        padding: 10px;
-        z-index: 1;
-    }
-    ul#account>ul.hidden{
-        display: none;
-    }
 
 
     </style>
@@ -146,7 +118,7 @@ template.innerHTML = /*html*/`
         <button id="history">history</button>
         <button id="myGames">My games</button>
         <button id="logIn">Log in</button>
-        <ul id="account">
+        <ul id="account" class="hidden">
         <li id="profilePic"><img src="./images/player1.png"></li>
         <ul id="profileInfo" class="hidden">
             <li id="logout">Logout</li>

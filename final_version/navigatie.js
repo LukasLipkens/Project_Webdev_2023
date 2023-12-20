@@ -87,6 +87,35 @@ template.innerHTML = /*html*/`
         justify-content: flex-end;
     }
 
+    ul#account{
+        display: flex;
+        position:relative;
+        flex-direction : column;
+        width: 10%;
+        margin: auto 2rem;
+    }
+    ul#account img{
+        width: 6rem;
+        position: relative;
+    }
+    ul#account.hidden{
+        display: none;
+    }
+    ul#account.hidden img{
+        display: none;
+    }
+
+    ul#account>ul{
+        position: absolute;
+        top: 6.5rem;
+        background-color: lightgrey;
+        padding: 10px;
+        z-index: 1;
+    }
+    ul#account>ul.hidden{
+        display: none;
+    }
+
 
     </style>
     <nav>
@@ -98,9 +127,14 @@ template.innerHTML = /*html*/`
         <div class="right-item">
             <button id="home" class="active">home</button>
             <button id="history">history</button>
-            <button id="myGames">My games</button>
+            <button id="myGames" class="hidden">My games</button>
             <button id="login">Log in</button>
-            
+            <ul id="account" class="hidden">
+            <li id="profilePic"><img src="./images/player1.png"></li>
+            <ul id="profileInfo" class="hidden">
+                <li id="logout">Logout</li>
+            </ul>
+            </ul>
         </div>
     </nav>
 `
@@ -117,10 +151,6 @@ class comp extends HTMLElement
 
     connectedCallback()
     {
-        this.socket = new WebSocket("ws://localhost:8080");
-        this.socket.addEventListener('open', function (event) {
-            console.log('Connection opened');
-        });
         this.button.forEach(btn => {
             btn.addEventListener('mousedown', (e) =>{
                 //console.log(this.getAttribute("loggedIn"));
@@ -132,8 +162,28 @@ class comp extends HTMLElement
                 this.ChangePageEvent(btn.getAttribute("id"));
             });
 
+            //Hier komt alles voor het profiel
+            this.account = this.shadowRoot.querySelector("#account");
+            this.profileInfo = this.shadowRoot.querySelector("#profileInfo");
+            this.logout = this.shadowRoot.querySelector("#logout");
+
+            this.account.removeEventListener("click", this.clickHandler);
+            this.clickHandler = () => {
+                //console.log("test");
+                this.profileInfo.classList.toggle("hidden");
+            };
+            this.account.addEventListener("click", this.clickHandler);
+            this.logout.removeEventListener("click", this.Logout);
+            this.logout.addEventListener("click", this.Logout);
+
     });
 }
+    Logout(){
+        this.dispatchEvent(new CustomEvent("signOut", {
+            bubbles: true,
+            composed: true,
+        }))
+    }
 
     ChangePageEvent(id){
         this.dispatchEvent(new CustomEvent("ChangePageEvent", {
@@ -141,6 +191,38 @@ class comp extends HTMLElement
             composed: true,
             detail: id
         }))
+    }
+
+    Update(user){
+        
+        if(user != null){
+            this.button.forEach(btn =>{
+                btn.classList.remove("hidden");
+            })
+            this.button.forEach(btn =>{
+                btn.classList.remove("active");
+            })
+            this.button.forEach(btn =>{
+                if(btn.getAttribute("id") == "login"){
+                    btn.classList.add("hidden");
+                }
+            })
+            this.account.classList.remove("hidden");
+        }
+        else{
+            this.button.forEach(btn =>{
+                btn.classList.remove("hidden");
+            })
+            this.button.forEach(btn =>{
+                btn.classList.remove("active");
+            })
+            this.button.forEach(btn =>{
+                if(btn.getAttribute("id") == "myGames"){
+                    btn.classList.add("hidden");
+                }
+            })
+            this.account.classList.add("hidden");
+        }
     }
 
 }

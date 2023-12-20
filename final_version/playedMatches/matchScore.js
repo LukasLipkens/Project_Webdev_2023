@@ -219,6 +219,7 @@ class MatchComponent extends HTMLElement {
 
     setMatchData(matchData) {
         // console.log("arrived at matchComp");
+        console.log(matchData);
         this.scoresData = matchData;
         this.indiviData = this.scoresData.scoringData;
         this.gameId = this.scoresData.gameId;

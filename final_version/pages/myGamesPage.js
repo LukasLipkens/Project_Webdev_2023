@@ -1,6 +1,7 @@
 //#region IMPORTS
 import "../gameSetup/createGame.js"
 import "../playedMatches/matchScore.js"
+import "../playedMatches/matchScore.js";
 import "../gameSetup/endGameView.js"
 //#endregion IMPORTS
 
@@ -76,6 +77,26 @@ template.innerHTML = /*html*/`
             top: 20%;
             left: 50%;
         }
+        #pagination {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: flex-end;
+            padding-right: 55px;
+        }
+        #pagination li {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #pagination li.active {
+            box-shadow: inset 0 0 2px green;
+            color: green;
+        }
     </style>
     <div id="myGamesContainer">
         <div id="startView">
@@ -98,10 +119,11 @@ template.innerHTML = /*html*/`
         <div id="gameView">
 
         </div>
+        <ul id="pagination"></ul>
     </div>
 `
 
-class comp extends HTMLElement {
+class MyGamesComp extends HTMLElement {
     constructor() {
         super();
         this.shadow = this.attachShadow({ mode: "open" });
@@ -116,6 +138,9 @@ class comp extends HTMLElement {
     }
 
     connectedCallback() {
+        this.currentPage = 1;
+        this.itemsPerPage = 7;
+        this.pagination = this.shadowRoot.querySelector('#pagination');
         this.allGames = [];
         this.currentId = "";
         this.EndGameView = null;
@@ -165,6 +190,64 @@ class comp extends HTMLElement {
                 bord.scoreObject.team2.players = [this.players[2], this.players[3]];
                 bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
             }
+            this.pagination.style.display = "none";
+        }
+    }
+    Update(games){
+        //console.log("update");
+        this.allGames = games;
+        let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
+
+        this.RenderPage(games);
+        this.RenderPagination(totalPages);
+    }
+    RenderPage() {
+        let displayGames = this.allGames.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
+        this.myHistory.innerHTML = "";
+        for(let game of displayGames){
+            let matchComponent = document.createElement('match-comp');
+            matchComponent.setAttribute('id', game.gameId);
+
+            matchComponent.setMatchData({
+                gameId: game.gameId,
+                date: game.date,
+                startTime: game.starttijd,
+                endTime: game.eindtijd,
+                player1: game["team1 names"],
+                player2: game["team2 names"],
+                score1: game["team1 sets"],
+                score2: game["team2 sets"],
+                scoringData: game["points"],
+            });
+            this.myHistory.append(matchComponent);
+
+            matchComponent.addEventListener('toggleContent', (event) => {
+                this.toggleMatchComp(event.detail);
+            });
+        }
+    }
+    RenderPagination(totalPages) {
+        this.pagination.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            this.pageItem = document.createElement('li');
+            this.pageItem.textContent = i;
+            this.pageItem.page = i;
+            this.pagination.append(this.pageItem);
+
+            if (i == this.currentPage) {
+                this.pageItem.classList.add('active');
+            };
+
+        }
+        let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
+        for(let e of pageEl){
+            e.addEventListener('click', () => {
+                pageEl.forEach((el) => { el.classList.remove('active'); });
+                this.currentPage = e.page;
+                e.classList.add('active');
+                this.RenderPage();
+            });
         }
     }
 
@@ -191,32 +274,12 @@ class comp extends HTMLElement {
 
         this.endGameView.addEventListener("backToMyGamesPage", () => {
             if (this.gameInfo) {
-                let matchComponent = document.createElement('match-comp');
-                matchComponent.setAttribute('id', this.gameInfo.gameId);
-
-                matchComponent.setMatchData({
-                    gameId: this.gameInfo.gameId,
-                    date: this.gameInfo.date,
-                    startTime: this.gameInfo.starttijd,
-                    endTime: this.gameInfo.eindtijd,
-                    player1: this.gameInfo["team1 names"],
-                    player2: this.gameInfo["team2 names"],
-                    score1: this.gameInfo["team1 sets"],
-                    score2: this.gameInfo["team2 sets"],
-                    scoringData: this.gameInfo["points"],
-                });
-                this.myHistory.appendChild(matchComponent);
-
-                matchComponent.addEventListener('toggleContent', (event) => {
-                    this.toggleMatchComp(event.detail);
-                });
-            }
-
             this.gameContainer.style.display = "none";
             this.mainContainer.style.display = "block";
             this.shadowRoot.querySelector("scorenbord-comp").remove();
             this.endGameView.remove();
-        });
+            this.pagination.style.display = "flex";
+        }});
     }
 
     toggleMatchComp(gameId) {
@@ -238,4 +301,4 @@ class comp extends HTMLElement {
     }
 }
 
-customElements.define('mygames-comp', comp)
+customElements.define('mygames-comp', MyGamesComp)
