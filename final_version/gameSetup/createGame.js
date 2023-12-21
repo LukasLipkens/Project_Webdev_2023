@@ -324,25 +324,25 @@ class comp extends HTMLElement
             switch (this.gameType)
             {
                 case "solo":
-                    if(team1Player1!=""){players.push(team1Player1);}
-                    else{errors.push("team 1 player 1 is nog leeg");}
+                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                    else{errors.push("error: Player1Team1");}
 
-                    if(team2Player1!=""){players.push(team2Player1);}
-                    else{errors.push("team 2 player 1 is nog leeg");}
+                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                    else{errors.push("error: Player2Team1");}
 
                     break;
                 case "double":
-                    if(team1Player1!=""){players.push(team1Player1);}
-                    else{errors.push("team 1 player 1 is nog leeg");}
+                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                    else{errors.push("error: Player1Team1");}
 
-                    if(team1Player2!=""){players.push(team1Player2);}
-                    else{errors.push("team 1 player 2 is nog leeg");}
+                    if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
+                    else{errors.push("error: Player1Team2");}
 
-                    if(team2Player1!=""){players.push(team2Player1);}
-                    else{errors.push("team 2 player 2 is nog leeg");}
+                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                    else{errors.push("error: Player2Team1");}
 
-                    if(team2Player2!=""){players.push(team2Player2);}
-                    else{errors.push("team 2 player 2 is nog leeg");}
+                    if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
+                    else{errors.push("error: Player2Team2");}
 
                     break;
             }

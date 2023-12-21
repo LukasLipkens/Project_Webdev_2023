@@ -175,6 +175,7 @@ class comp extends HTMLElement
         //#endregion elements
         
         //#region global value's
+        this.hasWinner = false;
         this.pointsArray = ["0","15","30","40","ADV"];
         this.serving = "";
 
@@ -386,8 +387,8 @@ class comp extends HTMLElement
                 this.scoreObject.team2.sets = T2;
                 break;
         }
-        console.log(T1 + "|" + T2)
-        if((T1 == 2 || T2 == 2) && (T1 < 2 || T2 < 2)){
+        if((T1 == 2 || T2 == 2) && (!this.hasWinner)){
+            this.hasWinner = true;
             this.winner(team);
         }
         
