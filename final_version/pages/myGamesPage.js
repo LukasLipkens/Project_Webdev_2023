@@ -65,7 +65,7 @@ template.innerHTML = /*html*/`
             position: absolute;
             width: 100%;
             text-align: center;
-            bottom: 25px;
+            bottom: 40px;
             left: 0;
         }
 
@@ -138,8 +138,9 @@ template.innerHTML = /*html*/`
             font-size: 20px;
             margin-right: 5px;
         }
-        #dateInput {
+        #nameInput {
             height: 20px;
+            width: 80px;
             margin-right: 10px;
         }
         #searchBtn {
@@ -153,8 +154,8 @@ template.innerHTML = /*html*/`
                 <h1>Welcome <span id="playerName">player</span></h1>
             </div>
             <div id="searchContainer">
-                <label for="dateInput">Search by Date:</label>
-                <input type="date" id="dateInput">
+                <label for="nameInput">Search by name:</label>
+                <input type="text" id="nameInput">
                 <button id="searchBtn">Search</button>
             </div>
             <div id="myHistoryDiv">
@@ -186,9 +187,10 @@ class MyGamesComp extends HTMLElement {
         this.mainContainer = this.shadowRoot.querySelector("#startView");
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
         this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
-        // this.addEventListener("EndGameEvent", this.EndGameEvent);
-        this.searchBtn = this.shadowRoot.querySelector('#searchBtn');
-        this.dateInput = this.shadowRoot.querySelector('#dateInput');
+        // this.pagination = this.shadowRoot.querySelector('#pagination');
+
+        // this.searchBtn = this.shadowRoot.querySelector('#searchBtn');
+        // this.nameInput = this.shadowRoot.querySelector('#nameInput');
 
         this.formIsShown = false;
     }
@@ -196,38 +198,42 @@ class MyGamesComp extends HTMLElement {
     connectedCallback() {
         this.currentPage = 1;
         this.itemsPerPage = 7;
-        // this.pagination = this.shadowRoot.querySelector('#pagination');
+
         this.allGames = [];
         this.currentId = "";
         this.EndGameView = null;
 
-        this.searchBtn.addEventListener('click', () => { this.searchByDate(); });
         this.creatGame.addEventListener("click", () => { this.showCreateGameForm(); });
+        // this.searchBtn.addEventListener('click', () => { this.searchByName(); });
     }
 
-    searchByDate() {
-        let searchDate = this.dateInput.value;
+    // searchByName() {
+    //     let searchName = this.nameInput.value.trim().toLowerCase();
 
-        // checken of de datum geldig is
-        if (!searchDate || isNaN(Date.parse(searchDate))) {
-            alert('Please enter a valid date.');
-            return;
-        }
+    //     if (!searchName) {
+    //         alert('Please enter a valid name.');
+    //         return;
+    //     }
 
-        const matchComponents = this.shadowRoot.querySelectorAll('#myHistoryDiv match-comp');
-        const searchDateObject = new Date(searchDate);
-        console.log('myGames searchDate: ', searchDateObject); // 2023
+    //     const searchComponents = this.shadowRoot.querySelectorAll('#myHistoryDiv match-comp');
 
-        matchComponents.forEach((component) => {
-            let matchDate = new Date(component.getAttribute('date'));
-            console.log('myGames matchDate: ', matchDate); // 1970 ???
-            if (matchDate.toDateString() == searchDateObject.toDateString()) {
-                component.style.display = 'block';
-            } else {
-                component.style.display = 'none';
-            }
-        });
-    }
+    //     searchComponents.forEach((component) => {
+    //         console.log(component); // geeft de component zelf en geen waarde in array
+    //         let playerName1 = component.getAttribute('player1').toLowerCase();
+    //         let playerName2 = component.getAttribute('player2').toLowerCase();
+    //         console.log('playerNames: ', playerName1, playerName2);
+
+    //         if (playerName1.includes(searchName)) {
+    //             component.style.display = 'block';
+    //         }
+    //         else if (playerName2.includes(searchName)) {
+    //             component.style.display = 'block';
+    //         }
+    //         else {
+    //             component.style.display = 'none';
+    //         }
+    //     });
+    // }
 
     showCreateGameForm() {
         let gameForm = document.createElement("create-comp");
@@ -252,7 +258,6 @@ class MyGamesComp extends HTMLElement {
 
             this.mainContainer.style.display = "none";
 
-
             this.gameContainer.appendChild(scoreBoard);
 
             //we steken de volgende functies hierin omdat we de gameId nodig hebben en deze niet direct ingeladen wordt
@@ -272,13 +277,13 @@ class MyGamesComp extends HTMLElement {
                 bord.scoreObject.team2.players = [this.players[2], this.players[3]];
                 bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
             }
-            this.pagination.style.display = "none";
+            // this.pagination.style.display = "none";
         }
     }
     Update(games) {
         //console.log("update");
         this.allGames = games;
-        let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
+        // let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
 
         this.RenderPage(games);
         // this.RenderPagination(totalPages);
@@ -308,6 +313,7 @@ class MyGamesComp extends HTMLElement {
             });
         }
     }
+
     // RenderPagination(totalPages) {
     //     this.pagination.innerHTML = "";
 
@@ -360,7 +366,7 @@ class MyGamesComp extends HTMLElement {
                 this.mainContainer.style.display = "block";
                 this.shadowRoot.querySelector("scorenbord-comp").remove();
                 this.endGameView.remove();
-                this.pagination.style.display = "flex";
+                // this.pagination.style.display = "flex";
             }
         });
     }
