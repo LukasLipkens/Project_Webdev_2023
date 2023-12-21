@@ -40,7 +40,7 @@ template.innerHTML = /*html*/`
         }
         #myHistoryDiv{
             min-height: 200px;
-            max-height: 510px;
+            max-height: 550px;
             /* border: 5px solid black;
             border-radius: 10px;
             padding-top: 10px; */
@@ -66,7 +66,7 @@ template.innerHTML = /*html*/`
             position: absolute;
             width: 100%;
             text-align: center;
-            bottom: -100px;
+            bottom: -15px;
             left: 0;
         }
 
@@ -112,7 +112,7 @@ template.innerHTML = /*html*/`
             gap: 10px;
             margin-top: 10px;
             justify-content: flex-end;
-            padding-right: 55px;
+            padding-right: 60px;
         }
         #pagination li {
             font-size: 18px;
@@ -166,7 +166,6 @@ template.innerHTML = /*html*/`
             </div>
             <div id="myHistoryDiv">
         	    <!--<legend>History<legend>-->
-                <!--<ul id="pagination"></ul>-->
             </div>
             <div id="createGameDiv">
                 <button id="createGameBtn">
@@ -177,6 +176,7 @@ template.innerHTML = /*html*/`
                     </svg>
                 </button>
             </div>
+            <ul id="pagination"></ul>
         </div>
         <div id="gameView">
         </div>
@@ -193,7 +193,7 @@ class MyGamesComp extends HTMLElement {
         this.mainContainer = this.shadowRoot.querySelector("#startView");
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
         this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
-        // this.pagination = this.shadowRoot.querySelector('#pagination');
+        this.pagination = this.shadowRoot.querySelector('#pagination');
 
         // this.searchBtn = this.shadowRoot.querySelector('#searchBtn');
         // this.nameInput = this.shadowRoot.querySelector('#nameInput');
@@ -203,7 +203,7 @@ class MyGamesComp extends HTMLElement {
 
     connectedCallback() {
         this.currentPage = 1;
-        this.itemsPerPage = 7;
+        this.itemsPerPage = 4;
 
         this.allGames = [];
         this.currentId = "";
@@ -283,16 +283,16 @@ class MyGamesComp extends HTMLElement {
                 bord.scoreObject.team2.players = [this.players[2], this.players[3]];
                 bord.team2.innerHTML = `<h4>${this.players[2].gebruikersnaam}</h4><h4>${this.players[3].gebruikersnaam}</h4>`;
             }
-            // this.pagination.style.display = "none";
+            this.pagination.style.display = "none";
         }
     }
     Update(games) {
         //console.log("update");
         this.allGames = games;
-        // let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
+        let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
 
         this.RenderPage(games);
-        // this.RenderPagination(totalPages);
+        this.RenderPagination(totalPages);
     }
     RenderPage() {
         let displayGames = this.allGames.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
@@ -320,30 +320,30 @@ class MyGamesComp extends HTMLElement {
         }
     }
 
-    // RenderPagination(totalPages) {
-    //     this.pagination.innerHTML = "";
+    RenderPagination(totalPages) {
+        this.pagination.innerHTML = "";
 
-    //     for (let i = 1; i <= totalPages; i++) {
-    //         this.pageItem = document.createElement('li');
-    //         this.pageItem.textContent = i;
-    //         this.pageItem.page = i;
-    //         this.pagination.append(this.pageItem);
+        for (let i = 1; i <= totalPages; i++) {
+            this.pageItem = document.createElement('li');
+            this.pageItem.textContent = i;
+            this.pageItem.page = i;
+            this.pagination.append(this.pageItem);
 
-    //         if (i == this.currentPage) {
-    //             this.pageItem.classList.add('active');
-    //         };
+            if (i == this.currentPage) {
+                this.pageItem.classList.add('active');
+            };
 
-    //     }
-    //     let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
-    //     for (let e of pageEl) {
-    //         e.addEventListener('click', () => {
-    //             pageEl.forEach((el) => { el.classList.remove('active'); });
-    //             this.currentPage = e.page;
-    //             e.classList.add('active');
-    //             this.RenderPage();
-    //         });
-    //     }
-    // }
+        }
+        let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
+        for (let e of pageEl) {
+            e.addEventListener('click', () => {
+                pageEl.forEach((el) => { el.classList.remove('active'); });
+                this.currentPage = e.page;
+                e.classList.add('active');
+                this.RenderPage();
+            });
+        }
+    }
 
     EndGame(data, gameId) {
         this.endGameView = document.createElement('endview-comp');
@@ -372,7 +372,7 @@ class MyGamesComp extends HTMLElement {
                 this.mainContainer.style.display = "block";
                 this.shadowRoot.querySelector("scorenbord-comp").remove();
                 this.endGameView.remove();
-                // this.pagination.style.display = "flex";
+                this.pagination.style.display = "flex";
             }
         });
     }
