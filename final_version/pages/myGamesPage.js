@@ -25,6 +25,7 @@ template.innerHTML = /*html*/`
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
         }
         #welcomeDiv{
             margin: auto;
@@ -65,7 +66,7 @@ template.innerHTML = /*html*/`
             position: absolute;
             width: 100%;
             text-align: center;
-            bottom: 40px;
+            bottom: -100px;
             left: 0;
         }
 
@@ -124,6 +125,11 @@ template.innerHTML = /*html*/`
         #pagination li.active {
             box-shadow: inset 0 0 2px green;
             color: green;
+        }
+        endview-comp {
+            position: absolute;
+            top: 10%;
+            left: 33%;
         }
 
         #searchContainer {
