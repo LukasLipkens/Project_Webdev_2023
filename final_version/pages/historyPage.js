@@ -26,7 +26,20 @@ template.innerHTML = /*html*/ `
             flex-direction: column;
             justify-content: space-evenly;
             margin-top: 20px;
+            /*max-height: 600px;
+            overflow-y: scroll;*/
+        }/*
+        #pageContainer::-webkit-scrollbar {
+            width: 8px;
         }
+        #pageContainer::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #pageContainer::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
+        } */
         #page {
             display: none;
         }

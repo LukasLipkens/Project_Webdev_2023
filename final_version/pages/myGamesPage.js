@@ -41,21 +41,6 @@ template.innerHTML = /*html*/`
         #myHistoryDiv{
             min-height: 200px;
             max-height: 550px;
-            /* border: 5px solid black;
-            border-radius: 10px;
-            padding-top: 10px; */
-            overflow-y: scroll;
-        }
-        #myHistoryDiv::-webkit-scrollbar {
-            width: 8px;
-        }
-        #myHistoryDiv::-webkit-scrollbar-thumb {
-            background-color: #888;
-            border-radius: 5px;
-        }
-        #myHistoryDiv::-webkit-scrollbar-track {
-            background-color: #ddd;
-            border-radius: 5px;
         }
         #myHistoryDiv legend{
             font-size: 2em;
