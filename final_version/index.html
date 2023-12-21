@@ -11,7 +11,7 @@
 
 <body>
     <style>
-        /* .sky {
+        .sky {
             position: fixed;
             top: 0;
             left: 0;
@@ -42,11 +42,11 @@
         app-comp {
             position: relative;
             z-index: 1;
-        } */
+        }
     </style>
-    <!-- <div class="sky" id="skyContainer"></div> -->
+    <div class="sky" id="skyContainer"></div>
     <app-comp></app-comp>
-    <!-- <script>
+    <script>
         function createCloud() {
             const cloud = document.createElement('div');
             cloud.className = 'cloud';
@@ -68,7 +68,7 @@
             });
         }
         setInterval(createCloud, 2500); // Set the interval to 5000 milliseconds (5 seconds)
-    </script> -->
+    </script>
 </body>
 
 </html>
