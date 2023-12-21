@@ -78,8 +78,6 @@ template.innerHTML = /*html*/ `
             width: 40px;
             height: 40px;
             visibility: visible;
-            background: radial-gradient(circle, gold , white 80%);
-            border-radius: 30px;
         }
         #drawLeft, #drawRight {
             width: 40px;
