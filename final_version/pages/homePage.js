@@ -17,6 +17,7 @@ template.innerHTML = /*html*/`
             overflow-y: auto;
             overflow-x: hidden;
             scrollbar-width: thin;
+            background-color: #E0E0E0;
         }
         #title {
             font-size: 60px;
@@ -29,20 +30,17 @@ template.innerHTML = /*html*/`
             justify-content: space-evenly;
             margin-top: 20px;
         }
-        /* For WebKit browsers (Chrome, Safari) */
-    #homeContainer::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    #homeContainer::-webkit-scrollbar-thumb {
-        background-color: #888;
-        border-radius: 5px;
-    }
-
-    #homeContainer::-webkit-scrollbar-track {
-        background-color: #ddd;
-        border-radius: 5px;
-    }
+        #homeContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        #homeContainer::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #homeContainer::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
+        }
     </style>
 
     <div id="homeContainer">
@@ -87,7 +85,6 @@ class comp extends HTMLElement {
 
                 //console.log("added: " + game["gameId"])
                 this.addGame(game);
-
             }
             else {
                 //console.log("updated: " + game["gameId"])

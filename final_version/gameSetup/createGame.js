@@ -68,7 +68,7 @@ template.innerHTML = /*html*/`
     }
 
     .radio-input label:has(input:checked) {
-        color: black;   
+        color: black;
     }
 
     .radio-input label:has(input:checked) ~ .selection {
@@ -132,7 +132,7 @@ template.innerHTML = /*html*/`
         transition: all .2s;
         padding: 10px 20px;
         border-radius: 100px;
-        background: #cfef00;
+        background: rgb(1, 184, 90);
         border: 1px solid transparent;
         display: flex;
         align-items: center;

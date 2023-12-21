@@ -37,13 +37,13 @@ class comp extends HTMLElement {
         });
         this.socket.addEventListener("message", (e) => {
             let reader = new FileReader();
-            reader.onload = () =>{
-                if(reader.readyState == 2){
+            reader.onload = () => {
+                if (reader.readyState == 2) {
                     let text = reader.result;
                     if (text == "refresh") {
                         this.GetLiveGames();
                         this.GetHistory();
-                        if(this.user != null) this.GetUserGames();
+                        if (this.user != null) this.GetUserGames();
                     }
                 }
             }
@@ -109,34 +109,34 @@ class comp extends HTMLElement {
                 "Content-Type": "application/json; charset=utf-8",
             },
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            let mygames = this.shadowRoot.querySelector("mygames-comp");
-            mygames.Update(data);
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let mygames = this.shadowRoot.querySelector("mygames-comp");
+                mygames.Update(data);
+            });
     }
     //In AddGame voegen we een game toe aan de database , we gebruiken dan getLivegames om de home page te updaten
     AddGame(e) {
         let mygames = this.shadowRoot.querySelector("mygames-comp");
         let playerList = e.detail;
         let gameId = null;
-        let teams = [[],[]];
+        let teams = [[], []];
         playerList.forEach((player, index) => {
-            if(length == 3){
-                if(index == 0){
+            if (length == 3) {
+                if (index == 0) {
                     teams[0].push(player.id);
                 }
-                else{
+                else {
                     teams[1].push(player.id);
                 }
                 return;
             }
-            else{
-                if(index >= 2){
+            else {
+                if (index >= 2) {
                     teams[1].push(player.id);
                 }
-                else{
+                else {
                     teams[0].push(player.id);
                 }
             }
@@ -157,41 +157,41 @@ class comp extends HTMLElement {
                 gameId = data;
                 mygames.createGame(e.detail, gameId);
                 teams.forEach((team, index) => {
-                    for(let player of team){
-                        console.log(player, team, index+1);
-                            fetch("./test_php/addPlayerToTeam.php?gameId=" + gameId + "&spelerId=" + player + "&teamId=" + (index+1), {
-                                method: "GET",
-                                headers: {
-                                    "Content-Type": "application/json; charset=utf-8",
-                                },
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    //console.log(data);
-                                    this.socket.send("refresh");
-                                });
+                    for (let player of team) {
+                        console.log(player, team, index + 1);
+                        fetch("./test_php/addPlayerToTeam.php?gameId=" + gameId + "&spelerId=" + player + "&teamId=" + (index + 1), {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json; charset=utf-8",
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                //console.log(data);
+                                this.socket.send("refresh");
+                            });
                     }
                 });
             });
-        
+
     }
     //In UpdateGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te updaten
     UpdateGame(e) {
         //console.log(e.detail)
         //hier moet een fetch komen die de game data update van de geme die in e zit
         let scoreObject = e.detail;
-        
-        fetch("./test_php/updateGame.php?gameId="+scoreObject.game+"&puntenT1="+scoreObject.team1.points+"&puntenT2="+scoreObject.team2.points+"&gamesT1="+scoreObject.team1.game+"&gamesT2="+scoreObject.team2.game+"&setsT1="+scoreObject.team1.sets+"&setsT2="+scoreObject.team2.sets+"&serving="+scoreObject.serving,{
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-        },
+
+        fetch("./test_php/updateGame.php?gameId=" + scoreObject.game + "&puntenT1=" + scoreObject.team1.points + "&puntenT2=" + scoreObject.team2.points + "&gamesT1=" + scoreObject.team1.game + "&gamesT2=" + scoreObject.team2.game + "&setsT1=" + scoreObject.team1.sets + "&setsT2=" + scoreObject.team2.sets + "&serving=" + scoreObject.serving, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
         })
-        .then(response => response.json())
-        .then(data => {
-            this.socket.send("refresh");
-        });
-        
+            .then(response => response.json())
+            .then(data => {
+                this.socket.send("refresh");
+            });
+
         //this.GetLiveGames()
     }
     //In EndGame updaten we een game in de database , we gebruiken dan getLivegames om de home page te verwijderen en toe voegen aan de history met getHistory
@@ -223,7 +223,7 @@ class comp extends HTMLElement {
                         mygames.EndGame(data, e.detail);
                         console.log("ophalen history");
                     }
-                );
+                    );
             });
 
     }
@@ -237,7 +237,7 @@ class comp extends HTMLElement {
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },
-            })
+        })
             .then(response => response.json())
             .then(data => {
                 //console.log(data);
@@ -278,7 +278,7 @@ class comp extends HTMLElement {
                         element = element.replace(/}/g, '');
                         let temp = element.split(":");
                         console.log(temp);
-                        if(temp[0] == "gebruikersnaam"){
+                        if (temp[0] == "gebruikersnaam") {
                             userName = temp[1];
                             console.log(userName);
                         }
@@ -287,7 +287,7 @@ class comp extends HTMLElement {
                     let mygames = this.shadowRoot.querySelector("mygames-comp");
                     mygames.shadowRoot.querySelector("#playerName").innerHTML = userName;
                 }
-        })
+            })
     }
     //In SignOut loggen we een gebruiker uit, we updaten navigatie en verwijderen user
     SignOut(e) {
@@ -301,9 +301,9 @@ class comp extends HTMLElement {
     SignUp(e) {
         fetch("./test_php/addUser.php?email=" + e.detail.email + "&password=" + e.detail.password + "&name=" + e.detail.name, {
             method: "GET",
-            })
+        })
             .then(response => response.text())
-            .then((data)=>{
+            .then((data) => {
                 //console.log(data);
                 if (data != "") {
                     console.log(data);
@@ -313,10 +313,10 @@ class comp extends HTMLElement {
                 else {
                     this.SignIn(e);
                 }
-    }).catch((error) => {
-        console.log(error);
-    });
-}
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
     //#region update page
     ChangePageEvent(e) {
         this.showPages(e.detail);

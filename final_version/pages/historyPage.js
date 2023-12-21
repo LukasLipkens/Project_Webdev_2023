@@ -14,6 +14,7 @@ template.innerHTML = /*html*/ `
             margin: auto;
             margin-top: 20px;
             padding-top: 20px;
+            background-color: #E0E0E0;
         }
         #title {
             font-size: 60px;
@@ -44,12 +45,13 @@ template.innerHTML = /*html*/ `
             font-size: 18px;
             font-weight: bold;
             padding: 5px 10px;
-            border: 1px solid #ccc;
+            border: 1px solid green;
             border-radius: 5px;
             cursor: pointer;
+            background-color: white;
         }
         #pagination li.active {
-            box-shadow: inset 0 0 2px green;
+            box-shadow: inset 0 0 5px green;
             color: green;
         }
 

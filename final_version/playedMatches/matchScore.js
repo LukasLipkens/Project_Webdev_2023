@@ -14,8 +14,8 @@ template.innerHTML = /*html*/ `
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 10%;
-            background-image: linear-gradient(to right, #d1d1d1 75%, white);
+            width: 13%;
+            background-image: linear-gradient(to right, #E0E0E0 25%, white);
             padding-right: 10px;
             font-size: 25px;
             height: 63px;
@@ -23,10 +23,11 @@ template.innerHTML = /*html*/ `
             margin-left: 15px;
         }
         #item-container {
-            border: 2px solid #d1d1d1;
+            border: 1px solid green;
             border-left: none;
             border-radius: 0 10px 0 0;
-            width: 90%;
+            width: 87%;
+            background-color: white;
         }
         #text {
             color: black;
@@ -51,6 +52,8 @@ template.innerHTML = /*html*/ `
             transition: transform 0.3s ease;
             transform: rotate(0);
             transform-origin: center;
+            border-radius: 50%;
+            background-color: #E0E0E0;
         }
         #left, #right {
             display: flex;
@@ -92,9 +95,21 @@ template.innerHTML = /*html*/ `
         #item-content {
             display: none;
             height: 250px;
-            overflow-y: scroll;
-            border-left: 1px solid #d1d1d1;
+            border-left: 1px solid green;
             padding: auto;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        #item-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        #item-content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #item-content::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         .expanded #item-content {
             display: block;
@@ -118,12 +133,12 @@ template.innerHTML = /*html*/ `
         }
         #item-content-box p:first-child {
             padding: 10px 20px;
-            border: 1px solid green;
+            border: 1px solid #d1d1d1;
             border-radius: 10px;
         }
         #item-content-box p:last-child {
             padding: 10px 20px;
-            border: 1px solid green;
+            border: 1px solid #d1d1d1;
             border-radius: 10px;
         }
         #startTime, #endTime {

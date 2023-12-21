@@ -11,26 +11,50 @@ template.innerHTML = /*html*/`
     <style>
         #myGamesContainer{
             /*border: 2px solid black;*/
+            position: relative;
             border-radius: 10px;
             width: 1200px;
             margin: auto;
             margin-top: 20px;
-            min-height: 300px;
+            min-height: 750px;
             position: relative;
+            border: 5px solid black;
+            background-color: #E0E0E0;
+        }
+        #startView {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         #welcomeDiv{
             margin: auto;
             width: max-content;
-            border-bottom: 2px solid black;
-            margin-bottom: 25px;
+            /* border-bottom: 2px solid black; */
+            margin-bottom: 0;
+            padding: 0;
+            font-size: 20px;
+        }
+        #welcomeDiv span{
+            color: green;
         }
         #myHistoryDiv{
             min-height: 200px;
-            max-height: 500px;
-            width: 95%;
-            margin: auto;
-            border: 2px solid black;
-            border-radius: 10px
+            max-height: 510px;
+            /* border: 5px solid black;
+            border-radius: 10px;
+            padding-top: 10px; */
+            overflow-y: scroll;
+        }
+        #myHistoryDiv::-webkit-scrollbar {
+            width: 8px;
+        }
+        #myHistoryDiv::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #myHistoryDiv::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         #myHistoryDiv legend{
             font-size: 2em;
@@ -38,7 +62,11 @@ template.innerHTML = /*html*/`
         }
 
         #createGameDiv{
-            margin: 25px 0px 25px 0px; 
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            bottom: 25px;
+            left: 0;
         }
 
         /*begin createGameButton*/
@@ -49,7 +77,7 @@ template.innerHTML = /*html*/`
             transition: all .2s;
             padding: 10px 20px;
             border-radius: 100px;
-            background: #cfef00;
+            background: rgb(1, 184, 90);
             border: 1px solid transparent;
             display: flex;
             align-items: center;
@@ -97,15 +125,42 @@ template.innerHTML = /*html*/`
             box-shadow: inset 0 0 2px green;
             color: green;
         }
+
+        #searchContainer {
+            position: absolute;
+            top: 40px;
+            left: 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        #searchContainer label {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        #dateInput {
+            height: 20px;
+            margin-right: 10px;
+        }
+        #searchBtn {
+            height: 20px;
+            width: auto;
+        }
     </style>
     <div id="myGamesContainer">
         <div id="startView">
             <div id="welcomeDiv">
                 <h1>Welcome <span id="playerName">player</span></h1>
             </div>
-            <fieldset id="myHistoryDiv">
-        	    <legend>History<legend>
-            </fieldset>
+            <div id="searchContainer">
+                <label for="dateInput">Search by Date:</label>
+                <input type="date" id="dateInput">
+                <button id="searchBtn">Search</button>
+            </div>
+            <div id="myHistoryDiv">
+        	    <!--<legend>History<legend>-->
+                <!--<ul id="pagination"></ul>-->
+            </div>
             <div id="createGameDiv">
                 <button id="createGameBtn">
                     <span>Create game</span>
@@ -117,9 +172,7 @@ template.innerHTML = /*html*/`
             </div>
         </div>
         <div id="gameView">
-
         </div>
-        <ul id="pagination"></ul>
     </div>
 `
 
@@ -134,17 +187,46 @@ class MyGamesComp extends HTMLElement {
         this.gameContainer = this.shadowRoot.querySelector("#gameView");
         this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
         // this.addEventListener("EndGameEvent", this.EndGameEvent);
+        this.searchBtn = this.shadowRoot.querySelector('#searchBtn');
+        this.dateInput = this.shadowRoot.querySelector('#dateInput');
+
         this.formIsShown = false;
     }
 
     connectedCallback() {
         this.currentPage = 1;
         this.itemsPerPage = 7;
-        this.pagination = this.shadowRoot.querySelector('#pagination');
+        // this.pagination = this.shadowRoot.querySelector('#pagination');
         this.allGames = [];
         this.currentId = "";
         this.EndGameView = null;
+
+        this.searchBtn.addEventListener('click', () => { this.searchByDate(); });
         this.creatGame.addEventListener("click", () => { this.showCreateGameForm(); });
+    }
+
+    searchByDate() {
+        let searchDate = this.dateInput.value;
+
+        // checken of de datum geldig is
+        if (!searchDate || isNaN(Date.parse(searchDate))) {
+            alert('Please enter a valid date.');
+            return;
+        }
+
+        const matchComponents = this.shadowRoot.querySelectorAll('#myHistoryDiv match-comp');
+        const searchDateObject = new Date(searchDate);
+        console.log('myGames searchDate: ', searchDateObject); // 2023
+
+        matchComponents.forEach((component) => {
+            let matchDate = new Date(component.getAttribute('date'));
+            console.log('myGames matchDate: ', matchDate); // 1970 ???
+            if (matchDate.toDateString() == searchDateObject.toDateString()) {
+                component.style.display = 'block';
+            } else {
+                component.style.display = 'none';
+            }
+        });
     }
 
     showCreateGameForm() {
@@ -193,18 +275,18 @@ class MyGamesComp extends HTMLElement {
             this.pagination.style.display = "none";
         }
     }
-    Update(games){
+    Update(games) {
         //console.log("update");
         this.allGames = games;
         let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
 
         this.RenderPage(games);
-        this.RenderPagination(totalPages);
+        // this.RenderPagination(totalPages);
     }
     RenderPage() {
         let displayGames = this.allGames.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
         this.myHistory.innerHTML = "";
-        for(let game of displayGames){
+        for (let game of displayGames) {
             let matchComponent = document.createElement('match-comp');
             matchComponent.setAttribute('id', game.gameId);
 
@@ -226,30 +308,30 @@ class MyGamesComp extends HTMLElement {
             });
         }
     }
-    RenderPagination(totalPages) {
-        this.pagination.innerHTML = "";
+    // RenderPagination(totalPages) {
+    //     this.pagination.innerHTML = "";
 
-        for (let i = 1; i <= totalPages; i++) {
-            this.pageItem = document.createElement('li');
-            this.pageItem.textContent = i;
-            this.pageItem.page = i;
-            this.pagination.append(this.pageItem);
+    //     for (let i = 1; i <= totalPages; i++) {
+    //         this.pageItem = document.createElement('li');
+    //         this.pageItem.textContent = i;
+    //         this.pageItem.page = i;
+    //         this.pagination.append(this.pageItem);
 
-            if (i == this.currentPage) {
-                this.pageItem.classList.add('active');
-            };
+    //         if (i == this.currentPage) {
+    //             this.pageItem.classList.add('active');
+    //         };
 
-        }
-        let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
-        for(let e of pageEl){
-            e.addEventListener('click', () => {
-                pageEl.forEach((el) => { el.classList.remove('active'); });
-                this.currentPage = e.page;
-                e.classList.add('active');
-                this.RenderPage();
-            });
-        }
-    }
+    //     }
+    //     let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
+    //     for (let e of pageEl) {
+    //         e.addEventListener('click', () => {
+    //             pageEl.forEach((el) => { el.classList.remove('active'); });
+    //             this.currentPage = e.page;
+    //             e.classList.add('active');
+    //             this.RenderPage();
+    //         });
+    //     }
+    // }
 
     EndGame(data, gameId) {
         this.endGameView = document.createElement('endview-comp');
@@ -274,12 +356,13 @@ class MyGamesComp extends HTMLElement {
 
         this.endGameView.addEventListener("backToMyGamesPage", () => {
             if (this.gameInfo) {
-            this.gameContainer.style.display = "none";
-            this.mainContainer.style.display = "block";
-            this.shadowRoot.querySelector("scorenbord-comp").remove();
-            this.endGameView.remove();
-            this.pagination.style.display = "flex";
-        }});
+                this.gameContainer.style.display = "none";
+                this.mainContainer.style.display = "block";
+                this.shadowRoot.querySelector("scorenbord-comp").remove();
+                this.endGameView.remove();
+                this.pagination.style.display = "flex";
+            }
+        });
     }
 
     toggleMatchComp(gameId) {

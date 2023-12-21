@@ -1,12 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tennis</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo&display=swap" />
     <script type="module" src="app.js"></script>
 </head>
+
 <body>
+    <style>
+        * {
+            /* font-family: 'Baloo', cursive; */
+        }
+
+        .sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, green, #87CEEB 30%, #1E90FF);
+            overflow: hidden;
+        }
+
+        .cloud {
+            background-color: #fff;
+            border-radius: 25%;
+            position: absolute;
+            top: 50px;
+            animation: cloudAnimation 20s linear infinite;
+        }
+
+        @keyframes cloudAnimation {
+            0% {
+                left: -20%;
+            }
+
+            100% {
+                left: 120%;
+            }
+        }
+
+        app-comp {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    <div class="sky" id="skyContainer"></div>
     <app-comp></app-comp>
+    <script>
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            const minWidth = 200;
+            const maxWidth = 300;
+            cloud.style.width = Math.floor(Math.random() * (maxWidth - minWidth + 1) + minWidth) + 'px'; // Random width between 300px and 500px
+            cloud.style.height = (parseInt(cloud.style.width) / 2) + 'px'; // Set height to half of the width
+            cloud.style.left = Math.random() * 100 + 'vw';
+            cloud.style.top = Math.random() * 30 + 'vh';
+            document.getElementById('skyContainer').appendChild(cloud);
+            animateCloud(cloud);
+        }
+        function animateCloud(cloud) {
+            const duration = 100;
+            cloud.style.animation = `cloudAnimation ${duration}s linear infinite`;
+            cloud.addEventListener('animationiteration', () => {
+                // Remove the cloud when the animation completes (outside the screen)
+                cloud.remove();
+            });
+        }
+        setInterval(createCloud, 2500); // Set the interval to 5000 milliseconds (5 seconds)
+    </script>
 </body>
+
 </html>

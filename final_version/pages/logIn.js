@@ -30,28 +30,30 @@ template.innerHTML = /*html*/`
 </div>-->
 
 <style>
-  * {
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    background-color: #c9d6ff;
+
+  #loginContainer {
+    border: 5px solid black;
+    border-radius: 10px;
+    width: 1200px;
+    height: 750px;
+    margin: auto;
+    margin-top: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    height: 100vh;
   }
+
   .container {
     background-color: #fff;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.60);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: 100%;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 100%;
   }
   .container p {
     font-size: 14px;
@@ -72,7 +74,7 @@ template.innerHTML = /*html*/`
   }
 
   .container button {
-    background-color: #512da8;
+    background-color: rgb(1, 184, 90);
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -173,7 +175,7 @@ template.innerHTML = /*html*/`
   }
 
   .toggle {
-    background-color: #512da8;
+    background-color: rgb(1, 184, 90);
     height: 100%;
     color: #fff;
     position: relative;
@@ -220,132 +222,133 @@ template.innerHTML = /*html*/`
   }
 </style>
 <body>
-  <div class="container" id="container">
-    <div class="form-container sign-up">
-      <form>
-        <h1>Create Account</h1>
-        <span>use your email for registration</span>
-        <input id="upName" type="text" placeholder="Put here your name" />
-        <input id="upEmail" type="email" placeholder="Put here youre email" />
-        <input id="upPassword" type="password" placeholder="Put here youre password" />
-        <button type = "button" id = "signUp">Sign Up</button>
-      </form>
-    </div>
-    <div class="form-container sign-in">
-      <form>
-        <h1>Sign In</h1>
-        <span>use your email and password to login</span>
-        <input id="signEmail" type="email" placeholder="Put here your email" />
-        <input id="signPass" type="password" placeholder="Put here your password" />
-        <a href="#">Forgot Your Password?</a>
-        <button id = "signIn" type="button">Sign In</button>
-      </form>
-    </div>
-    <div class="toggle-container">
-      <div class="toggle">
-        <div class="toggle-panel toggle-left">
-          <h1>Welcome Back!</h1>
-          <p>Enter your personal details to use all of site features</p>
-          <button class="hidden" id="login">Sign In</button>
-        </div>
-        <div class="toggle-panel toggle-right">
-          <h1>Hello, Visitor!</h1>
-          <p>Register with your personal details to use all of site features</p>
-          <button class="hidden" id="register">Sign Up</button>
+  <div id="loginContainer">
+    <div class="container" id="container">
+      <div class="form-container sign-up">
+        <form>
+          <h1>Create Account</h1>
+          <span>use your email for registration</span>
+          <input id="upName" type="text" placeholder="Put here your name" />
+          <input id="upEmail" type="email" placeholder="Put here youre email" />
+          <input id="upPassword" type="password" placeholder="Put here youre password" />
+          <button type = "button" id = "signUp">Sign Up</button>
+        </form>
+      </div>
+      <div class="form-container sign-in">
+        <form>
+          <h1>Sign In</h1>
+          <span>use your email and password to login</span>
+          <input id="signEmail" type="email" placeholder="Put here your email" />
+          <input id="signPass" type="password" placeholder="Put here your password" />
+          <a href="#">Forgot Your Password?</a>
+          <button id = "signIn" type="button">Sign In</button>
+        </form>
+      </div>
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your personal details to use all of site features</p>
+            <button class="hidden" id="login">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Hello, Visitor!</h1>
+            <p>Register with your personal details to use all of site features</p>
+            <button class="hidden" id="register">Sign Up</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  </body>
+</body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     
 `
 
-class app extends HTMLElement
-{
-    constructor(){
-        super()
-        this.shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
-        this.shadow.append(template.content.cloneNode(true))
-        
-        }
-    connectedCallback(){
-      this.IsLoggedIn = false;
+class app extends HTMLElement {
+  constructor() {
+    super()
+    this.shadow = this.attachShadow({ mode: "open" }) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
+    this.shadow.append(template.content.cloneNode(true))
 
-        //this.loginbtn = this.shadow.querySelector("#btnLogin");
-        this.email = this.shadow.querySelector("#signEmail");
-        this.password = this.shadow.querySelector("#signPass");
+  }
+  connectedCallback() {
+    this.IsLoggedIn = false;
 
-        this.upEmail = this.shadow.querySelector("#upEmail");
-        this.upName = this.shadow.querySelector("#upName");
-        this.upPass = this.shadow.querySelector("#upPassword")
+    //this.loginbtn = this.shadow.querySelector("#btnLogin");
+    this.email = this.shadow.querySelector("#signEmail");
+    this.password = this.shadow.querySelector("#signPass");
 
-        this.signIn = this.shadow.querySelector("#signIn");
-        this.signUp = this.shadow.querySelector("#signUp");
+    this.upEmail = this.shadow.querySelector("#upEmail");
+    this.upName = this.shadow.querySelector("#upName");
+    this.upPass = this.shadow.querySelector("#upPassword")
 
-        this.signIn.addEventListener("click", ()=>{
-          if(empty(this.email.value)){
-            //console.log("1");
+    this.signIn = this.shadow.querySelector("#signIn");
+    this.signUp = this.shadow.querySelector("#signUp");
 
-              this.email.value = "";
-          }
-          else if(empty(this.password.value)){
-            //console.log("2");
+    this.signIn.addEventListener("click", () => {
+      if (empty(this.email.value)) {
+        //console.log("1");
 
-              this.password.value = "";
-          }
-          else{
-            //console.log("3");
-            let data = {
-              email: this.email.value,
-              password: this.password.value
-            }
-            this.dispatchEvent(new CustomEvent("signIn", {composed: true, bubbles: true, detail: data}));
-          }
-        });
-
-        this.signUp.addEventListener("click", ()=>{
-          if(empty(this.upEmail.value)){
-            alert("Please fill in your email");
-          }
-          else if(empty(this.upPass.value)){
-            alert("Please fill in your password");
-          }
-          else if(empty(this.upName.value)){
-            alert("Please fill in your name");
-          }
-          else{
-            let data = {
-              email: this.upEmail.value,
-              password: this.upPass.value,
-              name: this.upName.value
-            }
-            this.dispatchEvent(new CustomEvent("signUp", {composed: true, bubbles: true, detail: data}));
-          }
-        });
-
-        //animatie voor de login en sign up:
-        this.container= this.shadow.getElementById("container");
-        this.registerBtn = this.shadow.getElementById("register");
-        this.loginBtn = this.shadow.getElementById("login");
-
-        this.registerBtn.addEventListener("click", ()=>{
-          this.container.classList.add("active");
-        });
-
-        this.loginBtn.addEventListener("click", ()=>{
-          this.container.classList.remove("active");
-        });
-
+        this.email.value = "";
       }
+      else if (empty(this.password.value)) {
+        //console.log("2");
 
-        Error(){
-          this.email.classList.add("is-invalid");
-          this.password.classList.add("is-invalid");
-          alert("Wrong email or password");
+        this.password.value = "";
+      }
+      else {
+        //console.log("3");
+        let data = {
+          email: this.email.value,
+          password: this.password.value
         }
-          
+        this.dispatchEvent(new CustomEvent("signIn", { composed: true, bubbles: true, detail: data }));
+      }
+    });
+
+    this.signUp.addEventListener("click", () => {
+      if (empty(this.upEmail.value)) {
+        alert("Please fill in your email");
+      }
+      else if (empty(this.upPass.value)) {
+        alert("Please fill in your password");
+      }
+      else if (empty(this.upName.value)) {
+        alert("Please fill in your name");
+      }
+      else {
+        let data = {
+          email: this.upEmail.value,
+          password: this.upPass.value,
+          name: this.upName.value
+        }
+        this.dispatchEvent(new CustomEvent("signUp", { composed: true, bubbles: true, detail: data }));
+      }
+    });
+
+    //animatie voor de login en sign up:
+    this.container = this.shadow.getElementById("container");
+    this.registerBtn = this.shadow.getElementById("register");
+    this.loginBtn = this.shadow.getElementById("login");
+
+    this.registerBtn.addEventListener("click", () => {
+      this.container.classList.add("active");
+    });
+
+    this.loginBtn.addEventListener("click", () => {
+      this.container.classList.remove("active");
+    });
+
+  }
+
+  Error() {
+    this.email.classList.add("is-invalid");
+    this.password.classList.add("is-invalid");
+    alert("Wrong email or password");
+  }
+
 }
 
 
@@ -356,28 +359,28 @@ customElements.define('login-comp', app);
 
 
 const empty = (data) => {
-    // Check if data is a number or boolean, and return false as they're never considered empty
-    if (typeof data === 'number' || typeof data === 'boolean') {
-      return false;
-    }
-    
-    // Check if data is undefined or null, and return true as they're considered empty
-    if (typeof data === 'undefined' || data === null) {
-      return true;
-    }
-  
-    // Check if data has a length property (e.g. strings, arrays) and return true if the length is 0
-    if (typeof data.length !== 'undefined') {
-      return data.length === 0;
-    }
-  
-    // Check if data is an object and use Object.keys() to determine if it has any enumerable properties
-    if (typeof data === 'object') {
-      return Object.keys(data).length === 0;
-    }
-  
-    // Return false for any other data types, as they're not considered empty
+  // Check if data is a number or boolean, and return false as they're never considered empty
+  if (typeof data === 'number' || typeof data === 'boolean') {
     return false;
-  };
+  }
+
+  // Check if data is undefined or null, and return true as they're considered empty
+  if (typeof data === 'undefined' || data === null) {
+    return true;
+  }
+
+  // Check if data has a length property (e.g. strings, arrays) and return true if the length is 0
+  if (typeof data.length !== 'undefined') {
+    return data.length === 0;
+  }
+
+  // Check if data is an object and use Object.keys() to determine if it has any enumerable properties
+  if (typeof data === 'object') {
+    return Object.keys(data).length === 0;
+  }
+
+  // Return false for any other data types, as they're not considered empty
+  return false;
+};
 
 

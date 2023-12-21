@@ -6,17 +6,20 @@ const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>
     nav {
-    background-color: #d1d1d1;
+    background-color: #E0E0E0;
     padding: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    width: 1200px;
+    width: 1160px;
+    height: 75px;
     margin: auto;
-    
+    padding: 0 20px;
+    border: 5px solid black;
     }
+
     nav ul {
         list-style: none;
         margin: 0;
@@ -91,11 +94,11 @@ template.innerHTML = /*html*/`
         display: flex;
         position:relative;
         flex-direction : column;
-        width: 10%;
-        margin: auto 2rem;
+        width: 7%;
+        margin: auto 1rem;
     }
     ul#account img{
-        width: 6rem;
+        width: 4rem;
         position: relative;
     }
     ul#account.hidden{
@@ -139,23 +142,21 @@ template.innerHTML = /*html*/`
     </nav>
 `
 
-class comp extends HTMLElement
-{
-    constructor(){
+class comp extends HTMLElement {
+    constructor() {
         super();
-        this.shadow = this.attachShadow({mode: "open"});
+        this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
-        
+
         this.button = this.shadowRoot.querySelectorAll("button");
     }
 
-    connectedCallback()
-    {
+    connectedCallback() {
         this.button.forEach(btn => {
-            btn.addEventListener('mousedown', (e) =>{
+            btn.addEventListener('mousedown', (e) => {
                 //console.log(this.getAttribute("loggedIn"));
                 // this.socket.send("test");
-                this.button.forEach(btn =>{
+                this.button.forEach(btn => {
                     btn.classList.remove("active");
                 })
                 btn.classList.toggle("active");
@@ -176,16 +177,16 @@ class comp extends HTMLElement
             this.logout.removeEventListener("click", this.Logout);
             this.logout.addEventListener("click", this.Logout);
 
-    });
-}
-    Logout(){
+        });
+    }
+    Logout() {
         this.dispatchEvent(new CustomEvent("signOut", {
             bubbles: true,
             composed: true,
         }))
     }
 
-    ChangePageEvent(id){
+    ChangePageEvent(id) {
         this.dispatchEvent(new CustomEvent("ChangePageEvent", {
             bubbles: true,
             composed: true,
@@ -193,31 +194,31 @@ class comp extends HTMLElement
         }))
     }
 
-    Update(user){
-        
-        if(user != null){
-            this.button.forEach(btn =>{
+    Update(user) {
+
+        if (user != null) {
+            this.button.forEach(btn => {
                 btn.classList.remove("hidden");
             })
-            this.button.forEach(btn =>{
+            this.button.forEach(btn => {
                 btn.classList.remove("active");
             })
-            this.button.forEach(btn =>{
-                if(btn.getAttribute("id") == "login"){
+            this.button.forEach(btn => {
+                if (btn.getAttribute("id") == "login") {
                     btn.classList.add("hidden");
                 }
             })
             this.account.classList.remove("hidden");
         }
-        else{
-            this.button.forEach(btn =>{
+        else {
+            this.button.forEach(btn => {
                 btn.classList.remove("hidden");
             })
-            this.button.forEach(btn =>{
+            this.button.forEach(btn => {
                 btn.classList.remove("active");
             })
-            this.button.forEach(btn =>{
-                if(btn.getAttribute("id") == "myGames"){
+            this.button.forEach(btn => {
+                if (btn.getAttribute("id") == "myGames") {
                     btn.classList.add("hidden");
                 }
             })
