@@ -121,6 +121,7 @@ template.innerHTML = /*html*/`
             border: 1px solid #ccc;
             border-radius: 5px;
             cursor: pointer;
+            z-index: 2;
         }
         #pagination li.active {
             box-shadow: inset 0 0 2px green;
