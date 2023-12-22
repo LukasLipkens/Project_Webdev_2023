@@ -71,10 +71,13 @@ template.innerHTML = /*html*/`
             align-items: center;
             font-size: 15px;
             margin: auto;
+            transition: all .2s;
         }
 
         button:hover {
-            background: #c4e201;
+            color: #ddd;
+            background: #006400;
+            transition: all .2s;
         }
 
         button > svg {
