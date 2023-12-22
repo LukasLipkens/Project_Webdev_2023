@@ -59,7 +59,7 @@ template.innerHTML = /*html*/ `
             gap: 10px;
             margin-top: 10px;
             justify-content: flex-end;
-            padding-right: 55px;
+            padding-right: 80px;
         }
         #pagination li {
             font-size: 18px;
@@ -175,20 +175,38 @@ class HistoryComp extends HTMLElement {
     renderPagination(totalPages) {
         this.pagination.innerHTML = "";
 
-        for (let i = 1; i <= totalPages; i++) {
-            this.pageItem = document.createElement('li');
-            this.pageItem.textContent = i;
-            this.pagination.append(this.pageItem);
+        // calculates the range of visible page buttons (in this case 3 at a time)
+        this.startPage = Math.max(1, this.currentPage - 1);
+        this.endPage = Math.min(totalPages, this.startPage + 2);
 
-            if (i == this.currentPage) {
-                this.pageItem.classList.add('active');
-            };
-
-            this.pageItem.addEventListener('click', () => {
-                this.changePage(i);
-                console.log('next');
-            });
+        // Previous Button
+        if (this.currentPage > 1) {
+            this.createPaginationButton("Previous", this.currentPage - 1);
         }
+
+        // Page Numbers
+        for (let i = this.startPage; i <= this.endPage; i++) {
+            this.createPaginationButton(i, i);
+        }
+
+        // Next Button
+        if (this.currentPage < totalPages) {
+            this.createPaginationButton("Next", this.currentPage + 1);
+        }
+    }
+
+    createPaginationButton(label, pageNumber) {
+        this.pageItem = document.createElement('li');
+        this.pageItem.textContent = label;
+        this.pagination.append(this.pageItem);
+
+        if (label === this.currentPage || (label === "Previous" && this.currentPage === pageNumber - 1) || (label === "Next" && this.currentPage === pageNumber + 1)) {
+            this.pageItem.classList.add('active');
+        }
+
+        this.pageItem.addEventListener('click', () => {
+            this.changePage(pageNumber);
+        });
     }
 
     changePage(pageNumber) {

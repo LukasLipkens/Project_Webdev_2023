@@ -10,7 +10,6 @@ template.innerHTML = /*html*/`
     <!--<scorenbord-comp type="admin" gameId="2023120301"></scorenbord-comp>-->
     <style>
         #myGamesContainer{
-            /*border: 2px solid black;*/
             position: relative;
             border-radius: 10px;
             width: 1200px;
@@ -29,7 +28,6 @@ template.innerHTML = /*html*/`
         #welcomeDiv {
             margin: auto;
             width: max-content;
-            /* border-bottom: 2px solid black; */
             margin-bottom: 0;
             padding: 0;
             font-size: 60px;
@@ -44,11 +42,6 @@ template.innerHTML = /*html*/`
             min-height: 75px;
             max-height: 550px;
         }
-        /*#myHistoryDiv legend{
-            font-size: 2em;
-            margin: auto;
-        }*/
-
         #createGameDiv{
             position: absolute;
             width: 100%;
@@ -112,6 +105,7 @@ template.innerHTML = /*html*/`
             border-radius: 5px;
             cursor: pointer;
             z-index: 2;
+            background-color: white;
         }
         #pagination li.active {
             box-shadow: inset 0 0 2px green;
@@ -123,38 +117,12 @@ template.innerHTML = /*html*/`
             left: 33%;
         }
 
-        /*#searchContainer {
-            position: absolute;
-            top: 40px;
-            left: 30px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-        #searchContainer label {
-            font-size: 20px;
-            margin-right: 5px;
-        }
-        #nameInput {
-            height: 20px;
-            width: 80px;
-            margin-right: 10px;
-        }
-        #searchBtn {
-            height: 20px;
-            width: auto;
-        }*/
     </style>
     <div id="myGamesContainer">
         <div id="startView">
             <div id="welcomeDiv">
                 <p>Welcome <span id="playerName">player</span></p>
             </div>
-            <!--<div id="searchContainer">
-                <label for="nameInput">Search by name:</label>
-                <input type="text" id="nameInput">
-                <button id="searchBtn">Search</button>
-            </div>-->
             <div id="myHistoryDiv">
         	    <!--<legend>History<legend>-->
             </div>
@@ -186,9 +154,6 @@ class MyGamesComp extends HTMLElement {
         this.myHistory = this.shadowRoot.querySelector("#myHistoryDiv");
         this.pagination = this.shadowRoot.querySelector('#pagination');
 
-        // this.searchBtn = this.shadowRoot.querySelector('#searchBtn');
-        // this.nameInput = this.shadowRoot.querySelector('#nameInput');
-
         this.formIsShown = false;
     }
 
@@ -201,37 +166,7 @@ class MyGamesComp extends HTMLElement {
         this.EndGameView = null;
 
         this.creatGame.addEventListener("click", () => { this.showCreateGameForm(); });
-        // this.searchBtn.addEventListener('click', () => { this.searchByName(); });
     }
-
-    // searchByName() {
-    //     let searchName = this.nameInput.value;
-    //     console.log('searchName: ', searchName);
-
-    //     if (!searchName) {
-    //         alert('Please enter a valid name.');
-    //         return;
-    //     }
-
-    //     const searchComponents = this.shadowRoot.querySelectorAll('#myHistoryDiv match-comp');
-
-    //     searchComponents.forEach((component) => {
-    //         console.log('searchComponent :', component);
-    //         let playerName1 = component.getAttribute('player1');
-    //         let playerName2 = component.getAttribute('player2');
-    //         console.log('playerNames: ', playerName1, playerName2);
-
-    //         if (playerName1.includes(searchName)) {
-    //             component.style.display = 'block';
-    //         }
-    //         else if (playerName2.includes(searchName)) {
-    //             component.style.display = 'block';
-    //         }
-    //         else {
-    //             component.style.display = 'none';
-    //         }
-    //     });
-    // }
 
     showCreateGameForm() {
         let gameForm = document.createElement("create-comp");
