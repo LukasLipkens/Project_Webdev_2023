@@ -6,6 +6,7 @@ const template = document.createElement("template")
 template.innerHTML = /*html*/`
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
         #homeContainer {
             border: 5px solid black;
             border-radius: 10px;
@@ -20,9 +21,12 @@ template.innerHTML = /*html*/`
             background-color: #E0E0E0;
         }
         #title {
-            font-size: 60px;
+            font-family: 'Anton', sans-serif;
+            font-weight: 600;
+            font-size: 3rem;
             margin: 0 auto;
             text-align: center;
+            text-decoration: underline;
         }
         #gamesDiv {
             display: flex;

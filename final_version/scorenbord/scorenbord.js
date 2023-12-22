@@ -34,7 +34,7 @@ template.innerHTML = /*html*/`
             padding: 4px;
             border: 5px solid black;
             border-radius: 5px;
-            width: 70%;
+            width: 100%;
             margin: auto;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -48,7 +48,9 @@ template.innerHTML = /*html*/`
             
         }
         .scoreBoard{
-            width: 1200px;
+            /*width: 1200px;*/
+            min-width: 70%;
+            max-width: 80%;
             margin: auto;
 
         }

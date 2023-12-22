@@ -5,6 +5,7 @@ import "../playedMatches/matchScore.js";
 const template = document.createElement("template");
 template.innerHTML = /*html*/ `
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
         #historyContainer {
             border: 5px solid black;
@@ -19,7 +20,10 @@ template.innerHTML = /*html*/ `
             background-color: #E0E0E0;
         }
         #title {
-            font-size: 60px;
+            font-family: 'Anton', sans-serif;
+            font-weight: 600;
+            text-decoration: underline;
+            font-size: 3rem;
             padding-bottom: 10px;
             margin: 0 auto;
             text-align: center;

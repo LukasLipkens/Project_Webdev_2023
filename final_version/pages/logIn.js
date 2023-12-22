@@ -33,8 +33,8 @@ template.innerHTML = /*html*/`
   #loginContainer {
     border: 5px solid black;
     border-radius: 10px;
-    width: 1200px;
-    height: 750px;
+    width: 70vw;
+    height: 80vh;
     margin: auto;
     margin-top: 20px;
     overflow-y: auto;
