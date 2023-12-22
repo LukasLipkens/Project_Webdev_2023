@@ -30,7 +30,6 @@ template.innerHTML = /*html*/`
 </div>-->
 
 <style>
-
   #loginContainer {
     border: 5px solid black;
     border-radius: 10px;

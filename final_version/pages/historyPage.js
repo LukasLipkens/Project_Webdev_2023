@@ -9,8 +9,10 @@ template.innerHTML = /*html*/ `
         #historyContainer {
             border: 5px solid black;
             border-radius: 10px;
-            width: 1200px;
-            min-height: 750px;
+            /*width: 1200px;
+            min-height: 750px;*/
+            width: 80vw;
+            height: 80vh;
             margin: auto;
             margin-top: 20px;
             padding-top: 10px;
@@ -89,7 +91,7 @@ class HistoryComp extends HTMLElement {
         this.matchData = [];
 
         this.currentPage = 1;
-        this.itemsPerPage = 8;
+        this.itemsPerPage = 6;
 
         this.pageContainer = this.shadowRoot.querySelector('#pageContainer');
         this.pagination = this.shadowRoot.querySelector('#pagination');

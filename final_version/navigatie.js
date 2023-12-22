@@ -13,8 +13,10 @@ template.innerHTML = /*html*/`
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    width: 1160px;
-    height: 75px;
+    /*width: 1160px;
+    height: 75px;*/
+    width: 77.5vw;
+    height: 10vh;
     margin: auto;
     padding: 0 20px;
     border: 5px solid black;

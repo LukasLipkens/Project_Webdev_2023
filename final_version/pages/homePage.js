@@ -9,8 +9,8 @@ template.innerHTML = /*html*/`
         #homeContainer {
             border: 5px solid black;
             border-radius: 10px;
-            width: 1200px;
-            height: 750px;
+            width:80vw;
+            height: 80vh;
             margin: auto;
             margin-top: 20px;
             padding-top: 10px;
