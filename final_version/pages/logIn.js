@@ -6,29 +6,6 @@ const template = document.createElement("template")
 
 template.innerHTML = /*html*/`
 
-<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<main>
-<div class="container d-flex flex-column align-items-center">
-
-<body>
-<img src="images/logo.svg" class="w-25 mb-3" alt="">
-
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control <?php echo $nameErr ? 'is-invalid' : null; ?> " id="name" name="name" placeholder="Enter your name">
-        <div class="invalid-feedback">
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control <?php echo $emailErr ? 'is-invalid' : null; ?>" id="password" name="password" placeholder="Enter your password">
-        <div class="invalid-feedback">
-        </div>
-    </div>
-<div class="mb-3">
-<button id="btnLogin" value="Login" class="btn btn-dark w-100 h-25">Login</button>
-</div>-->
-
 <style>
   #loginContainer {
     border: 5px solid black;
