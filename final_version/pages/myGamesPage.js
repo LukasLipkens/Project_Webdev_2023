@@ -17,7 +17,6 @@ template.innerHTML = /*html*/`
             margin: auto;
             margin-top: 20px;
             min-height: 750px;
-            position: relative;
             border: 5px solid black;
             background-color: #E0E0E0;
         }
@@ -27,25 +26,28 @@ template.innerHTML = /*html*/`
             justify-content: center;
             position: relative;
         }
-        #welcomeDiv{
+        #welcomeDiv {
             margin: auto;
             width: max-content;
             /* border-bottom: 2px solid black; */
             margin-bottom: 0;
             padding: 0;
-            font-size: 20px;
+            font-size: 60px;
+        }
+        #welcomeDiv p{
+            margin: 10px 0;
         }
         #welcomeDiv span{
             color: green;
         }
-        #myHistoryDiv{
+        #myHistoryDiv {
             min-height: 200px;
             max-height: 550px;
         }
-        #myHistoryDiv legend{
+        /*#myHistoryDiv legend{
             font-size: 2em;
             margin: auto;
-        }
+        }*/
 
         #createGameDiv{
             position: absolute;
@@ -118,7 +120,7 @@ template.innerHTML = /*html*/`
             left: 33%;
         }
 
-        #searchContainer {
+        /*#searchContainer {
             position: absolute;
             top: 40px;
             left: 30px;
@@ -138,18 +140,18 @@ template.innerHTML = /*html*/`
         #searchBtn {
             height: 20px;
             width: auto;
-        }
+        }*/
     </style>
     <div id="myGamesContainer">
         <div id="startView">
             <div id="welcomeDiv">
-                <h1>Welcome <span id="playerName">player</span></h1>
+                <p>Welcome <span id="playerName">player</span></p>
             </div>
-            <div id="searchContainer">
+            <!--<div id="searchContainer">
                 <label for="nameInput">Search by name:</label>
                 <input type="text" id="nameInput">
                 <button id="searchBtn">Search</button>
-            </div>
+            </div>-->
             <div id="myHistoryDiv">
         	    <!--<legend>History<legend>-->
             </div>
@@ -200,7 +202,8 @@ class MyGamesComp extends HTMLElement {
     }
 
     // searchByName() {
-    //     let searchName = this.nameInput.value.trim().toLowerCase();
+    //     let searchName = this.nameInput.value;
+    //     console.log('searchName: ', searchName);
 
     //     if (!searchName) {
     //         alert('Please enter a valid name.');
@@ -210,9 +213,9 @@ class MyGamesComp extends HTMLElement {
     //     const searchComponents = this.shadowRoot.querySelectorAll('#myHistoryDiv match-comp');
 
     //     searchComponents.forEach((component) => {
-    //         console.log(component); // geeft de component zelf en geen waarde in array
-    //         let playerName1 = component.getAttribute('player1').toLowerCase();
-    //         let playerName2 = component.getAttribute('player2').toLowerCase();
+    //         console.log('searchComponent :', component);
+    //         let playerName1 = component.getAttribute('player1');
+    //         let playerName2 = component.getAttribute('player2');
     //         console.log('playerNames: ', playerName1, playerName2);
 
     //         if (playerName1.includes(searchName)) {

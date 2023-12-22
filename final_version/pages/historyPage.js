@@ -13,11 +13,12 @@ template.innerHTML = /*html*/ `
             min-height: 750px;
             margin: auto;
             margin-top: 20px;
-            padding-top: 20px;
+            padding-top: 10px;
             background-color: #E0E0E0;
         }
         #title {
             font-size: 60px;
+            padding-bottom: 10px;
             margin: 0 auto;
             text-align: center;
         }
@@ -25,9 +26,9 @@ template.innerHTML = /*html*/ `
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
-            margin-top: 20px;
-            /*max-height: 600px;
-            overflow-y: scroll;*/
+            /*margin-top: 20px;*/
+            min-height: 600px;
+            /*overflow-y: auto;*/
         }/*
         #pageContainer::-webkit-scrollbar {
             width: 8px;

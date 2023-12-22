@@ -13,7 +13,7 @@ template.innerHTML = /*html*/`
             height: 750px;
             margin: auto;
             margin-top: 20px;
-            padding-top: 20px;
+            padding-top: 10px;
             overflow-y: auto;
             overflow-x: hidden;
             scrollbar-width: thin;
@@ -28,7 +28,6 @@ template.innerHTML = /*html*/`
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
-            margin-top: 20px;
         }
         #homeContainer::-webkit-scrollbar {
             width: 8px;

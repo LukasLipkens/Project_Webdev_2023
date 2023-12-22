@@ -13,6 +13,7 @@ templateCustom.innerHTML = /*html*/ `
             border: 5px solid green;
             background-color: white;
             padding-top: 30px;
+            border-radius: 10px;
         }
         #backButton {
             cursor: pointer;
