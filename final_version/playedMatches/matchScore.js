@@ -75,8 +75,8 @@ template.innerHTML = /*html*/ `
             width: 100%;
         }
         #center img {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             visibility: visible;
         }
         #drawLeft, #drawRight {

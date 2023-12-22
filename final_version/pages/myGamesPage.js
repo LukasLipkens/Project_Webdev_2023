@@ -41,7 +41,7 @@ template.innerHTML = /*html*/`
             color: green;
         }
         #myHistoryDiv {
-            min-height: 200px;
+            min-height: 75px;
             max-height: 550px;
         }
         /*#myHistoryDiv legend{

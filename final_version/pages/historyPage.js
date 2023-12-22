@@ -29,13 +29,13 @@ template.innerHTML = /*html*/ `
             text-align: center;
         }
         #pageContainer {
-            display: flex;
+            display: block;
             flex-direction: column;
             justify-content: space-evenly;
             /*margin-top: 20px;*/
-            min-height: 600px;
-            /*overflow-y: auto;*/
-        }/*
+            max-height: 600px;
+            overflow-y: scroll;
+        }
         #pageContainer::-webkit-scrollbar {
             width: 8px;
         }
@@ -46,7 +46,7 @@ template.innerHTML = /*html*/ `
         #pageContainer::-webkit-scrollbar-track {
             background-color: #ddd;
             border-radius: 5px;
-        } */
+        } 
         #page {
             display: none;
         }
@@ -95,7 +95,7 @@ class HistoryComp extends HTMLElement {
         this.matchData = [];
 
         this.currentPage = 1;
-        this.itemsPerPage = 6;
+        this.itemsPerPage = 8;
 
         this.pageContainer = this.shadowRoot.querySelector('#pageContainer');
         this.pagination = this.shadowRoot.querySelector('#pagination');
