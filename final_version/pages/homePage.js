@@ -2,6 +2,30 @@
 import "../scorenbord/scorenbord.js"
 //#endregion IMPORTS
 
+/**
+ * Description;
+ * de home pagina wordt gebruikt om de live games weer te geven en te updaten
+ * 
+ * Functions;
+ * update
+ *      de update functie wordt gebruikt wanneer er een update is voor de home pagina
+ *      Parameters:
+ *          gameupdate => dit moet een array zijn gemaakt van objecten die de informatie van de ongoing spellen bevatten
+ *      Werking:
+ *          wanneer er een nieuwe game moet worden toegevoegd zal de addgame functie uitgevoerd worden
+ *          in deze functie wordt er een nieuw scorebord component aangemaakt en ingevuld met de data van de
+ *          match in dat object. ook word de gameId toegevoegd aan de displayedGames array.
+ * 
+ *          (om de namen in het component te zetten wordt de putnames functie uitgevoerd)
+ * 
+ *          wanneer een game al in de displayed games array zit moet hij geupdate worden, hiervoor wordt de updateGame
+ *          functie uitgevoerd die de nieuwe score en serve in het correcte component zal stoppen
+ * 
+ *          wanneer een game niet meer in de gameupdate parameter zit moet hij verwijderd worden, dit gebeurt door het aanroepen
+ *          van de remove game functie die dan de game zal verwijderen.
+ * 
+ */
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
 
@@ -60,6 +84,8 @@ class comp extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
 
+        this.gamesDiv = this.shadowRoot.querySelector("#gamesDiv");
+
         this.displayedGames = [];
         this.newGames = [];
     }
@@ -106,7 +132,7 @@ class comp extends HTMLElement {
         let nieuwScorenbord = document.createElement("scorenbord-comp");
         nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);
 
-        this.shadowRoot.querySelector("#gamesDiv").append(nieuwScorenbord);
+        this.gamesDiv.append(nieuwScorenbord);
 
         let game = this.shadowRoot.querySelector(`#game-${gameToAdd["gameId"]}`);
         game.pointsT1.innerHTML = gameToAdd["game"]["team1 punten"];
