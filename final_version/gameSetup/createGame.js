@@ -2,6 +2,10 @@
 
 //#endregion IMPORTS
 
+/*
+    dit component is een formuliertje wat moet worden ingevuld wanneer je een game wil aanmaken.
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>
@@ -253,7 +257,7 @@ class comp extends HTMLElement
                 input.parentNode.appendChild(divplayerList);
 
             input.addEventListener("keyup", (event)=>{
-                //we maken hier target aan zodat dit ook nog beschikbaar is in de ajax call
+                //we maken hier target aan zodat dit ook nog beschikbaar is in de fetch
                 let target = event.target;
 
                 //Hier resetten we even alle playerLists
@@ -295,6 +299,8 @@ class comp extends HTMLElement
         });
     });
     }
+
+//deze functie zorgt ervoor dat je kan wisselen tussen een 1v1 en een 2v2 wedstrijd
         updateForm(){
             switch (this.gameType)
             {
@@ -311,64 +317,72 @@ class comp extends HTMLElement
             }
         }
 //#region create or cancel gameCreation
-        createGame(){
-            let players = [];
-            let team1Player1 = this.shadowRoot.querySelector("#team1Player1").value;
-            let team1Player2 = this.shadowRoot.querySelector("#team1Player2").value;
-            let team2Player1 = this.shadowRoot.querySelector("#team2Player1").value;
-            let team2Player2 = this.shadowRoot.querySelector("#team2Player2").value;
 
-            let errors = [];
-            let errorstring = "";
+    /*
+    deze functie gaat kijken of al de velden voor het gametype dat je wil aanmaken zijn ingevuld
+    als dit niet het geval is of er zijn namen die meer dan 1 keer voorkomen gebruikt wordt er een error gegeven
 
-            switch (this.gameType)
-            {
-                case "solo":
-                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
-                    else{errors.push("error: Player1Team1");}
+    */
+    createGame(){
+        let players = [];
+        let team1Player1 = this.shadowRoot.querySelector("#team1Player1").value;
+        let team1Player2 = this.shadowRoot.querySelector("#team1Player2").value;
+        let team2Player1 = this.shadowRoot.querySelector("#team2Player1").value;
+        let team2Player2 = this.shadowRoot.querySelector("#team2Player2").value;
 
-                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
-                    else{errors.push("error: Player2Team1");}
+        let errors = [];
+        let errorstring = "";
 
-                    break;
-                case "double":
-                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
-                    else{errors.push("error: Player1Team1");}
+        switch (this.gameType)
+        {
+            case "solo":
+                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                else{errors.push("error: Player1Team1");}
 
-                    if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
-                    else{errors.push("error: Player1Team2");}
+                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                else{errors.push("error: Player2Team1");}
 
-                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
-                    else{errors.push("error: Player2Team1");}
+                break;
+            case "double":
+                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                else{errors.push("error: Player1Team1");}
 
-                    if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
-                    else{errors.push("error: Player2Team2");}
+                if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
+                else{errors.push("error: Player1Team2");}
 
-                    break;
-            }
+                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                else{errors.push("error: Player2Team1");}
 
-            if(errors.length != 0){
-                errors.forEach(element => {
-                    
-                    errorstring += element + "\r\n";
-                });
-                alert(errorstring);
-            }
-            else{
-                this.AddGame(this.playerList);
-            }
+                if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
+                else{errors.push("error: Player2Team2");}
+
+                break;
         }
-        cancelGame(){
-            let array = ["cancel"];
-            this.AddGame(array);
+
+        if(errors.length != 0){
+            errors.forEach(element => {
+                
+                errorstring += element + "\r\n";
+            });
+            alert(errorstring);
         }
-        AddGame(info){ //wordt getriggerd wanneer de scoren geupdate wordt
-            this.dispatchEvent(new CustomEvent("addGame", {
-                bubbles: true,
-                composed: true,
-                detail: info
-            }))
+        else{
+            this.AddGame(this.playerList);
         }
+    }
+    //als je op cancel drukt verdwijnd de game weer
+    cancelGame(){
+        let array = ["cancel"];
+        this.AddGame(array);
+    }
+    //als je op adgame drukt wordt er een event gebruikt dat al de speler info doorgeeft
+    AddGame(info){
+        this.dispatchEvent(new CustomEvent("addGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
 //#endregion create or cancel gameCreation
 
 }

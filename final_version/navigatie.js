@@ -2,6 +2,10 @@
 
 //#endregion IMPORTS
 
+/*
+    dit is de navigatie van de pagina, hierin wordt ook weergegeven dat je bent ingelogd of niet
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>

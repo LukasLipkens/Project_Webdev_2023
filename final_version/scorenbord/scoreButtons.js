@@ -2,6 +2,11 @@
 
 //#endregion IMPORTS
 
+/*
+    dit zijn de knoppen die toegevoegd worden aan het scorenbord wanneer het admin is
+    de knoppen zijn gemaakt op de scoren te verhogen/verlagen
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>

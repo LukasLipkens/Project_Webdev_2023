@@ -3,6 +3,11 @@ import "./scoreButtons.js"
 import "./endgameButton.js"
 //#endregion IMPORTS
 
+/*
+    dit is het scorenbord dat gebruikt word om de scoren te laten zien op de homepagina
+    als ook om de scoren te updaten via de mygames pagina
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>
@@ -341,11 +346,13 @@ class comp extends HTMLElement
         
         switch(team){
             case "T_1":
+                //als team 1 de game gewonnen heeft
                 this.gameT1.innerHTML = T1 + 1;
                 T1 += 1;
                 this.scoreObject.team1.game = T1
                 break;
             case "T_2":
+                //als team 2 de game gewonnen heeft
                 this.gameT2.innerHTML = T2 + 1;
                 T2 += 1;
                 this.scoreObject.team2.game = T2
@@ -353,10 +360,12 @@ class comp extends HTMLElement
         }
 
         if(team == "T_1" && T1 > 5 && T1 >= T2 + 2){
+            //als team 1 minimaal 6 sets gewonnen heeft met een verschil van 2 sets T.O.V team 2
             this.sets(team);
             return;
         }
         if(team == "T_2" && T2 > 5 && T2 >= T1 + 2){
+            //als team 2 minimaal 6 sets gewonnen heeft met een verschil van 2 sets T.O.V team 1
             this.sets(team);
             return;
         }
@@ -390,7 +399,7 @@ class comp extends HTMLElement
                 break;
         }
         if((T1 == 2 || T2 == 2) && (!this.hasWinner)){
-            this.hasWinner = true;
+            this.hasWinner = true; //als er nog geen winnaar is
             this.winner(team);
         }
         
@@ -401,16 +410,13 @@ class comp extends HTMLElement
         let endgamebtn = document.createElement(`endgamebtn-comp`);
         endgamebtn.setAttribute("gameid", this.getAttribute("gameid"))
         this.endgame.append(endgamebtn);
-        //score knoppen weg halen
-        // this.shadowRoot.querySelector("#T_1").remove();
-        // this.shadowRoot.querySelector("#T_2").remove();
     }
 //#endregion PuntenTelling
 
     updateServe(status, team){
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
         let serveT2 = this.shadowRoot.querySelector("#ballT2");
-        if(this.type == "admin"){
+        if(this.type == "admin"){ //wanneer het scorenbord op de mygames pagina stat
             if(status == 0){//status 0 betekent start van het spel
             //voeg de serve ball toe aan een random player
                 if(Math.floor(Math.random() * 2) == 0){
@@ -441,7 +447,7 @@ class comp extends HTMLElement
                 }
             }
         }
-        else{
+        else{ //wanneer het scorenbord op de home pagina staat
             if(team == 0){
                 serveT1.style.display = "block";
                 serveT2.style.display = "none";
@@ -453,7 +459,8 @@ class comp extends HTMLElement
         }
     }
 
-    UpdateToAdmin(){
+    //als het scorenbord het atribuut admin heeft worden de knoppen toegevoegd om de scoren te verhogen
+    UpdateToAdmin(){ 
         console.log("admin rights have been added");
         //plus en min knoppen toevoegen
         for(let i = 1; i<=2;i++){
