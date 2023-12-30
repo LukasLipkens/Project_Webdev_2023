@@ -33,8 +33,10 @@ template.innerHTML = /*html*/ `
             flex-direction: column;
             justify-content: space-evenly;
             /*margin-top: 20px;*/
-            max-height: 600px;
+            /*max-height: 600px;*/
+            height: 60vh;
             overflow-y: scroll;
+            overflow-x: hidden;
         }
         #pageContainer::-webkit-scrollbar {
             width: 8px;
@@ -46,7 +48,7 @@ template.innerHTML = /*html*/ `
         #pageContainer::-webkit-scrollbar-track {
             background-color: #ddd;
             border-radius: 5px;
-        } 
+        }
         #page {
             display: none;
         }
@@ -102,10 +104,16 @@ class HistoryComp extends HTMLElement {
     }
 
     connectedCallback() {
-        // this.renderPage();
+        this.itemsPerPage = parseInt(document.documentElement.scrollHeight * 0.6 /75);
+        window.addEventListener('resize', (e) => { this.UpdateItemsPerPage(e)});
         this.GetAllGames();
     }
-
+    UpdateItemsPerPage(e) {
+        console.log(e);
+        this.itemsPerPage = parseInt(this.shadowroot.documentElement.scrollHeight * 0.6 /70);
+        console.log(this.itemsPerPage);
+        this.renderPage();
+    }
     GetAllGames() {
         this.dispatchEvent(new CustomEvent("getHistory", {
             bubbles: true,
