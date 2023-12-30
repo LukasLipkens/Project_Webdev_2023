@@ -10,8 +10,6 @@ template.innerHTML = /*html*/ `
         #historyContainer {
             border: 5px solid black;
             border-radius: 10px;
-            /*width: 1200px;
-            min-height: 750px;*/
             width: 80vw;
             height: 80vh;
             margin: auto;
@@ -21,7 +19,7 @@ template.innerHTML = /*html*/ `
         }
         #title {
             font-family: 'Anton', sans-serif;
-            font-weight: 600;
+            font-weight: 500;
             text-decoration: underline;
             font-size: 3rem;
             padding-bottom: 10px;
@@ -110,7 +108,7 @@ class HistoryComp extends HTMLElement {
     }
     UpdateItemsPerPage(e) {
         console.log(e);
-        this.itemsPerPage = parseInt(this.shadowroot.documentElement.scrollHeight * 0.6 /70);
+        this.itemsPerPage = parseInt(e.target.innerHeight * 0.6 /70);
         console.log(this.itemsPerPage);
         this.renderPage();
     }

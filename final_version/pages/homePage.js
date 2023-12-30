@@ -26,7 +26,7 @@ template.innerHTML = /*html*/`
         }
         #title {
             font-family: 'Anton', sans-serif;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 3rem;
             margin: 0 auto;
             text-align: center;

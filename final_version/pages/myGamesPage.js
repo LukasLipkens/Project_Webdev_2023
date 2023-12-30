@@ -16,10 +16,10 @@ template.innerHTML = /*html*/`
         #myGamesContainer{
             position: relative;
             border-radius: 10px;
-            width: 1200px;
+            width: 80vw;
+            height: 80vh;
             margin: auto;
             margin-top: 20px;
-            min-height: 750px;
             border: 5px solid black;
             background-color: #E0E0E0;
         }
@@ -28,13 +28,17 @@ template.innerHTML = /*html*/`
             flex-direction: column;
             justify-content: center;
             position: relative;
+            height: 90%;
         }
         #welcomeDiv {
+            font-family: 'Anton', sans-serif;
+            font-weight: 500;
+            text-decoration: underline;
+            font-size: 3rem;
             margin: auto;
             width: max-content;
             margin-bottom: 0;
             padding: 0;
-            font-size: 60px;
         }
         #welcomeDiv p{
             margin: 10px 0;
@@ -43,15 +47,22 @@ template.innerHTML = /*html*/`
             color: green;
         }
         #myHistoryDiv {
-            min-height: 75px;
-            max-height: 550px;
+            overflow-y: scroll;
+            max-height: 70%;
+        }
+        #myHistoryDiv::-webkit-scrollbar {
+            width: 8px;
+        }
+        #myHistoryDiv::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #myHistoryDiv::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         #createGameDiv{
-            position: absolute;
-            width: 100%;
             text-align: center;
-            bottom: -15px;
-            left: 0;
         }
 
         /*begin createGameButton*/
@@ -89,9 +100,23 @@ template.innerHTML = /*html*/`
         /*einde ceateGameButton*/
         #gameForm{
             position: absolute;
-            transform: translate(-50%, -0%);
-            top: 20%;
+            transform: translate(-50%, -20%);
+            top: 10%;
             left: 50%;
+            z-index: 2;
+            max-height: 80vh;
+            overflow-y: scroll;
+        }
+        #gameForm::-webkit-scrollbar {
+            width: 8px;
+        }
+        #gameForm::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #gameForm::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         #pagination {
             list-style: none;
@@ -117,8 +142,13 @@ template.innerHTML = /*html*/`
         }
         endview-comp {
             position: absolute;
-            top: 10%;
-            left: 33%;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #gameView {
+            max-height: 100%;
         }
 
     </style>
@@ -130,6 +160,7 @@ template.innerHTML = /*html*/`
             <div id="myHistoryDiv">
         	    <!--<legend>History<legend>-->
             </div>
+            <ul id="pagination"></ul>
             <div id="createGameDiv">
                 <button id="createGameBtn">
                     <span>Create game</span>
@@ -139,7 +170,6 @@ template.innerHTML = /*html*/`
                     </svg>
                 </button>
             </div>
-            <ul id="pagination"></ul>
         </div>
         <div id="gameView">
         </div>
@@ -239,8 +269,8 @@ class MyGamesComp extends HTMLElement {
                 date: game.date,
                 startTime: game.starttijd,
                 endTime: game.eindtijd,
-                player1: game["team1 names"],
-                player2: game["team2 names"],
+                team1: game["team1 names"],
+                team2: game["team2 names"],
                 score1: game["team1 sets"],
                 score2: game["team2 sets"],
                 scoringData: game["points"],
@@ -282,7 +312,8 @@ class MyGamesComp extends HTMLElement {
         this.endGameView = document.createElement('endview-comp');
         this.allGames = data;
         this.currentId = gameId;
-
+        this.gameContainer.appendChild(this.endGameView);
+        this.endGameView = this.shadowRoot.querySelector('endview-comp');
         this.gameInfo = this.allGames.find(game => game.gameId == this.currentId);
         if (this.gameInfo) {
             this.endGameView.setMatchInfo({
@@ -290,14 +321,14 @@ class MyGamesComp extends HTMLElement {
                 date: this.gameInfo.date,
                 startTime: this.gameInfo.starttijd,
                 endTime: this.gameInfo.eindtijd,
-                player1: this.gameInfo["team1 names"],
-                player2: this.gameInfo["team2 names"],
+                team1: this.gameInfo["team1 names"],
+                team2: this.gameInfo["team2 names"],
                 score1: this.gameInfo["team1 sets"],
                 score2: this.gameInfo["team2 sets"],
                 scoringData: this.gameInfo["points"],
             })
         }
-        this.gameContainer.appendChild(this.endGameView);
+        
 
         this.endGameView.addEventListener("backToMyGamesPage", () => {
             if (this.gameInfo) {

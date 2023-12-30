@@ -116,10 +116,34 @@ template.innerHTML = /*html*/`
 
     ul#account>ul{
         position: absolute;
-        top: 6.5rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+        top: 4rem;
         background-color: lightgrey;
         padding: 10px;
         z-index: 1;
+        border-radius: 10px;
+        margin : 0;
+    }
+    ul#account>ul:hover{
+        background-color: grey;
+        color: white;
+    }
+    ul#account>ul img{
+        width: 2vw;
+        margin-top: 0.5rem;
+    }
+    ul#account>ul>li>p{
+        text-align: center;
+        margin: 0;
+    }
+    ul#account>ul>li{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
     ul#account>ul.hidden{
         display: none;
@@ -141,7 +165,7 @@ template.innerHTML = /*html*/`
             <ul id="account" class="hidden">
             <li id="profilePic"><img src="./images/player1.png"></li>
             <ul id="profileInfo" class="hidden">
-                <li id="logout">Logout</li>
+                <li id="logout"><p>Logout</p><img src = "./images/logout.png"></li>
             </ul>
             </ul>
         </div>
