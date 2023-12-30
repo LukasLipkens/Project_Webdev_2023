@@ -30,7 +30,8 @@ templateCustom.innerHTML = /*html*/ `
             margin: 30px 0 0 0;
         }
         #backButton:hover {
-            background: #c4e201;
+            background: #006400;
+            color: #c2c2c2;
         }
         h1{
             font-family: "Arial", "sans-serif"; 

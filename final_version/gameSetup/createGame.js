@@ -56,7 +56,7 @@ template.innerHTML = /*html*/`
         align-items: center;
         z-index: 1;
         font-weight: 600;
-        letter-spacing: -1px;
+        letter-spacing: 0px;
         font-size: 14px;
     }
 

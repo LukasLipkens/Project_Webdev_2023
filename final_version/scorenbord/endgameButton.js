@@ -17,7 +17,7 @@ template.innerHTML = /*html*/`
         transition: all .2s;
         padding: 10px 20px;
         border-radius: 100px;
-        background: #cfef00;
+        background: rgb(1, 184, 90);
         border: 1px solid transparent;
         display: flex;
         align-items: center;
@@ -25,7 +25,8 @@ template.innerHTML = /*html*/`
     }
 
     button:hover {
-        background: #c4e201;
+        background: #006400;
+        color: #c2c2c2;
     }
 
     button > svg {
