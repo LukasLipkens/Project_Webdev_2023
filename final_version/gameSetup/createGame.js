@@ -12,16 +12,16 @@ template.innerHTML = /*html*/`
     #createGameForm{
         width: 300px;
         border: 2px solid black;
-        background-color: rgb(255, 255, 255);
-        border-radius: 15px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
         text-align: center;
     }
-    h1{
-        background-color: green;
+    .topText{
+        background-color: #006400;
         margin: 0;
         padding: 5px;
-        color: yellow;
-        border-radius: 12px 12px 0px 0px;
+        color: #0c0c0c;
+        border-radius: 8px 8px 0px 0px;
         font-size: 2.5em;
     }
     #gameTypeSelector{
@@ -40,7 +40,7 @@ template.innerHTML = /*html*/`
         display: flex;
         align-items: center;
         border-radius: 0 0 15px 15px;
-        background-color: #b3b3b3;
+        background-color: rgb(1, 184, 90);;
         color: #000000;
         width: var(--container_width);
         overflow: hidden;
@@ -72,11 +72,11 @@ template.innerHTML = /*html*/`
     }
 
     .radio-input label:has(input:checked) {
-        color: black;
+        color: #c2c2c2;
     }
 
     .radio-input label:has(input:checked) ~ .selection {
-        background-color: green;
+        background-color: #006400;
         display: inline-block;
     }
 
@@ -99,7 +99,7 @@ template.innerHTML = /*html*/`
         padding: 15px 20px;
         outline: none;
         background: transparent;
-        border-radius: 5px;
+        border-radius: 10px;
         border: 1px solid#000000;
         font-size: 1em;
     }
@@ -145,7 +145,8 @@ template.innerHTML = /*html*/`
     }
 
     button:hover {
-        background: #c4e201;
+        background: #006400;
+        color: #c2c2c2;
     }   
 
     button > svg {
@@ -169,7 +170,7 @@ template.innerHTML = /*html*/`
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div id="createGameForm">
-        <h1>Create Game</h1>
+        <p class="topText">Create Game</p>
         <div class="radio-input">
             <label>
             <input class="gameMode" type="radio" id="value-1" name="value-radio" value="solo" checked="checked">

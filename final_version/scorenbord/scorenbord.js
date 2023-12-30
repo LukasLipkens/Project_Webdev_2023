@@ -57,7 +57,7 @@ template.innerHTML = /*html*/`
             min-width: 70%;
             max-width: 80%;
             margin: auto;
-
+            max-width: 1200px;
         }
         .content{
             border-radius: 20px;
