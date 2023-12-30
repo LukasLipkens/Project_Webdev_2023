@@ -2,29 +2,9 @@
 import "../scorenbord/scorenbord.js"
 //#endregion IMPORTS
 
-/**
- * Description;
- * de home pagina wordt gebruikt om de live games weer te geven en te updaten
- * 
- * Functions;
- * update
- *      de update functie wordt gebruikt wanneer er een update is voor de home pagina
- *      Parameters:
- *          gameupdate => dit moet een array zijn gemaakt van objecten die de informatie van de ongoing spellen bevatten
- *      Werking:
- *          wanneer er een nieuwe game moet worden toegevoegd zal de addgame functie uitgevoerd worden
- *          in deze functie wordt er een nieuw scorebord component aangemaakt en ingevuld met de data van de
- *          match in dat object. ook word de gameId toegevoegd aan de displayedGames array.
- * 
- *          (om de namen in het component te zetten wordt de putnames functie uitgevoerd)
- * 
- *          wanneer een game al in de displayed games array zit moet hij geupdate worden, hiervoor wordt de updateGame
- *          functie uitgevoerd die de nieuwe score en serve in het correcte component zal stoppen
- * 
- *          wanneer een game niet meer in de gameupdate parameter zit moet hij verwijderd worden, dit gebeurt door het aanroepen
- *          van de remove game functie die dan de game zal verwijderen.
- * 
- */
+/*
+    dit is de homepagina waar de live games op komen te staan
+*/
 
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
@@ -90,11 +70,11 @@ class comp extends HTMLElement {
         this.newGames = [];
     }
     connectedCallback() {
-        //console.log("getLiveGames");
+        //het ophalen van de live games bij het openen van de website
         this.GetLiveGames("getLiveGames")
     }
-
-    GetLiveGames(info) { //wordt getriggerd wanneer de scoren geupdate wordt
+    //haalt de live games op
+    GetLiveGames(info) {
         this.dispatchEvent(new CustomEvent("getLiveGames", {
             bubbles: true,
             composed: true,
@@ -102,6 +82,8 @@ class comp extends HTMLElement {
         }))
     }
 
+    //deze functie wordt aangeroepen vanuit de app.js wanneer er een update is voor de home pagina
+    //als er een update is wordt er gekeken of er games moeten toegevoegd, geupdated of verwijderd worden
     Update(gameupdate) {
         console.log(gameupdate);
         this.newGames = [];
@@ -128,7 +110,8 @@ class comp extends HTMLElement {
         });
     }
 
-    addGame(gameToAdd) {//voegt de game toe als het id van de game nog niet bestaat
+    //voegt de game toe als het id van de game nog niet bestaat
+    addGame(gameToAdd) {
         let nieuwScorenbord = document.createElement("scorenbord-comp");
         nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);
 
@@ -148,7 +131,9 @@ class comp extends HTMLElement {
 
         this.putnames(game, gameToAdd);
     }
-    updateGame(gameToUpdate) {//update de game wanneer het id van de game al weergegeven wordt
+
+    //update de game wanneer het id van de game al weergegeven wordt
+    updateGame(gameToUpdate) {
         let game = this.shadowRoot.querySelector(`#game-${gameToUpdate["gameId"]}`);
         game.pointsT1.innerHTML = gameToUpdate["game"]["team1 punten"];
         game.pointsT2.innerHTML = gameToUpdate["game"]["team2 punten"];
@@ -161,23 +146,23 @@ class comp extends HTMLElement {
 
         game.updateServe(1, gameToUpdate["serving"]);
     }
+
+    //verwijderd een game als hij niet meer in de nieuwe array zit
     removeGame(gameToRemove) {
         let game = this.shadowRoot.querySelector(`#game-${gameToRemove}`);
         console.log(game);
         game.remove();
     }
-    putnames(game, gameToAdd) {//zet de namen van de spelers in het scorenbord
+
+    //steld de namen van de spelers in op het juiste scorenbord bij het toevoegen
+    putnames(game, gameToAdd) {
         let namesTeam1;
         let namesTeam2;
         console.log(gameToAdd);
-        //if(gameToAdd["game"]["team1 names"].indexOf(",") != -1){
+
         namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
         namesTeam2 = gameToAdd["game"]["team2 names"].split(",");
-        // }else{
-        //     namesTeam1 = [gameToAdd["game"]["team1 names"]];
-        //     namesTeam2 = [gameToAdd["game"]["team2 names"]];
-        // }
-        // switch (namesTeam1.length) {
+
         if (gameToAdd["game"]["team1 names"].indexOf(",") != -1) {
             namesTeam1 = gameToAdd["game"]["team1 names"].split(",");
             namesTeam2 = gameToAdd["game"]["team2 names"].split(",");

@@ -5,9 +5,13 @@ import "../playedMatches/matchScore.js";
 import "../gameSetup/endGameView.js"
 //#endregion IMPORTS
 
+/*
+    dit is de pagina waar je persoonlijke games op komen te staan
+    ook kan je hier een nieuwe game aanmaken
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
-    <!--<scorenbord-comp type="admin" gameId="2023120301"></scorenbord-comp>-->
     <style>
         #myGamesContainer{
             position: relative;
@@ -167,13 +171,15 @@ class MyGamesComp extends HTMLElement {
 
         this.creatGame.addEventListener("click", () => { this.showCreateGameForm(); });
     }
-
+    //laat het create game formulier zien
     showCreateGameForm() {
         let gameForm = document.createElement("create-comp");
         gameForm.setAttribute("id", "gameForm");
         this.mainContainer.append(gameForm);
     }
 
+    //als er op create game gedrukt wordt moet alleen nog die game weergegeven worden op de pagina
+    //als er op cancel geklikt wordt moet het formuliertje van het scherm gehaald worden
     createGame(e, gameId) {
         if (e.length == 1) {
             this.shadowRoot.querySelector("#gameForm").remove();
