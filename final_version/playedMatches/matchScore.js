@@ -230,9 +230,8 @@ class MatchComponent extends HTMLElement {
         this.matchContent = this.shadowRoot.querySelector('#item-content');
     }
 
+    // Methode verkregen bij aanmaak match-component in historyPage.js
     setMatchData(matchData) {
-        // console.log("arrived at matchComp");
-        console.log(matchData);
         this.scoresData = matchData;
         this.indiviData = this.scoresData.scoringData;
         this.gameId = this.scoresData.gameId;
@@ -251,6 +250,7 @@ class MatchComponent extends HTMLElement {
 
     connectedCallback() { }
 
+    // Afhankelijk van ontvangen matchData wordt winner bepaald en gegevens ingevuld op desbetreffende locaties
     editScoreAndPlayers() {
         this.winnerLeft.style.visibility = 'hidden';
         this.winnerRight.style.visibility = 'hidden';
@@ -276,6 +276,7 @@ class MatchComponent extends HTMLElement {
         this.scores.innerHTML = `${this.score1} - ${this.score2}`;
     }
 
+    // Eenmaal op arrow geklikt wordt er een event gestuurd naar boven (historyPage.js) samen met de gameId (om te vergelijken)
     setupEventListeners() {
         this.arrowImage.forEach((arrow) => {
             arrow.addEventListener('click', () => {
@@ -284,6 +285,7 @@ class MatchComponent extends HTMLElement {
         });
     }
 
+    // als expanded = true: wordt er een class 'expanded' toegevoegd en anders wordt deze verwijderd (op individuele match-component)
     toggle(expanded) {
         if (expanded) {
             if (this.container.classList.contains('expanded')) {
@@ -298,6 +300,7 @@ class MatchComponent extends HTMLElement {
         }
     }
 
+    // indiviData van matchData bevat de info voor single-score-componenten (individualScore.js) aan te maken bij elke match-componenten
     createScoreComponents() {
         this.indiviData.forEach((line) => {
             this.singleScoreComp = document.createElement('single-score-comp');

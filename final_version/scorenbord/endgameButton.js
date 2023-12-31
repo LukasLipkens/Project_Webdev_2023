@@ -52,28 +52,27 @@ template.innerHTML = /*html*/`
     </button>
 `
 
-class app extends HTMLElement
-{
-    constructor(){
+class app extends HTMLElement {
+    constructor() {
         super()
-        this.shadow = this.attachShadow({mode: "open"})
+        this.shadow = this.attachShadow({ mode: "open" })
         this.shadow.append(template.content.cloneNode(true))
-        
-        }
+    }
 
-        connectedCallback(){
-            this.shadowRoot.querySelector("button").addEventListener('click', ()=>{
-                this.EndGame(this.getAttribute("gameid"));
-            })
-        }
+    connectedCallback() {
+        this.shadowRoot.querySelector("button").addEventListener('click', () => {
+            this.EndGame(this.getAttribute("gameid"));
+        })
+    }
 
-        EndGame(info){
-            this.dispatchEvent(new CustomEvent("endGame", {
-                bubbles: true,
-                composed: true,
-                detail: info
-            }))
-        }
+    // Event uitgestuurd naar boven (app.js) om game te beëindigen (in database)
+    EndGame(info) {
+        this.dispatchEvent(new CustomEvent("endGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
 }
 
 customElements.define('endgamebtn-comp', app);

@@ -138,6 +138,7 @@ class EndGameView extends HTMLElement {
         this.matchInfo = this.shadowRoot.querySelector("#matchInfo");
     }
 
+    // Stuurt een event uit naar boven, richting myGamesPage.js
     connectedCallback() {
         this.backButton.addEventListener("click", () => {
             const event = new CustomEvent("backToMyGamesPage", {
@@ -148,6 +149,7 @@ class EndGameView extends HTMLElement {
         });
     }
 
+    // Via de Methode verkregen matchData van myGamesPage.js, wordt deze ingevuld
     setMatchInfo(matchData) {
         this.matchInfo.innerHTML = `
             <div id="matchtime"><h4>${matchData.date}</h4><h4>${matchData.startTime} - ${matchData.endTime}</h4></div>
@@ -175,24 +177,24 @@ class EndGameView extends HTMLElement {
         let teamA = this.matchInfo.querySelector("#teamA");
         let teamB = this.matchInfo.querySelector("#teamB");
         console.log("teama");
-        
+
         matchData.team1.split(",").forEach((player, index) => {
             let playerBubble = document.createElement("player-comp");
             teamA.appendChild(playerBubble);
             console.log(index);
-            playerBubble.classList.add("player"+ (index == 0 ? "A" : "B"));
+            playerBubble.classList.add("player" + (index == 0 ? "A" : "B"));
             playerBubble.SetPlayer(player);
-            if(index == 1){
+            if (index == 1) {
                 teamA.classList.add("doubles");
                 teamB.classList.add("doubles");
             }
 
         });
         console.log("teamb");
-        matchData.team2.split(",").forEach((player,index) => {
+        matchData.team2.split(",").forEach((player, index) => {
             let playerBubble = document.createElement("player-comp");
             teamB.appendChild(playerBubble);
-            playerBubble.classList.add("player"+ (index == 0 ? "A" : "B"));
+            playerBubble.classList.add("player" + (index == 0 ? "A" : "B"));
             playerBubble.SetPlayer(player);
         });
 

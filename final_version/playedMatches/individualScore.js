@@ -80,6 +80,7 @@ class SingleScoreComponent extends HTMLElement {
 
     connectedCallback() { }
 
+    // Via methode verkregen scoreData van matchScore.js en ingevuld op desbetreffende locatie
     setScoreData(scoreData) {
         this.player1 = scoreData.player1;
         this.player2 = scoreData.player2;
