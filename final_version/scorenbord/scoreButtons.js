@@ -5,6 +5,7 @@
 /*
     dit zijn de knoppen die toegevoegd worden aan het scorenbord wanneer het admin is
     de knoppen zijn gemaakt op de scoren te verhogen/verlagen
+    
 */
 
 const template = document.createElement("template")
@@ -91,7 +92,7 @@ class app extends HTMLElement
                 })
             });
         }
-
+        //event vorr de knop die gedrukt wordt
         UpdateScoreEvent(info){
             this.dispatchEvent(new CustomEvent("UpdateScoreEvent", {
                 bubbles: true,

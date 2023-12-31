@@ -256,7 +256,8 @@ class comp extends HTMLElement
                 let divplayerList = document.createElement('div');
                 divplayerList.classList.add('playerList');
                 input.parentNode.appendChild(divplayerList);
-
+            
+            //luisteren naar input
             input.addEventListener("keyup", (event)=>{
                 //we maken hier target aan zodat dit ook nog beschikbaar is in de fetch
                 let target = event.target;
@@ -265,6 +266,7 @@ class comp extends HTMLElement
                 let allLists = this.shadowRoot.querySelectorAll(".playerList");
                 allLists.forEach(element => { element.innerHTML = ""; });
 
+                //spelernamen ophalen die de input bevatten
                 fetch('./test_php/searchUser.php?search='+ event.target.value, {
                     method: 'GET',
                     headers: {

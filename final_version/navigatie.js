@@ -184,8 +184,6 @@ class comp extends HTMLElement {
     connectedCallback() {
         this.button.forEach(btn => {
             btn.addEventListener('mousedown', (e) => {
-                //console.log(this.getAttribute("loggedIn"));
-                // this.socket.send("test");
                 this.button.forEach(btn => {
                     btn.classList.remove("active");
                 })
@@ -224,6 +222,7 @@ class comp extends HTMLElement {
         }))
     }
 
+    //update de navigatie wanneer er iemand in of uitlogd
     Update(user) {
 
         if (user != null) {
