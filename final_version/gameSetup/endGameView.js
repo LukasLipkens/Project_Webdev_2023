@@ -2,8 +2,6 @@
 import "./playerBubble.js";
 //#endregion IMPORTS
 
-
-
 const templateCustom = document.createElement("template");
 templateCustom.innerHTML = /*html*/ `
     <style>

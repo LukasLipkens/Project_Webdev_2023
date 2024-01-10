@@ -31,8 +31,6 @@ template.innerHTML = /*html*/ `
             display: block;
             flex-direction: column;
             justify-content: space-evenly;
-            /*margin-top: 20px;*/
-            /*max-height: 600px;*/
             height: 60vh;
             overflow-y: scroll;
             overflow-x: hidden;

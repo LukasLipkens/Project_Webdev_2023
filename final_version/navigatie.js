@@ -17,8 +17,6 @@ template.innerHTML = /*html*/`
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    /*width: 1160px;
-    height: 75px;*/
     width: 80vw;
     height: 10vh;
     margin: auto;

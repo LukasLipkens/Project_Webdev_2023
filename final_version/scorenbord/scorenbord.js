@@ -55,7 +55,6 @@ template.innerHTML = /*html*/`
             
         }
         .scoreBoard{
-            /*width: 1200px;*/
             min-width: 70%;
             max-width: 80%;
             margin: auto;
