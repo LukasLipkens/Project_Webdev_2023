@@ -24,6 +24,7 @@ template.innerHTML = /*html*/`
     margin: auto;
     padding: 0;
     border: 5px solid black;
+    user-select: none;
     }
 
     nav ul {

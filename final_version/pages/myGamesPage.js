@@ -21,6 +21,7 @@ template.innerHTML = /*html*/`
             margin-top: 20px;
             border: 5px solid black;
             background-color: #E0E0E0;
+            user-select: none;
         }
         #startView {
             position: relative;
@@ -143,7 +144,9 @@ template.innerHTML = /*html*/`
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
+        match-comp {
+            user-select: none;
+        }
         #gameView {
             max-height: 100%;
         }
