@@ -25,6 +25,7 @@ template.innerHTML = /*html*/`
             overflow-x: hidden;
             scrollbar-width: thin;
             background-color: #E0E0E0;
+            user-select: none;
         }
         #title {
             font-family: 'Anton', sans-serif;

@@ -9,6 +9,7 @@ template.innerHTML = /*html*/ `
         #container {
             display: flex;
             margin-bottom: 10px;
+            user-select: none;
         }
         #date-container {
             display: flex;

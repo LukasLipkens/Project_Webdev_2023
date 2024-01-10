@@ -16,6 +16,7 @@ template.innerHTML = /*html*/ `
             margin-top: 20px;
             padding-top: 10px;
             background-color: #E0E0E0;
+            user-select: none;
         }
         #title {
             font-family: 'Anton', sans-serif;
@@ -73,6 +74,9 @@ template.innerHTML = /*html*/ `
         #pagination li.active {
             box-shadow: inset 0 0 5px green;
             color: green;
+        }
+        match-comp {
+            user-select: none;
         }
 
     </style>
