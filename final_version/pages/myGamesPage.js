@@ -24,9 +24,6 @@ template.innerHTML = /*html*/`
             background-color: #E0E0E0;
         }
         #startView {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             position: relative;
             height: 90%;
         }
@@ -36,6 +33,7 @@ template.innerHTML = /*html*/`
             text-decoration: underline;
             font-size: 3rem;
             margin: auto;
+            margin-top: 10px;
             width: max-content;
             margin-bottom: 0;
             padding: 0;
@@ -267,7 +265,7 @@ class MyGamesComp extends HTMLElement {
         for (let game of displayGames) {
             let matchComponent = document.createElement('match-comp');
             matchComponent.setAttribute('id', game.gameId);
-
+            console.log(game);
             matchComponent.setMatchData({
                 gameId: game.gameId,
                 date: game.date,
