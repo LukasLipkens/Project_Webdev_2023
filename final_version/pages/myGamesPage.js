@@ -60,7 +60,11 @@ template.innerHTML = /*html*/`
         }
         #createGameDiv{
             text-align: center;
-            user-select: none;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%; 
+            margin-bottom: 10px;
         }
 
         /*begin createGameButton*/
