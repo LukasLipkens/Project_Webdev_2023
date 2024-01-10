@@ -38,6 +38,8 @@ template.innerHTML = /*html*/`
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
+            max-width: 1200px;
+            margin: auto;
         }
         #homeContainer::-webkit-scrollbar {
             width: 8px;
