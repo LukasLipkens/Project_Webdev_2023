@@ -45,7 +45,7 @@ template.innerHTML = /*html*/`
         }
         #myHistoryDiv {
             overflow-y: scroll;
-            max-height: 70%;
+            max-height: 50vh;
         }
         #myHistoryDiv::-webkit-scrollbar {
             width: 8px;
@@ -60,6 +60,7 @@ template.innerHTML = /*html*/`
         }
         #createGameDiv{
             text-align: center;
+            user-select: none;
         }
 
         /*begin createGameButton*/
