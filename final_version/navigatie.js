@@ -155,11 +155,29 @@ template.innerHTML = /*html*/`
         padding: 0 20px;
     }
 
+    #navImage:hover{
+        animation: bounce 2s infinite;
+    }   
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0); /* Initial and final positions */
+        }
+        
+        40% {
+            transform: translateY(-30px); /* Bounce up */
+        }
+        
+        60% {
+            transform: translateY(-15px); /* Bounce down slightly */
+        }
+    }
+
     </style>
     <nav>
         <ul>
         <li><h2>Tennis</h2></li>
-        <li><img src="./images/logo.svg" alt="tennisBall" style="width: 60px;"></li>
+        <li><img id="navImage" src="./images/logo.svg" alt="tennisBall" style="width: 60px;"></li>
         <li><h2>Scores<h2></li>
         </ul>
         <div class="right-item">
