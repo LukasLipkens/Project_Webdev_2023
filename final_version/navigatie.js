@@ -19,17 +19,17 @@ template.innerHTML = /*html*/`
     border-radius: 10px;
     /*width: 1160px;
     height: 75px;*/
-    width: 77.5vw;
+    width: 80vw;
     height: 10vh;
     margin: auto;
-    padding: 0 20px;
+    padding: 0;
     border: 5px solid black;
     }
 
     nav ul {
         list-style: none;
         margin: 0;
-        padding: 0;
+        padding: 0 20px;
         display: flex;
         align-items: center;
         
@@ -90,7 +90,7 @@ template.innerHTML = /*html*/`
     nav .right-item {
         margin-left: auto;
         margin: 0;
-        padding: 0;
+        padding: 0 10px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -148,7 +148,12 @@ template.innerHTML = /*html*/`
     ul#account>ul.hidden{
         display: none;
     }
-
+    #navigationContent{
+        padding: 010px
+    }
+    ul, .right-item{
+        padding: 0 20px;
+    }
 
     </style>
     <nav>
@@ -184,8 +189,6 @@ class comp extends HTMLElement {
     connectedCallback() {
         this.button.forEach(btn => {
             btn.addEventListener('mousedown', (e) => {
-                //console.log(this.getAttribute("loggedIn"));
-                // this.socket.send("test");
                 this.button.forEach(btn => {
                     btn.classList.remove("active");
                 })
@@ -224,6 +227,7 @@ class comp extends HTMLElement {
         }))
     }
 
+    //update de navigatie wanneer er iemand in of uitlogd
     Update(user) {
 
         if (user != null) {

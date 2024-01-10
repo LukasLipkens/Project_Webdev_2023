@@ -4,6 +4,8 @@ import "../scorenbord/scorenbord.js"
 
 /*
     dit is de homepagina waar de live games op komen te staan
+
+    da pagina wordt geupdate vanuit de app, die de functie update aanroept en de nieuwe data hieraan meegeeft
 */
 
 const template = document.createElement("template")
@@ -28,7 +30,7 @@ template.innerHTML = /*html*/`
             font-family: 'Anton', sans-serif;
             font-weight: 500;
             font-size: 3rem;
-            margin: 0 auto;
+            margin: 15px auto;
             text-align: center;
             text-decoration: underline;
         }
@@ -36,6 +38,8 @@ template.innerHTML = /*html*/`
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
+            max-width: 1200px;
+            margin: auto;
         }
         #homeContainer::-webkit-scrollbar {
             width: 8px;
@@ -91,18 +95,21 @@ class comp extends HTMLElement {
 
             this.newGames.push(game["gameId"])
 
+            //kijk of game al weergegeven wordt
+            //zo ja: update de game met de nieuwe data van de update
+            //zo nee: voeg de game toe met addGame en voeg het id toe aan de array displayed games
             if (this.displayedGames.indexOf(game["gameId"]) == -1) {
                 this.displayedGames.push(game["gameId"])
 
-                //console.log("added: " + game["gameId"])
                 this.addGame(game);
             }
             else {
-                //console.log("updated: " + game["gameId"])
                 this.updateGame(game)
             }
         });
-        this.displayedGames.forEach(game => { //dit kan ik nog niet testen dus hoop dat het werkt
+
+        //als er een game niet meer in de update zit mag hij verwijderd worden
+        this.displayedGames.forEach(game => {
             if (this.newGames.indexOf(game) == -1) {
                 this.displayedGames.pop(game);
                 this.removeGame(game);
@@ -111,6 +118,7 @@ class comp extends HTMLElement {
     }
 
     //voegt de game toe als het id van de game nog niet bestaat
+    //hier wordt een nieuw score element aangemaakt, de juiste gegevens worden hier direct ingestopt
     addGame(gameToAdd) {
         let nieuwScorenbord = document.createElement("scorenbord-comp");
         nieuwScorenbord.setAttribute("id", `game-${gameToAdd["gameId"]}`);

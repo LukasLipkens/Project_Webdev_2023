@@ -10,7 +10,7 @@ template.innerHTML = /*html*/`
   #loginContainer {
     border: 5px solid black;
     border-radius: 10px;
-    width: 70vw;
+    width: 80vw;
     height: 80vh;
     margin: auto;
     margin-top: 20px;
@@ -81,12 +81,16 @@ template.innerHTML = /*html*/`
   .container input {
     background-color: #eee;
     border: none;
-    margin: 8px 0;
+    margin-bottom: 5px;
     padding: 10px 15px;
     font-size: 13px;
     border-radius: 8px;
-    width: 100%;
+    width: 50%;
     outline: none;
+  }
+
+  .container span {
+    margin-bottom: 15px;
   }
 
   .form-container {
@@ -196,6 +200,7 @@ template.innerHTML = /*html*/`
   .container.active .toggle-right {
     transform: translateX(200%);
   }
+
 </style>
 <body>
   <div id="loginContainer">

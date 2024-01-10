@@ -17,7 +17,7 @@ template.innerHTML = /*html*/`
         transition: all .2s;
         padding: 10px 20px;
         border-radius: 100px;
-        background: #cfef00;
+        background: rgb(1, 184, 90);
         border: 1px solid transparent;
         display: flex;
         align-items: center;
@@ -25,7 +25,8 @@ template.innerHTML = /*html*/`
     }
 
     button:hover {
-        background: #c4e201;
+        background: #006400;
+        color: #c2c2c2;
     }
 
     button > svg {
@@ -51,28 +52,27 @@ template.innerHTML = /*html*/`
     </button>
 `
 
-class app extends HTMLElement
-{
-    constructor(){
+class app extends HTMLElement {
+    constructor() {
         super()
-        this.shadow = this.attachShadow({mode: "open"})
+        this.shadow = this.attachShadow({ mode: "open" })
         this.shadow.append(template.content.cloneNode(true))
-        
-        }
+    }
 
-        connectedCallback(){
-            this.shadowRoot.querySelector("button").addEventListener('click', ()=>{
-                this.EndGame(this.getAttribute("gameid"));
-            })
-        }
+    connectedCallback() {
+        this.shadowRoot.querySelector("button").addEventListener('click', () => {
+            this.EndGame(this.getAttribute("gameid"));
+        })
+    }
 
-        EndGame(info){
-            this.dispatchEvent(new CustomEvent("endGame", {
-                bubbles: true,
-                composed: true,
-                detail: info
-            }))
-        }
+    // Event uitgestuurd naar boven (app.js) om game te beëindigen (in database)
+    EndGame(info) {
+        this.dispatchEvent(new CustomEvent("endGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
 }
 
 customElements.define('endgamebtn-comp', app);

@@ -6,6 +6,8 @@ import "./endgameButton.js"
 /*
     dit is het scorenbord dat gebruikt word om de scoren te laten zien op de homepagina
     als ook om de scoren te updaten via de mygames pagina
+
+    de scoren wordt hier ook berekenden doorgestuurt naar de app wanneer er iets veranderd
 */
 
 const template = document.createElement("template")
@@ -57,7 +59,6 @@ template.innerHTML = /*html*/`
             min-width: 70%;
             max-width: 80%;
             margin: auto;
-
         }
         .content{
             border-radius: 20px;
@@ -229,6 +230,8 @@ class comp extends HTMLElement
             detail: info
         }))
     }
+
+    //wordt getriggerd wanneer er een set is gewonnen
     AddGameSet(info){
         this.dispatchEvent(new CustomEvent("addGameSet", {
             bubbles: true,
@@ -247,13 +250,13 @@ class comp extends HTMLElement
         let player = info[1];
 
         /*begin spel*/
-        this.game(action, player);
+        this.point(action, player);
         /*einde spel*/
 
         this.UpdateGame(this.scoreObject);
     }
-
-    game(action, team){
+    //de punten van het spel
+    point(action, team){
         let T1 = this.pointsT1.innerHTML;
         let T2 = this.pointsT2.innerHTML;
 
@@ -276,13 +279,13 @@ class comp extends HTMLElement
                 if(T1 == "40" && team == "T_1" && T2 != 40 && T2 != "ADV"){
                     //als team 1: 40 heeft EN scoort EN team 2 heeft geen 40 EN geen ADV: team 1 wint de game 
                     //console.log("case 1");
-                    this.match(team);
+                    this.game(team);
                     return;
                 }
                 if(T2 == "40" && team == "T_2" && T1 != 40 && T1 != "ADV"){
                     //als team 2: 40 heeft EN scoort EN team 1 heeft geen 40 EN geen ADV: team 2 wint de game 
                     //console.log("case 2");
-                    this.match(team);
+                    this.game(team);
                     return;
                 }
                 if(T1 == "40" && T2 == "40"){
@@ -296,13 +299,13 @@ class comp extends HTMLElement
                 if(team == "T_1" && T1 == "ADV"){
                     //team 1 scoort heeft voordeel: team 1 wint de game
                     //console.log("case 4");
-                    this.match(team);
+                    this.game(team);
                     return;
                 }
                 if(team == "T_2" && T2 == "ADV"){
                     //team 2 scoort heeft voordeel: team 2 wint de game
                     //console.log("case 5");
-                    this.match(team);
+                    this.game(team);
                     return;
                 }
                 if(team == "T_2" && T1 == "ADV" || team == "T_1" && T2 == "ADV"){
@@ -331,7 +334,8 @@ class comp extends HTMLElement
             }
         }
     }
-    match(team){
+    //punten van de games
+    game(team){
         /*reset points*/
         this.scoreObject.team1.points = +this.pointsArray[this.pointsArray.indexOf("0")];
         this.pointsT1.innerHTML = this.pointsArray[this.pointsArray.indexOf("0")];
@@ -372,6 +376,7 @@ class comp extends HTMLElement
 
 
     }
+    //punten van de sets
     sets(team){
         /*reset de match punten*/
         let info = [this.setNr, this.scoreObject.game, this.scoreObject.team1.game, this.scoreObject.team2.game];
@@ -413,6 +418,7 @@ class comp extends HTMLElement
     }
 //#endregion PuntenTelling
 
+    //deze functie controllerd de tennis bal die aangeeft wie er opslag heeft
     updateServe(status, team){
         let serveT1 = this.shadowRoot.querySelector("#ballT1");
         let serveT2 = this.shadowRoot.querySelector("#ballT2");

@@ -23,9 +23,6 @@ template.innerHTML = /*html*/`
             background-color: #E0E0E0;
         }
         #startView {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             position: relative;
             height: 90%;
         }
@@ -34,13 +31,13 @@ template.innerHTML = /*html*/`
             font-weight: 500;
             text-decoration: underline;
             font-size: 3rem;
-            margin: auto;
+            margin: 0 auto;
             width: max-content;
             margin-bottom: 0;
             padding: 0;
         }
         #welcomeDiv p{
-            margin: 10px 0;
+            margin: 25px auto;
         }
         #welcomeDiv span{
             color: green;
@@ -123,7 +120,7 @@ template.innerHTML = /*html*/`
             gap: 10px;
             margin-top: 10px;
             justify-content: flex-end;
-            padding-right: 60px;
+            padding-right: 80px;
         }
         #pagination li {
             font-size: 18px;
@@ -251,25 +248,29 @@ class MyGamesComp extends HTMLElement {
     Update(games) {
         //console.log("update");
         this.allGames = games;
-        let totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
 
-        this.RenderPage(games);
-        this.RenderPagination(totalPages);
+        this.ShowPage();
+        this.RenderPagination();
     }
-    RenderPage() {
+
+    // Toont de pagina met de bijhorende match-componenten
+    ShowPage() {
+        this.totalPages = Math.ceil(this.allGames.length / this.itemsPerPage);
+
         let displayGames = this.allGames.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
         this.myHistory.innerHTML = "";
+
         for (let game of displayGames) {
             let matchComponent = document.createElement('match-comp');
             matchComponent.setAttribute('id', game.gameId);
-
+            console.log(game);
             matchComponent.setMatchData({
                 gameId: game.gameId,
                 date: game.date,
                 startTime: game.starttijd,
                 endTime: game.eindtijd,
-                team1: game["team1 names"],
-                team2: game["team2 names"],
+                player1: game["team1 names"],
+                player2: game["team2 names"],
                 score1: game["team1 sets"],
                 score2: game["team2 sets"],
                 scoringData: game["points"],
@@ -282,31 +283,66 @@ class MyGamesComp extends HTMLElement {
         }
     }
 
-    RenderPagination(totalPages) {
+    // Eenmaal verstuurde event opgevangen gaat er gezocht worden naar de corresponderende match-component uit de reeks getoonde componenten
+    // De toggle methode gaat in de matchScore.js van elke componenten uitgevoerd worden
+    toggleMatchComp(gameId) {
+        this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
+        this.matchComponents.forEach((component) => {
+            let componentId = component.getAttribute('id');
+            console.log('componentId: ', componentId);
+            if (componentId == gameId) {
+                component.toggle(true);
+            } else {
+                component.toggle(false);
+            }
+        });
+    }
+
+    // De knoppen voor de pagina's worden aangemaakt
+    // Voor elke knop wordt er een event voorzien die dan de match-componenten voor de volgende geselecteerde gaat tonen
+    RenderPagination() {
         this.pagination.innerHTML = "";
 
-        for (let i = 1; i <= totalPages; i++) {
-            this.pageItem = document.createElement('li');
-            this.pageItem.textContent = i;
-            this.pageItem.page = i;
-            this.pagination.append(this.pageItem);
+        this.startPage = Math.max(1, this.currentPage - 1);
+        this.endPage = Math.min(this.totalPages, this.startPage + 2);
 
-            if (i == this.currentPage) {
-                this.pageItem.classList.add('active');
-            };
-
+        if (this.currentPage > 1) {
+            this.createPaginationButton("Previous", this.currentPage - 1);
         }
-        let pageEl = this.shadowRoot.querySelectorAll('#pagination li');
-        for (let e of pageEl) {
-            e.addEventListener('click', () => {
-                pageEl.forEach((el) => { el.classList.remove('active'); });
-                this.currentPage = e.page;
-                e.classList.add('active');
-                this.RenderPage();
-            });
+
+        for (let i = this.startPage; i <= this.endPage; i++) {
+            this.createPaginationButton(i, i);
+        }
+
+        if (this.currentPage < this.totalPages) {
+            this.createPaginationButton("Next", this.currentPage + 1);
         }
     }
 
+    // De knoppen worden aangemaakt en toegevoegd, evenals een event
+    createPaginationButton(label, pageNumber) {
+        const pageItem = document.createElement('li');
+        pageItem.textContent = label;
+        this.pagination.appendChild(pageItem);
+
+        if (label === this.currentPage || (label === "Previous" && this.currentPage === pageNumber - 1) || (label === "Next" && this.currentPage === pageNumber + 1)) {
+            pageItem.classList.add('active');
+        }
+
+        pageItem.addEventListener('click', () => {
+            this.changePage(pageNumber);
+        });
+    }
+
+    // Gaat alles resetten en herberekenen voor de volgende geklikte pagina
+    changePage(pageNumber) {
+        this.currentPage = pageNumber;
+        this.ShowPage();
+        this.RenderPagination();
+    }
+
+    // Methode afkomstig van app.js met de data van (recent) beëindigde game
+    // endview-comp wordt aangemaakt en gegevens worden verstuurd naar endGameView.js via setMatchInfo
     EndGame(data, gameId) {
         this.endGameView = document.createElement('endview-comp');
         this.allGames = data;
@@ -327,8 +363,8 @@ class MyGamesComp extends HTMLElement {
                 scoringData: this.gameInfo["points"],
             })
         }
-        
 
+        // De terug knop op endGameView.js gaat een event uitsturen waarop deze eventListener gaat reageren
         this.endGameView.addEventListener("backToMyGamesPage", () => {
             if (this.gameInfo) {
                 this.gameContainer.style.display = "none";
@@ -338,24 +374,6 @@ class MyGamesComp extends HTMLElement {
                 this.pagination.style.display = "flex";
             }
         });
-    }
-
-    toggleMatchComp(gameId) {
-        if (gameId != null) {
-            this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
-            this.matchComponents.forEach((component) => {
-                let componentId = component.getAttribute('id');
-                console.log('componentId: ', componentId);
-                if (componentId == gameId) {
-                    component.toggle(true);
-                } else {
-                    component.toggle(false);
-                }
-            });
-        }
-        else {
-            console.error("gameId is null!");
-        }
     }
 }
 

@@ -23,7 +23,7 @@ template.innerHTML = /*html*/ `
             text-decoration: underline;
             font-size: 3rem;
             padding-bottom: 10px;
-            margin: 0 auto;
+            margin: 15px auto;
             text-align: center;
         }
         #pageContainer {
@@ -80,7 +80,7 @@ template.innerHTML = /*html*/ `
     <div id="historyContainer">
         <p id="title">All Played Games</p>
         <div id="pageContainer">
-            <!-- The container for displaying match-line components -->
+            <!-- De container voor het tonen van match-components -->
         </div>
         <ul id="pagination"></ul>
     </div>
@@ -93,7 +93,6 @@ class HistoryComp extends HTMLElement {
         this.shadow.append(template.content.cloneNode(true));
 
         this.matchData = [];
-
         this.currentPage = 1;
         this.itemsPerPage = 8;
 
@@ -101,17 +100,20 @@ class HistoryComp extends HTMLElement {
         this.pagination = this.shadowRoot.querySelector('#pagination');
     }
 
+    // Bij aanmaak history-comp worden deze uitgevoerd
     connectedCallback() {
-        this.itemsPerPage = parseInt(document.documentElement.scrollHeight * 0.6 /75);
-        window.addEventListener('resize', (e) => { this.UpdateItemsPerPage(e)});
+        this.itemsPerPage = parseInt(document.documentElement.scrollHeight * 0.6 / 75);
+        window.addEventListener('resize', (e) => { this.UpdateItemsPerPage(e) });
         this.GetAllGames();
     }
+
+    // Aantal items per pagina worden aangepast op basis van de vensterhoogte
     UpdateItemsPerPage(e) {
-        console.log(e);
-        this.itemsPerPage = parseInt(e.target.innerHeight * 0.6 /70);
-        console.log(this.itemsPerPage);
+        this.itemsPerPage = parseInt(e.target.innerHeight * 0.6 / 70);
         this.renderPage();
     }
+
+    // Vraag voor de wedstrijdgegevens bij de app.js
     GetAllGames() {
         this.dispatchEvent(new CustomEvent("getHistory", {
             bubbles: true,
@@ -119,12 +121,13 @@ class HistoryComp extends HTMLElement {
         }))
     }
 
+    // Haal alle wedstrijdgegevens op en steek ze in matchData
     Update(gameData) {
         this.matchData = gameData;
-        //console.log('history: ', gameData);
         this.renderPage();
     }
 
+    // Afhankelijk van de hoeveelheid items worden de pagina's aangemaakt
     renderPage() {
         this.totalPages = Math.ceil(this.matchData.length / this.itemsPerPage);
 
@@ -132,18 +135,21 @@ class HistoryComp extends HTMLElement {
         this.renderPagination(this.totalPages);
     }
 
+    // Toont de pagina met de bijhorende match-componenten
     showPage() {
+        // Bepalen welke match-componenten (op volgorde) worden getoond op die pagina
         this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
         this.endIndex = this.startIndex + this.itemsPerPage;
 
+        // Gesorteerd op oudste match als eerste toegevoegd en nieuwste als laatste toegevoegd
         this.matchData.sort((a, b) => b.gameId - a.gameId);
-        this.pageItems = this.matchData.slice(this.startIndex, this.endIndex);
+        this.pageItems = this.matchData.slice(this.startIndex, this.endIndex); // pageItems bevat de nodige matchData voor die bepaalde pagina
 
         this.pageContainer.innerHTML = "";
 
+        // Componenten worden één voor één aangemaakt en worden gekoppeld aan een eventListener voor te 'toggelen' (arrow svg)
         for (let i = 0; i < this.pageItems.length; i++) {
             const item = this.pageItems[i];
-            console.log('history: ', item);
             let matchComponent = document.createElement('match-comp');
             matchComponent.setAttribute('id', item.gameId);
 
@@ -166,6 +172,8 @@ class HistoryComp extends HTMLElement {
         }
     }
 
+    // Eenmaal verstuurde event opgevangen gaat er gezocht worden naar de corresponderende match-component uit de reeks getoonde componenten
+    // De toggle methode gaat in de matchScore.js van elke componenten uitgevoerd worden
     toggleMatchComp(gameId) {
         this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
         this.matchComponents.forEach((component) => {
@@ -178,29 +186,27 @@ class HistoryComp extends HTMLElement {
         });
     }
 
+    // Afhankelijk van de hoeveelheid pagina's worden de knoppen bepaald
     renderPagination(totalPages) {
         this.pagination.innerHTML = "";
 
-        // calculates the range of visible page buttons (in this case 3 at a time)
         this.startPage = Math.max(1, this.currentPage - 1);
         this.endPage = Math.min(totalPages, this.startPage + 2);
 
-        // Previous Button
         if (this.currentPage > 1) {
             this.createPaginationButton("Previous", this.currentPage - 1);
         }
 
-        // Page Numbers
         for (let i = this.startPage; i <= this.endPage; i++) {
             this.createPaginationButton(i, i);
         }
 
-        // Next Button
         if (this.currentPage < totalPages) {
             this.createPaginationButton("Next", this.currentPage + 1);
         }
     }
 
+    // De knoppen worden aangemaakt en toegevoegd, evenals een event
     createPaginationButton(label, pageNumber) {
         this.pageItem = document.createElement('li');
         this.pageItem.textContent = label;
@@ -215,6 +221,7 @@ class HistoryComp extends HTMLElement {
         });
     }
 
+    // Gaat alles resetten en herberekenen voor de volgende geklikte pagina
     changePage(pageNumber) {
         this.currentPage = pageNumber;
         this.renderPage();
