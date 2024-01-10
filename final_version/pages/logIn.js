@@ -20,6 +20,7 @@ template.innerHTML = /*html*/`
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
   }
 
   .container {
