@@ -30,7 +30,7 @@ template.innerHTML = /*html*/`
             font-family: 'Anton', sans-serif;
             font-weight: 500;
             font-size: 3rem;
-            margin: 0 auto;
+            margin: 15px auto;
             text-align: center;
             text-decoration: underline;
         }

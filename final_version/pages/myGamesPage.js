@@ -32,14 +32,13 @@ template.innerHTML = /*html*/`
             font-weight: 500;
             text-decoration: underline;
             font-size: 3rem;
-            margin: auto;
-            margin-top: 10px;
+            margin: 0 auto;
             width: max-content;
             margin-bottom: 0;
             padding: 0;
         }
         #welcomeDiv p{
-            margin: 10px 0;
+            margin: 25px auto;
         }
         #welcomeDiv span{
             color: green;

@@ -23,7 +23,7 @@ template.innerHTML = /*html*/ `
             text-decoration: underline;
             font-size: 3rem;
             padding-bottom: 10px;
-            margin: 0 auto;
+            margin: 15px auto;
             text-align: center;
         }
         #pageContainer {
