@@ -3,7 +3,7 @@ import "./navigatie.js"
 import "./pages/homePage.js"
 import "./pages/historyPage.js"
 import "./pages/myGamesPage.js"
-import "./pages/login.js"
+import "./pages/logIn.js"
 import "./scorenbord/scorenbord.js"
 //#endregion IMPORTS
 

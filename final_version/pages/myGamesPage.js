@@ -1,7 +1,6 @@
 //#region IMPORTS
 import "../gameSetup/createGame.js"
 import "../playedMatches/matchScore.js"
-import "../playedMatches/matchScore.js";
 import "../gameSetup/endGameView.js"
 //#endregion IMPORTS
 
