@@ -72,34 +72,32 @@ template.innerHTML = /*html*/`
     </div>
 `
 
-class app extends HTMLElement
-{
-    constructor(){
+class app extends HTMLElement {
+    constructor() {
         super()
-        this.shadow = this.attachShadow({mode: "open"}) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
+        this.shadow = this.attachShadow({ mode: "open" }) // zorgt ervoor dart het component een afgeschermde stijl kan hebben
         this.shadow.append(template.content.cloneNode(true))
-        
-        this.button = this.shadowRoot.querySelectorAll("button");
-        }
 
-        connectedCallback()
-        {
-            this.button.forEach(btn => {
-                btn.addEventListener('mousedown', (e) =>{
-                    //console.log("btn Clicked");
-                    let info = [btn.getAttribute("id"), this.getAttribute("id")];
-                    this.UpdateScoreEvent(info);
-                })
-            });
-        }
-        //event vorr de knop die gedrukt wordt
-        UpdateScoreEvent(info){
-            this.dispatchEvent(new CustomEvent("UpdateScoreEvent", {
-                bubbles: true,
-                composed: true,
-                detail: info
-            }))
-        }
+        this.button = this.shadowRoot.querySelectorAll("button");
+    }
+
+    connectedCallback() {
+        this.button.forEach(btn => {
+            btn.addEventListener('mousedown', (e) => {
+                //console.log("btn Clicked");
+                let info = [btn.getAttribute("id"), this.getAttribute("id")];
+                this.UpdateScoreEvent(info);
+            })
+        });
+    }
+    //event vorr de knop die gedrukt wordt
+    UpdateScoreEvent(info) {
+        this.dispatchEvent(new CustomEvent("UpdateScoreEvent", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
 }
 
 customElements.define('scorebtn-comp', app);
