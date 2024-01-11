@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module" defer src="./endGameView.js"></script>
+</head>
+<body>
+    <script>
+    var dummydata = {
+    date: "2021-05-05",
+    startTime: "12:00",
+    endTime: "13:00",
+    teamA: "Niels,Warre",
+    teamB: "Lukas,Hamza",
+    score1: 2,
+    score2: 1,
+    scoringData: [
+        {
+            "team1 punten": 11,
+            "team2 punten": 9,
+        },
+        {
+            "team1 punten": 11,
+            "team2 punten": 9,
+        },
+        {
+            "team1 punten": 11,
+            "team2 punten": 9,
+        },
+        {
+            "team1 punten": 8,
+            "team2 punten": 9,
+        },
+        {
+            "team1 punten": 11,
+            "team2 punten": 9,
+        },
+    ],
+};
+        let endgameview = document.createElement('endview-comp');
+        customElements.whenDefined('endview-comp').then(() => {
+            document.body.appendChild(endgameview);
+            endgameview.setMatchInfo(dummydata);
+
+        });
+
+    </script>
+</body>
+</html>

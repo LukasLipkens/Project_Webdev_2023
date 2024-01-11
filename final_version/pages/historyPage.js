@@ -5,25 +5,46 @@ import "../playedMatches/matchScore.js";
 const template = document.createElement("template");
 template.innerHTML = /*html*/ `
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
         #historyContainer {
-            border: 2px solid black;
+            border: 5px solid black;
             border-radius: 10px;
-            width: 1200px;
+            width: 80vw;
+            height: 80vh;
             margin: auto;
             margin-top: 20px;
             padding-top: 10px;
+            background-color: #E0E0E0;
+            user-select: none;
         }
         #title {
-            font-size: 60px;
-            margin: 0 auto;
+            font-family: 'Anton', sans-serif;
+            font-weight: 500;
+            text-decoration: underline;
+            font-size: 3rem;
+            padding-bottom: 10px;
+            margin: 15px auto;
             text-align: center;
         }
         #pageContainer {
-            display: flex;
+            display: block;
             flex-direction: column;
             justify-content: space-evenly;
-            margin-top: 20px;
+            height: 60vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        #pageContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        #pageContainer::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #pageContainer::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         #page {
             display: none;
@@ -37,19 +58,23 @@ template.innerHTML = /*html*/ `
             gap: 10px;
             margin-top: 10px;
             justify-content: flex-end;
-            padding-right: 55px;
+            padding-right: 80px;
         }
         #pagination li {
             font-size: 18px;
             font-weight: bold;
             padding: 5px 10px;
-            border: 1px solid #ccc;
+            border: 1px solid green;
             border-radius: 5px;
             cursor: pointer;
+            background-color: white;
         }
         #pagination li.active {
-            box-shadow: inset 0 0 2px green;
+            box-shadow: inset 0 0 5px green;
             color: green;
+        }
+        match-comp {
+            user-select: none;
         }
 
     </style>
@@ -57,7 +82,7 @@ template.innerHTML = /*html*/ `
     <div id="historyContainer">
         <p id="title">All Played Games</p>
         <div id="pageContainer">
-            <!-- The container for displaying match-line components -->
+            <!-- De container voor het tonen van match-components -->
         </div>
         <ul id="pagination"></ul>
     </div>
@@ -69,8 +94,7 @@ class HistoryComp extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" });
         this.shadow.append(template.content.cloneNode(true));
 
-
-
+        this.matchData = [];
         this.currentPage = 1;
         this.itemsPerPage = 8;
 
@@ -78,39 +102,34 @@ class HistoryComp extends HTMLElement {
         this.pagination = this.shadowRoot.querySelector('#pagination');
     }
 
+    // Wordt uitgevoerd wanneer het element aan de DOM is toegevoegd
     connectedCallback() {
-        this.matchData = [];
-        this.socket = new WebSocket("ws://localhost:8080");
-        this.socket.addEventListener("message", (e) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                console.log(reader.result);
-                let message = reader.result;
-                if (message == "refresh") {
-                    console.log("refreshing");
-                    this.fetchGames();
-                }
-            }
-            reader.readAsText(e.data);
-
-        });
-        this.fetchGames();
-    }
-    fetchGames() {
-        fetch('./test_php/getHistory.php', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                //console.log(data);
-                this.matchData = data;
-                this.renderPage();
-            })
+        this.itemsPerPage = parseInt(document.documentElement.scrollHeight * 0.6 / 75);
+        window.addEventListener('resize', (e) => { this.UpdateItemsPerPage(e) });
+        this.GetAllGames();
     }
 
+    // Werkt het aantal items per pagina bij op basis van vensterhoogte
+    UpdateItemsPerPage(e) {
+        this.itemsPerPage = parseInt(e.target.innerHeight * 0.6 / 70);
+        this.renderPage();
+    }
+
+    // Stuurt een custom event om wedstrijdgegevens op te halen bij de app.js
+    GetAllGames() {
+        this.dispatchEvent(new CustomEvent("getHistory", {
+            bubbles: true,
+            composed: true,
+        }))
+    }
+
+    // Haalt alle wedstrijdgegevens op en steek ze in matchData en voert renderPage uit
+    Update(gameData) {
+        this.matchData = gameData;
+        this.renderPage();
+    }
+
+    // Berekent het totale aantal pagina's, toont de pagina en tabbladen
     renderPage() {
         this.totalPages = Math.ceil(this.matchData.length / this.itemsPerPage);
 
@@ -118,27 +137,25 @@ class HistoryComp extends HTMLElement {
         this.renderPagination(this.totalPages);
     }
 
+    // Toont de pagina met de bijhorende match-componenten
     showPage() {
+        // Bepalen welke match-componenten (op volgorde) worden getoond op die pagina
         this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
         this.endIndex = this.startIndex + this.itemsPerPage;
-        this.pageItems = this.matchData.slice(this.startIndex, this.endIndex);
+
+        // Gesorteerd op oudste match als eerste toegevoegd en nieuwste als laatste toegevoegd
+        this.matchData.sort((a, b) => b.gameId - a.gameId);
+        this.pageItems = this.matchData.slice(this.startIndex, this.endIndex); // pageItems bevat de nodige matchData voor die bepaalde pagina
 
         this.pageContainer.innerHTML = "";
 
-        for (let item of this.pageItems) {
-            this.matchComponent = document.createElement('match-comp');
+        // Componenten worden één voor één aangemaakt en worden gekoppeld aan een eventListener voor te 'toggelen' (arrow svg)
+        for (let i = 0; i < this.pageItems.length; i++) {
+            const item = this.pageItems[i];
+            let matchComponent = document.createElement('match-comp');
+            matchComponent.setAttribute('id', item.gameId);
 
-            this.matchComponent.setAttribute('id', item.gameId); // moet er wel zijn om de "pijltjes" te kunnen togglen..
-            // this.matchComponent.setAttribute('date', item.date);
-            // this.matchComponent.setAttribute('startTime', item.startTime);
-            // this.matchComponent.setAttribute('endTime', item.endTime);
-            // this.matchComponent.setAttribute('playerName1', item.player1);
-            // this.matchComponent.setAttribute('playerName2', item.player2);
-            // this.matchComponent.setAttribute('score1', item.player1Score);
-            // this.matchComponent.setAttribute('score2', item.player2Score);
-
-
-            this.matchComponent.setMatchData({
+            matchComponent.setMatchData({
                 gameId: item.gameId,
                 date: item.date,
                 startTime: item.starttijd,
@@ -149,15 +166,16 @@ class HistoryComp extends HTMLElement {
                 score2: item["team2 sets"],
                 scoringData: item["points"],
             });
+            this.pageContainer.append(matchComponent);
 
-            this.pageContainer.append(this.matchComponent);
-
-            this.matchComponent.addEventListener('toggleContent', (event) => {
+            matchComponent.addEventListener('toggleContent', (event) => {
                 this.toggleMatchComp(event.detail);
             });
         }
     }
 
+    // Eenmaal verstuurde event opgevangen gaat er gezocht worden naar de corresponderende match-component uit de reeks getoonde componenten
+    // Gaat match-componenten in/uit toggelen op basis van gameId
     toggleMatchComp(gameId) {
         this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
         this.matchComponents.forEach((component) => {
@@ -170,24 +188,42 @@ class HistoryComp extends HTMLElement {
         });
     }
 
+    // Afhankelijk van de hoeveelheid pagina's worden de knoppen bepaald
     renderPagination(totalPages) {
         this.pagination.innerHTML = "";
 
-        for (let i = 1; i <= totalPages; i++) {
-            this.pageItem = document.createElement('li');
-            this.pageItem.textContent = i;
-            this.pagination.append(this.pageItem);
+        this.startPage = Math.max(1, this.currentPage - 1);
+        this.endPage = Math.min(totalPages, this.startPage + 2);
 
-            if (i == this.currentPage) {
-                this.pageItem.classList.add('active');
-            };
+        if (this.currentPage > 1) {
+            this.createPaginationButton("Previous", this.currentPage - 1);
+        }
 
-            this.pageItem.addEventListener('click', () => {
-                this.changePage(i);
-            });
+        for (let i = this.startPage; i <= this.endPage; i++) {
+            this.createPaginationButton(i, i);
+        }
+
+        if (this.currentPage < totalPages) {
+            this.createPaginationButton("Next", this.currentPage + 1);
         }
     }
 
+    // De knoppen worden aangemaakt en toegevoegd, evenals een event
+    createPaginationButton(label, pageNumber) {
+        this.pageItem = document.createElement('li');
+        this.pageItem.textContent = label;
+        this.pagination.append(this.pageItem);
+
+        if (label === this.currentPage || (label === "Previous" && this.currentPage === pageNumber - 1) || (label === "Next" && this.currentPage === pageNumber + 1)) {
+            this.pageItem.classList.add('active');
+        }
+
+        this.pageItem.addEventListener('click', () => {
+            this.changePage(pageNumber);
+        });
+    }
+
+    // Gaat alles resetten en herberekenen voor de volgende geklikte pagina
     changePage(pageNumber) {
         this.currentPage = pageNumber;
         this.renderPage();

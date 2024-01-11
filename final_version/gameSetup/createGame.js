@@ -2,22 +2,26 @@
 
 //#endregion IMPORTS
 
+/*
+    dit component is een formuliertje wat moet worden ingevuld wanneer je een game wil aanmaken.
+*/
+
 const template = document.createElement("template")
 template.innerHTML = /*html*/`
     <style>
     #createGameForm{
         width: 300px;
         border: 2px solid black;
-        background-color: rgb(255, 255, 255);
-        border-radius: 15px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
         text-align: center;
     }
-    h1{
-        background-color: green;
+    .topText{
+        background-color: #006400;
         margin: 0;
         padding: 5px;
-        color: yellow;
-        border-radius: 12px 12px 0px 0px;
+        color: #0c0c0c;
+        border-radius: 8px 8px 0px 0px;
         font-size: 2.5em;
     }
     #gameTypeSelector{
@@ -36,7 +40,7 @@ template.innerHTML = /*html*/`
         display: flex;
         align-items: center;
         border-radius: 0 0 15px 15px;
-        background-color: #b3b3b3;
+        background-color: rgb(1, 184, 90);;
         color: #000000;
         width: var(--container_width);
         overflow: hidden;
@@ -52,7 +56,7 @@ template.innerHTML = /*html*/`
         align-items: center;
         z-index: 1;
         font-weight: 600;
-        letter-spacing: -1px;
+        letter-spacing: 0px;
         font-size: 14px;
     }
 
@@ -68,11 +72,11 @@ template.innerHTML = /*html*/`
     }
 
     .radio-input label:has(input:checked) {
-        color: black;   
+        color: #c2c2c2;
     }
 
     .radio-input label:has(input:checked) ~ .selection {
-        background-color: green;
+        background-color: #006400;
         display: inline-block;
     }
 
@@ -95,7 +99,7 @@ template.innerHTML = /*html*/`
         padding: 15px 20px;
         outline: none;
         background: transparent;
-        border-radius: 5px;
+        border-radius: 10px;
         border: 1px solid#000000;
         font-size: 1em;
     }
@@ -132,7 +136,7 @@ template.innerHTML = /*html*/`
         transition: all .2s;
         padding: 10px 20px;
         border-radius: 100px;
-        background: #cfef00;
+        background: rgb(1, 184, 90);
         border: 1px solid transparent;
         display: flex;
         align-items: center;
@@ -141,7 +145,8 @@ template.innerHTML = /*html*/`
     }
 
     button:hover {
-        background: #c4e201;
+        background: #006400;
+        color: #c2c2c2;
     }   
 
     button > svg {
@@ -158,6 +163,10 @@ template.innerHTML = /*html*/`
         transform: scale(0.95);
     }
     /*#endregion btn*/
+    #playerName:hover{
+        cursor: pointer;
+        color: rgb(1, 184, 90);
+    }
 
     .double{
         display: none;
@@ -165,7 +174,7 @@ template.innerHTML = /*html*/`
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div id="createGameForm">
-        <h1>Create Game</h1>
+        <p class="topText">Create Game</p>
         <div class="radio-input">
             <label>
             <input class="gameMode" type="radio" id="value-1" name="value-radio" value="solo" checked="checked">
@@ -251,15 +260,17 @@ class comp extends HTMLElement
                 let divplayerList = document.createElement('div');
                 divplayerList.classList.add('playerList');
                 input.parentNode.appendChild(divplayerList);
-
+            
+            //luisteren naar input
             input.addEventListener("keyup", (event)=>{
-                //we maken hier target aan zodat dit ook nog beschikbaar is in de ajax call
+                //we maken hier target aan zodat dit ook nog beschikbaar is in de fetch
                 let target = event.target;
 
                 //Hier resetten we even alle playerLists
                 let allLists = this.shadowRoot.querySelectorAll(".playerList");
                 allLists.forEach(element => { element.innerHTML = ""; });
 
+                //spelernamen ophalen die de input bevatten
                 fetch('./test_php/searchUser.php?search='+ event.target.value, {
                     method: 'GET',
                     headers: {
@@ -269,32 +280,34 @@ class comp extends HTMLElement
             })
             .then(response => response.json())
             .then(data => {
-                                        //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
-                                        let divplayerListS = target.parentNode.querySelector(`.playerList`);
-                                        divplayerListS.innerHTML = "";
+                //Hiermee zorgen we ervoor dat de playerList van de juiste input wordt aangepast
+                let divplayerListS = target.parentNode.querySelector(`.playerList`);
+                divplayerListS.innerHTML = "";
+
+                if(data.length != 0 && target.value != ""){
+                    data.forEach(element => {
+                        //console.log(element);
+                        divplayerListS.innerHTML += "<p id='playerName'>"+element.gebruikersnaam+"</p>";
+                    });
+                    let playerOptions = divplayerListS.querySelectorAll("p");
+                    playerOptions.forEach((playerOption, index) => {
+                        playerOption.addEventListener("click", ()=>{
+                            let indexP = target.getAttribute("player");
+                            this.playerList[indexP-1] = data[index];
+                            //console.log(this.playerList);
+                            target.value = playerOption.innerHTML;
+                            divplayerListS.innerHTML = "";
+                        });
+                    });
                 
-                                        if(data.length != 0 && target.value != ""){
-                                            data.forEach(element => {
-                                                //console.log(element);
-                                                divplayerListS.innerHTML += "<p>"+element.gebruikersnaam+"</p>";
-                                            });
-                                            let playerOptions = divplayerListS.querySelectorAll("p");
-                                            playerOptions.forEach((playerOption, index) => {
-                                                playerOption.addEventListener("click", ()=>{
-                                                    let indexP = target.getAttribute("player");
-                                                    this.playerList[indexP-1] = data[index];
-                                                    //console.log(this.playerList);
-                                                    target.value = playerOption.innerHTML;
-                                                    divplayerListS.innerHTML = "";
-                                                });
-                                            });
-                                        
-                                        }
-                                    })
+                }
+            })
 
         });
     });
     }
+
+//deze functie zorgt ervoor dat je kan wisselen tussen een 1v1 en een 2v2 wedstrijd
         updateForm(){
             switch (this.gameType)
             {
@@ -311,65 +324,72 @@ class comp extends HTMLElement
             }
         }
 //#region create or cancel gameCreation
-        createGame(){
-            let players = [];
-            let team1Player1 = this.shadowRoot.querySelector("#team1Player1").value;
-            let team1Player2 = this.shadowRoot.querySelector("#team1Player2").value;
-            let team2Player1 = this.shadowRoot.querySelector("#team2Player1").value;
-            let team2Player2 = this.shadowRoot.querySelector("#team2Player2").value;
 
-            let errors = [];
-            let errorstring = "";
+    /*
+    deze functie gaat kijken of al de velden voor het gametype dat je wil aanmaken zijn ingevuld
+    als dit niet het geval is of er zijn namen die meer dan 1 keer voorkomen gebruikt wordt er een error gegeven
 
-            switch (this.gameType)
-            {
-                case "solo":
-                    if(team1Player1!=""){players.push(team1Player1);}
-                    else{errors.push("team 1 player 1 is nog leeg");}
+    */
+    createGame(){
+        let players = [];
+        let team1Player1 = this.shadowRoot.querySelector("#team1Player1").value;
+        let team1Player2 = this.shadowRoot.querySelector("#team1Player2").value;
+        let team2Player1 = this.shadowRoot.querySelector("#team2Player1").value;
+        let team2Player2 = this.shadowRoot.querySelector("#team2Player2").value;
 
-                    if(team2Player1!=""){players.push(team2Player1);}
-                    else{errors.push("team 2 player 1 is nog leeg");}
+        let errors = [];
+        let errorstring = "";
 
-                    break;
-                case "double":
-                    if(team1Player1!=""){players.push(team1Player1);}
-                    else{errors.push("team 1 player 1 is nog leeg");}
+        switch (this.gameType)
+        {
+            case "solo":
+                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                else{errors.push("error: Player1Team1");}
 
-                    if(team1Player2!=""){players.push(team1Player2);}
-                    else{errors.push("team 1 player 2 is nog leeg");}
+                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                else{errors.push("error: Player2Team1");}
 
-                    if(team2Player1!=""){players.push(team2Player1);}
-                    else{errors.push("team 2 player 2 is nog leeg");}
+                break;
+            case "double":
+                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                else{errors.push("error: Player1Team1");}
 
-                    if(team2Player2!=""){players.push(team2Player2);}
-                    else{errors.push("team 2 player 2 is nog leeg");}
+                if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
+                else{errors.push("error: Player1Team2");}
 
-                    break;
-            }
+                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                else{errors.push("error: Player2Team1");}
 
-            if(errors.length != 0){
-                errors.forEach(element => {
-                    
-                    errorstring += element + "\r\n";
-                });
-                alert(errorstring);
-            }
-            else{
-                //this.createGameEvent(players);
-                this.createGameEvent(this.playerList);
-            }
+                if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
+                else{errors.push("error: Player2Team2");}
+
+                break;
         }
-        cancelGame(){
-            let array = ["cancel"];
-            this.createGameEvent(array);
+
+        if(errors.length != 0){
+            errors.forEach(element => {
+                
+                errorstring += element + "\r\n";
+            });
+            alert(errorstring);
         }
-        createGameEvent(info){ //wordt getriggerd wanneer de scoren geupdate wordt
-            this.dispatchEvent(new CustomEvent("createGameEvent", {
-                bubbles: true,
-                composed: true,
-                detail: info
-            }))
+        else{
+            this.AddGame(this.playerList);
         }
+    }
+    //als je op cancel drukt verdwijnd de game weer
+    cancelGame(){
+        let array = ["cancel"];
+        this.AddGame(array);
+    }
+    //als je op adgame drukt wordt er een event gebruikt dat al de speler info doorgeeft
+    AddGame(info){
+        this.dispatchEvent(new CustomEvent("addGame", {
+            bubbles: true,
+            composed: true,
+            detail: info
+        }))
+    }
 //#endregion create or cancel gameCreation
 
 }

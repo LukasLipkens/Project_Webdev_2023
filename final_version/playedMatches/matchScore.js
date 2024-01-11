@@ -1,6 +1,5 @@
 //#region IMPORTS
 import "../playedMatches/individualScore.js"
-// import { playingInfo } from '../playerData.js'
 //#endregion IMPORTS
 
 const template = document.createElement("template");
@@ -10,13 +9,14 @@ template.innerHTML = /*html*/ `
         #container {
             display: flex;
             margin-bottom: 10px;
+            user-select: none;
         }
         #date-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 10%;
-            background-image: linear-gradient(to right, #d1d1d1 75%, white);
+            width: 13%;
+            background-image: linear-gradient(to right, #E0E0E0 25%, white);
             padding-right: 10px;
             font-size: 25px;
             height: 63px;
@@ -24,10 +24,11 @@ template.innerHTML = /*html*/ `
             margin-left: 15px;
         }
         #item-container {
-            border: 2px solid #d1d1d1;
+            border: 1px solid green;
             border-left: none;
             border-radius: 0 10px 0 0;
-            width: 90%;
+            width: 87%;
+            background-color: white;
         }
         #text {
             color: black;
@@ -52,6 +53,8 @@ template.innerHTML = /*html*/ `
             transition: transform 0.3s ease;
             transform: rotate(0);
             transform-origin: center;
+            border-radius: 50%;
+            background-color: #E0E0E0;
         }
         #left, #right {
             display: flex;
@@ -73,11 +76,9 @@ template.innerHTML = /*html*/ `
             width: 100%;
         }
         #center img {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             visibility: visible;
-            background: radial-gradient(circle, gold , white 80%);
-            border-radius: 30px;
         }
         #drawLeft, #drawRight {
             width: 40px;
@@ -93,9 +94,21 @@ template.innerHTML = /*html*/ `
         #item-content {
             display: none;
             height: 250px;
-            overflow-y: scroll;
-            border-left: 1px solid #d1d1d1;
+            border-left: 1px solid green;
             padding: auto;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        #item-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        #item-content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 5px;
+        }
+        #item-content::-webkit-scrollbar-track {
+            background-color: #ddd;
+            border-radius: 5px;
         }
         .expanded #item-content {
             display: block;
@@ -119,12 +132,12 @@ template.innerHTML = /*html*/ `
         }
         #item-content-box p:first-child {
             padding: 10px 20px;
-            border: 1px solid green;
+            border: 1px solid #d1d1d1;
             border-radius: 10px;
         }
         #item-content-box p:last-child {
             padding: 10px 20px;
-            border: 1px solid green;
+            border: 1px solid #d1d1d1;
             border-radius: 10px;
         }
         #startTime, #endTime {
@@ -218,16 +231,8 @@ class MatchComponent extends HTMLElement {
         this.matchContent = this.shadowRoot.querySelector('#item-content');
     }
 
+    // Methode verkregen bij aanmaak match-component in historyPage.js
     setMatchData(matchData) {
-        // this.gameId = this.getAttribute('id');
-        // this.date = this.getAttribute('date');
-        // this.startTime = this.getAttribute('startTime');
-        // this.endTime = this.getAttribute('endTime');
-        // this.player1 = this.getAttribute('playerName1');
-        // this.player2 = this.getAttribute('playerName2');
-        // this.player1Score = this.getAttribute('score1');
-        // this.player2Score = this.getAttribute('score2');
-        console.log("arrived at matchComp");
         this.scoresData = matchData;
         this.indiviData = this.scoresData.scoringData;
         this.gameId = this.scoresData.gameId;
@@ -239,28 +244,24 @@ class MatchComponent extends HTMLElement {
         this.score1 = this.scoresData.score1;
         this.score2 = this.scoresData.score2;
 
-        console.log('indiviData :', this.indiviData);
-        console.log('scoresData :', this.scoresData);
-
         this.editScoreAndPlayers();
         this.setupEventListeners();
         this.createScoreComponents();
     }
 
-    connectedCallback() {
-        // this.getPlayerData();
-    }
+    connectedCallback() { }
 
+    // Afhankelijk van ontvangen matchData wordt winner bepaald en gegevens ingevuld op desbetreffende locaties
     editScoreAndPlayers() {
         this.winnerLeft.style.visibility = 'hidden';
         this.winnerRight.style.visibility = 'hidden';
         this.drawLeft.style.display = 'none';
         this.drawRight.style.display = 'none';
 
-        if (this.player1 > this.player2) {
+        if (this.score1 > this.score2) {
             this.winnerLeft.style.visibility = 'visible';
         }
-        else if (this.player2 > this.player1) {
+        else if (this.score2 > this.score1) {
             this.winnerRight.style.visibility = 'visible';
         }
         else {
@@ -276,6 +277,7 @@ class MatchComponent extends HTMLElement {
         this.scores.innerHTML = `${this.score1} - ${this.score2}`;
     }
 
+    // Eenmaal op arrow geklikt wordt er een event gestuurd naar boven (historyPage.js) samen met de gameId (om te vergelijken)
     setupEventListeners() {
         this.arrowImage.forEach((arrow) => {
             arrow.addEventListener('click', () => {
@@ -284,6 +286,7 @@ class MatchComponent extends HTMLElement {
         });
     }
 
+    // als expanded = true: wordt er een class 'expanded' toegevoegd en anders wordt deze verwijderd (op individuele match-component)
     toggle(expanded) {
         if (expanded) {
             if (this.container.classList.contains('expanded')) {
@@ -298,18 +301,10 @@ class MatchComponent extends HTMLElement {
         }
     }
 
+    // indiviData van matchData bevat de info voor single-score-componenten (individualScore.js) aan te maken bij elke match-componenten
     createScoreComponents() {
         this.indiviData.forEach((line) => {
-            //     if (line.gameId == this.gameId) {
             this.singleScoreComp = document.createElement('single-score-comp');
-
-            // this.singleScoreComp.setAttribute('id', this.gameId);
-            // this.singleScoreComp.setAttribute('playerName1', this.player1);
-            // this.singleScoreComp.setAttribute('playerName2', this.player2);
-
-            // this.singleScoreComp.setAttribute('setNr', line.setNr);
-            // this.singleScoreComp.setAttribute('team1Points', line.team1Points);
-            // this.singleScoreComp.setAttribute('team2Points', line.team2Points);
 
             this.singleScoreComp.setScoreData({
                 gameId: this.gameId,
@@ -322,7 +317,6 @@ class MatchComponent extends HTMLElement {
 
             this.matchContent.append(this.singleScoreComp);
         });
-        //  });
     }
 }
 

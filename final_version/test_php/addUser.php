@@ -1,11 +1,11 @@
 <?php
-include "./config/database.php";
+include_once("../config/database.php");
 
 $name = $_GET["name"];
 $email = $_GET["email"];
 $password = $_GET["password"];
 
-
+$error = "";
 
 if (CheckExistingUser($email, $conn)) {
     $t_sql = 'INSERT INTO tblspelers (gebruikersnaam, password, email) VALUES("' . $name . '", "' . $password . '", "' . $email . '");';
@@ -13,12 +13,14 @@ if (CheckExistingUser($email, $conn)) {
     $t_add = mysqli_query($conn, $t_sql);
 
     if ($t_add) {
-        echo 'succes';
+        echo $error;
     } else {
-        echo 'Error:' . mysqli_error($conn);
+        $error = 'Error:' . mysqli_error($conn);
+        echo $error;
     }
 } else {
-    var_dump("user already exists:" . CheckExistingUser($email, $conn));
+    $error ="user already exists:" . CheckExistingUser($email, $conn);
+    echo $error;
 }
 
 function CheckExistingUser($email,  $conn)
