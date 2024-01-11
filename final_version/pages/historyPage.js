@@ -102,20 +102,20 @@ class HistoryComp extends HTMLElement {
         this.pagination = this.shadowRoot.querySelector('#pagination');
     }
 
-    // Bij aanmaak history-comp worden deze uitgevoerd
+    // Wordt uitgevoerd wanneer het element aan de DOM is toegevoegd
     connectedCallback() {
         this.itemsPerPage = parseInt(document.documentElement.scrollHeight * 0.6 / 75);
         window.addEventListener('resize', (e) => { this.UpdateItemsPerPage(e) });
         this.GetAllGames();
     }
 
-    // Aantal items per pagina worden aangepast op basis van de vensterhoogte
+    // Werkt het aantal items per pagina bij op basis van vensterhoogte
     UpdateItemsPerPage(e) {
         this.itemsPerPage = parseInt(e.target.innerHeight * 0.6 / 70);
         this.renderPage();
     }
 
-    // Vraag voor de wedstrijdgegevens bij de app.js
+    // Stuurt een custom event om wedstrijdgegevens op te halen bij de app.js
     GetAllGames() {
         this.dispatchEvent(new CustomEvent("getHistory", {
             bubbles: true,
@@ -123,13 +123,13 @@ class HistoryComp extends HTMLElement {
         }))
     }
 
-    // Haal alle wedstrijdgegevens op en steek ze in matchData
+    // Haalt alle wedstrijdgegevens op en steek ze in matchData en voert renderPage uit
     Update(gameData) {
         this.matchData = gameData;
         this.renderPage();
     }
 
-    // Afhankelijk van de hoeveelheid items worden de pagina's aangemaakt
+    // Berekent het totale aantal pagina's, toont de pagina en tabbladen
     renderPage() {
         this.totalPages = Math.ceil(this.matchData.length / this.itemsPerPage);
 
@@ -175,7 +175,7 @@ class HistoryComp extends HTMLElement {
     }
 
     // Eenmaal verstuurde event opgevangen gaat er gezocht worden naar de corresponderende match-component uit de reeks getoonde componenten
-    // De toggle methode gaat in de matchScore.js van elke componenten uitgevoerd worden
+    // Gaat match-componenten in/uit toggelen op basis van gameId
     toggleMatchComp(gameId) {
         this.matchComponents = this.shadowRoot.querySelectorAll('match-comp');
         this.matchComponents.forEach((component) => {
