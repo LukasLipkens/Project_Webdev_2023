@@ -343,26 +343,31 @@ class comp extends HTMLElement
         switch (this.gameType)
         {
             case "solo":
-                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
-                else{errors.push("error: Player1Team1");}
+                if(this.playerList.length == 3 && this.playerList[0] != null){ //lengte van de plyerlist is 3 bij solo en of al de namen zijn ingevuld
+                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                    else{errors.push("error: Player1Team1");}
 
-                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
-                else{errors.push("error: Player2Team1");}
-
+                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                    else{errors.push("error: Player2Team1");}
+                }
+                else{errors.push("error player unknown")}
+                
                 break;
             case "double":
-                if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
-                else{errors.push("error: Player1Team1");}
+                if(this.playerList.length == 4 && this.playerList[0] != null && this.playerList[1] != null && this.playerList[2] != null){
+                    if(team1Player1!="" && players.indexOf(team1Player1) == -1){players.push(team1Player1);}
+                    else{errors.push("error: Player1Team1");}
 
-                if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
-                else{errors.push("error: Player1Team2");}
+                    if(team1Player2!="" && players.indexOf(team1Player2) == -1){players.push(team1Player2);}
+                    else{errors.push("error: Player1Team2");}
 
-                if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
-                else{errors.push("error: Player2Team1");}
+                    if(team2Player1!="" && players.indexOf(team2Player1) == -1){players.push(team2Player1);}
+                    else{errors.push("error: Player2Team1");}
 
-                if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
-                else{errors.push("error: Player2Team2");}
-
+                    if(team2Player2!="" && players.indexOf(team2Player2) == -1){players.push(team2Player2);}
+                    else{errors.push("error: Player2Team2");}
+                }
+                else{errors.push("error player unknown")}
                 break;
         }
 
