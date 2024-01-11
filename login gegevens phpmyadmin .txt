@@ -1,4 +1,0 @@
-login gegevens phpmyadmin: 
-
-username: super
-password: Project_Webdev
